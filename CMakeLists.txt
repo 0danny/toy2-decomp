@@ -27,9 +27,29 @@ set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
 set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
 set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
+# Nu3D Sources
+set(NU3D_SOURCES
+    
+)
+
+# Toy2 Sources
+set(TOY2_SOURCES
+    src_main/Common.h
+    
+    src_main/Toy2/Toy2.cpp
+    src_main/Toy2/Toy2.h
+
+    src_main/Toy2/D3DApp.cpp
+    src_main/Toy2/D3DApp.h
+)
+
 # Build the game
 add_executable(toy2decomp WIN32 
-    src_main/main.cpp
+    ${NU3D_SOURCES}
+    ${TOY2_SOURCES}
+
+    src_main/Logger.cpp
+    src_main/Logger.h
 )
 
 # Build the testing dll(s)
