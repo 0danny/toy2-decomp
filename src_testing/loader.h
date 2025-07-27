@@ -6,14 +6,14 @@
 
 namespace Loader
 {
-    // hooking functions
-    void InjectHooks();
+	// hooking functions
+	void InjectHooks();
 
-    // addresses to hook
+	// addresses to hook
 
-    // typedef hooks
+	// typedef hooks
 
-    // original functions
+	// original functions
 
-    // function detours
+	// function detours
 }

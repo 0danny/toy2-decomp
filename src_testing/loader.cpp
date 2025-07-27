@@ -2,12 +2,12 @@
 
 namespace Loader
 {
-    void InjectHooks()
-    {
-        printf("[LOADER]: Injecting hooks...\n");
+	void InjectHooks()
+	{
+		printf("[LOADER]: Injecting hooks...\n");
 
-        GamePatches::InjectHooks();
+		GamePatches::InjectHooks();
 
-        MH_EnableHook(MH_ALL_HOOKS);
-    }
+		MH_EnableHook(MH_ALL_HOOKS);
+	}
 }

@@ -7,20 +7,20 @@
 
 namespace GamePatches
 {
-    void InjectHooks();
+	void InjectHooks();
 
-    // globals
+	// globals
 
-    // game globals
+	// game globals
 
-    // typedef hooks
-    typedef void (__cdecl *Nu3DLog)(char* p_format, ...);
+	// typedef hooks
+	typedef void(__cdecl* Nu3DLog)(char* p_format, ...);
 
-    // original functions
+	// original functions
 
-    // addresses of functions
-    static LPVOID Nu3DLogAddress = (LPVOID)0x004A66A0;
+	// addresses of functions
+	static LPVOID Nu3DLogAddress = (LPVOID)0x004A66A0;
 
-    // function detours
-    void __cdecl Nu3DLogHook(char* p_format, ...);
+	// function detours
+	void __cdecl Nu3DLogHook(char* p_format, ...);
 }
