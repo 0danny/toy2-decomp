@@ -11,7 +11,7 @@ namespace Toy2
     char g_cdPathRegValue[512];
     int32_t g_registryKeysRead;
 
-    // $FUNC 004A6390
+    // $FUNC 004A6390 [IMPLEMENTED]
     void ReadRegistry()
     {
         HKEY l_keyHandle;
@@ -72,37 +72,36 @@ namespace Toy2
         }
     }
 
-    // $FUNC 0048E730
+    // $FUNC 0048E730 [UNFINISHED]
     void OneInit()
     {
     }
 
-    // $FUNC 00490730
+    // $FUNC 00490730 [UNFINISHED]
     void CheckForQuit()
     {
     }
 
-    // $FUNC 004CE810
+    // $FUNC 004CE810 [UNFINISHED]
     int32_t ReadCfg()
     {
         return 0;
     }
 
-    // $FUNC 00412D70
+    // $FUNC 00412D70 [UNFINISHED]
     int32_t ShowModeSelect()
     {
         return 0;
     }
 
-    // $FUNC 0049D910
+    // $FUNC 0049D910 [UNFINISHED]
     int32_t Run(int32_t p_argCount, char **p_argList)
     {
         return 0;
     }
 }
 
-// $FUNC 004316C0
-// TODO: Implement
+// $FUNC 004316C0 [UNFINISHED]
 int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char *p_cmdLine, int32_t p_cmdShow)
 {
     // g_leftOverVar0 = 0;

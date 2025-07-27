@@ -12,7 +12,7 @@ namespace Logger
 
     int32_t g_showMsgBoxOnThrow;
 
-    // $FUNC 004A87C0
+    // $FUNC 004A87C0 [IMPLEMENTED]
     ThrowErrorFunc GetErrorHandler(char *p_filePath, int32_t p_lineNumber)
     {
         g_errorHandlerPath = p_filePath;
@@ -21,7 +21,7 @@ namespace Logger
         return ThrowError;
     }
 
-    // $FUNC 004A8710
+    // $FUNC 004A8710 [IMPLEMENTED]
     void ThrowError(char *p_format, ...)
     {
         char l_caption[256];

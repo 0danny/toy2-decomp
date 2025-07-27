@@ -10,13 +10,13 @@ namespace D3DApp
 
     char* g_lpCmdLine = NULL;
 
-    // $FUNC 004093A0
+    // $FUNC 004093A0 [UNFINISHED]
     int32_t BuildProfileMachine()
     {
         return 0;
     }
 
-    // $FUNC 004A6B30
+    // $FUNC 004A6B30 [UNFINISHED]
     int32_t BuildWindow()
     {
         return 0;
