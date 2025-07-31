@@ -117,12 +117,45 @@ def check_executable_size(build_test_type):
     print(f"[size]: Executable is {size_kb:.2f} KB ({size_mb:.2f} MB)")
 
 
+def build_tools(app):
+    # we want to use clang for toy2 tools
+    os.environ['CC'] = 'clang'
+    os.environ['CXX'] = 'clang++'
+
+    TOOLS_BUILD_FOLDER = f"{BUILD_FOLDER}//build_tools"
+
+    os.makedirs(TOOLS_BUILD_FOLDER, exist_ok=True)
+    os.chdir(TOOLS_BUILD_FOLDER)
+
+    build_arguments = [
+        'cmake',
+        '-G', 'Ninja',
+        f'-DCMAKE_BUILD_TYPE=RelWithDebInfo',
+        '-Wno-dev',
+        '../../tools'
+    ]
+
+    track_process(build_arguments)
+    track_process(['ninja'])
+
+    if app != "nl":
+        exe_path = os.path.join(os.getcwd(), f"{app}.exe")
+        print(f"----------------- Starting {app} -----------------")
+        subprocess.run([exe_path])
+
 def main():
     parser = argparse.ArgumentParser(
         description=f"Build script for {PROJECT_NAME} using VS6 NMake."
     )
     parser.add_argument("--nl", action="store_true", help="Don't launch the app after build")
     parser.add_argument("--cs", action="store_true", help="Check executable size after build")
+
+    parser.add_argument(
+        "--tools", 
+        choices=["SaveViewer"],
+        default="SaveViewer",
+        help="Build and launch the Toy2 tools",
+    )
 
     parser.add_argument(
         "--bt",
@@ -132,6 +165,10 @@ def main():
     )
 
     args = parser.parse_args()
+
+    if args.tools:
+        build_tools(args.tools)
+        return
 
     if args.cs:
         check_executable_size(build_test_type=args.bt)
