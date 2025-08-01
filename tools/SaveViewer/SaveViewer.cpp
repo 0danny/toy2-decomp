@@ -3,30 +3,21 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <assert.h>
 #include <filesystem>
 
 namespace SaveViewer
 {
-	struct [[gnu::packed]] SaveControlMapping
-	{
-		int32_t m_dInputCode;
-		int32_t m_controlSettingId;
-	};
-
-	struct [[gnu::packed]] Save99Data
-	{
-		int32_t            m_strSize;
-		int32_t            m_unused1;
-		int32_t            m_unused2;
-		SaveControlMapping m_mappings[38];
-		uint8_t            m_unusedPad[80];
-	};
-
 	void readSave(const std::string& savePath)
 	{
-		const auto fileName = std::filesystem::path(savePath).filename().string();
+		const auto filePath      = std::filesystem::path(savePath);
+		const auto fileName      = filePath.filename().string();
+		const auto fileExtension = filePath.extension().string();
+
+		if ( fileExtension != ".sav" )
+		{
+			printf("[SaveViewer] Not a valid .sav file.\n");
+			return;
+		}
 
 		printf("[SaveViewer] Reading sav file -> %s\n", fileName.c_str());
 
@@ -40,50 +31,117 @@ namespace SaveViewer
 		std::streamsize size = file.tellg();
 		file.seekg(0, std::ios::beg);
 
-		Save99Data saveData{};
+		// Read first 4 bytes to determine whether this is a normal save file or a 99.sav
+		int32_t strSize{ 0 };
 
-		assert(sizeof(Save99Data) == size);
-
-		if ( ! file.read(reinterpret_cast<char*>(&saveData), size) )
+		if ( ! file.read(reinterpret_cast<char*>(&strSize), sizeof(int32_t)) )
 		{
 			printf("[SaveViewer] Failed to read file.\n");
 			return;
 		}
 
-		printf("------------------ SAVE DATA ------------------\n");
-		printf("m_strSize: %d\n", saveData.m_strSize);
-		printf("m_unused1: %d\n", saveData.m_unused1);
-		printf("m_unused2: %d\n", saveData.m_unused2);
+		printf("[SaveViewer] String size is %d\n", strSize);
 
-		int32_t index = 1;
+		SaveType type = (strSize == 0 ? SaveType::ControlData : SaveType::ProgressionData);
 
-		for ( SaveControlMapping mapping : saveData.m_mappings )
+		if ( type == SaveType::ControlData )
+			readControlData(file);
+		else if ( type == SaveType::ProgressionData )
+			readProgressionData(file, strSize);
+	}
+
+	void readProgressionData(std::ifstream& file, const int32_t strSize)
+	{
+		//read the save name string in.
+		std::vector<char> saveName(strSize, 0);
+
+		if ( ! file.read(saveName.data(), strSize) )
 		{
-			if ( mapping.m_dInputCode == -1 ) continue;
+			printf("[SaveViewer] Failed to read progression data save name.\n");
+			return;
+		}
 
-			auto gameControl = std::find_if(
-			    Utils::g_gameControls, Utils::g_gameControls + Utils::g_gameControlsCount,
-			    [&mapping](const Utils::GameControl& control) {
-				    return control.m_id == mapping.m_dInputCode;
-			    }
-			);
+		Save0Data progData{};
 
-			auto controlSetting = std::find_if(
-			    Utils::g_controlSettings, Utils::g_controlSettings + Utils::g_controlSettingsCount,
-			    [&mapping](const Utils::ControlSetting& control) {
-				    return control.m_id == mapping.m_controlSettingId;
-			    }
-			);
+		if ( ! file.read(reinterpret_cast<char*>(&progData), sizeof(Save0Data)) )
+		{
+			printf("[SaveViewer] Failed to read progression data.\n");
+			return;
+		}
 
-			if ( controlSetting == Utils::g_controlSettings + Utils::g_controlSettingsCount )
+		printf("------------------ Progression Data ------------------\n");
+		printf("Save Name: %s\n", saveName.data());
+		printf("m_unkInt1: %u\n", progData.m_unkInt1);
+		printf("m_unkInt2: %u\n", progData.m_unkInt2);
+		printf("m_lives: %u\n", progData.m_lives);
+		printf("m_levelIndex: %u\n", progData.m_levelIndex);
+		printf("m_unk: %u\n", progData.m_unk);
+		printf("m_unkByte2_2: %u\n", progData.m_unkByte2_2);
+		printf("m_cameraType: %u\n", progData.m_cameraType);
+		printf("m_musicVolume: %u\n", progData.m_musicVolume);
+		printf("m_soundVolume: %u\n", progData.m_soundVolume);
+		printf("m_unkByte4_2: %u\n", progData.m_unkByte4_2);
+		printf("m_unkShort3: %u\n", progData.m_unkShort3);
+		printf("m_unkShort4: %u\n", progData.m_unkShort4);
+		printf("m_health: %u\n", progData.m_health);
+		printf("m_unkByte5: %u\n", progData.m_unkByte5);
+
+		printf("m_tokens: [ ");
+		for ( uint8_t token : progData.m_tokens )
+		{
+			printf("%u ", token);
+		}
+		printf("]\n");
+
+		//uint8_t  m_unkBytes[48];
+
+		printf("m_unkByte8: %u\n", progData.m_unkByte8);
+	}
+
+	void readControlData(std::ifstream& file)
+	{
+		Save99Data controlData{};
+
+		if ( ! file.read(reinterpret_cast<char*>(&controlData), sizeof(Save99Data)) )
+		{
+			printf("[SaveViewer] Failed to read control data.\n");
+			return;
+		}
+
+		printf("------------------ Control Data ------------------\n");
+		printf("m_unused1: %d\n", controlData.m_unused1);
+		printf("m_unused2: %d\n", controlData.m_unused2);
+
+		int32_t index          = 1;
+		int32_t unusedControls = 0;
+
+		for ( SaveControlMapping mapping : controlData.m_mappings )
+		{
+			if ( mapping.m_dInputCode == -1 )
 			{
-				printf("Control Setting Id %d, was not found for %s\n", mapping.m_controlSettingId, gameControl->m_name);
+				unusedControls++;
 				continue;
 			}
 
-			printf("Mapping %d: [%s, %s]\n", index, gameControl->m_name, controlSetting->m_name);
+			auto inputMapping = std::find_if(
+			    Utils::g_inputMapping, Utils::g_inputMapping + Utils::g_inputMappingCount,
+			    [&mapping](const Utils::InputMapping& item) {
+				    return item.m_id == mapping.m_dInputCode;
+			    }
+			);
+
+			auto gameControl = std::find_if(
+			    Utils::g_gameControls, Utils::g_gameControls + Utils::g_gameControlsCount,
+			    [&mapping](const Utils::GameControl& item) {
+				    return item.m_id == mapping.m_gameControlId;
+			    }
+			);
+
+			printf("Mapping %d: \"%s\" mapped to \"%s\"\n", index, inputMapping->m_name, gameControl->m_name);
 			index++;
 		}
+
+		printf("%d Unused Mappings\n", unusedControls);
 	}
 }
 

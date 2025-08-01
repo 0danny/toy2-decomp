@@ -1,8 +1,6 @@
 import sys
 sys.dont_write_bytecode = True
 
-import os
-import subprocess
 import argparse
 import re
 from pathlib import Path
@@ -45,7 +43,7 @@ def parse_source_files():
 
 def count_progress():
     # Check if functions_map.txt exists
-    functions_map_path = Path("decomp_utils/functions_map.txt")
+    functions_map_path = Path("tools/Resources/functions_map.txt")
     if not functions_map_path.exists():
         print("Error: decomp_utils/functions_map.txt not found!")
         return

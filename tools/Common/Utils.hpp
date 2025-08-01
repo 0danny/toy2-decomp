@@ -4,20 +4,20 @@
 
 namespace Utils
 {
-	// I know these names are confusing, WIP
+	struct InputMapping
+	{
+		const char* m_name;
+		int32_t     m_id;
+	};
+
 	struct GameControl
 	{
-		const char* m_name;
-		int32_t     m_id;
-	};
-
-	struct ControlSetting
-	{
 		int32_t     m_id;
 		const char* m_name;
 	};
 
-	ControlSetting g_controlSettings[14] = {
+	// $STATIC_VAR 00500E58
+	GameControl g_gameControls[14] = {
 		{ 16, "up" },
 		{ 64, "down" },
 		{ 128, "left" },
@@ -37,10 +37,10 @@ namespace Utils
 		{ 1, "secret menu" }
 	};
 
-	constexpr size_t g_controlSettingsCount = sizeof(g_controlSettings) / sizeof(ControlSetting);
+	constexpr size_t g_gameControlsCount = sizeof(g_gameControls) / sizeof(GameControl);
 
 	// $STATIC_VAR 004ED398
-	GameControl g_gameControls[] = {
+	InputMapping g_inputMapping[] = {
 		{ "esc", 1 },
 		{ "1", 2 },
 		{ "2", 3 },
@@ -197,5 +197,5 @@ namespace Utils
 		{ nullptr, -1 }
 	};
 
-	constexpr size_t g_gameControlsCount = sizeof(g_gameControls) / sizeof(GameControl);
+	constexpr size_t g_inputMappingCount = sizeof(g_inputMapping) / sizeof(InputMapping);
 }
