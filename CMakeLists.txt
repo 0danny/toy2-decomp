@@ -59,6 +59,7 @@ add_executable(toy2decomp WIN32
     src_main/Logger.h
 )
 
+
 # Build the testing dll(s)
 add_library(test_dll SHARED
     src_testing/dllmain.cpp
@@ -74,3 +75,6 @@ add_library(test_dll SHARED
 
 target_link_directories(test_dll PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
 target_link_libraries(test_dll PRIVATE minhook_x86)
+
+target_link_directories(toy2decomp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
+target_link_libraries(toy2decomp PRIVATE ddraw d3dx d3dxd d3dxof d3drm d3dim)
