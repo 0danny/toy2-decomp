@@ -144,5 +144,8 @@ def main():
     if args.progress:
         count_progress()
 
+    if not args.progress and not args.count:
+        print("Enter an option, --count or --progress.")
+
 if __name__ == "__main__":
     main()

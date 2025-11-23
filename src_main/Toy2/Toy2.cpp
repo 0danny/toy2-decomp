@@ -39,9 +39,9 @@ int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char* p_cmdLine
 	// memset(&g_wndEventMsg, 0, 200u);
 
 	D3DApp::g_hInstance = p_hInstance;
-	D3DApp::g_hPrev     = p_hPrev;
+	D3DApp::g_hPrev = p_hPrev;
 	D3DApp::g_lpCmdLine = p_cmdLine;
-	D3DApp::g_nShowCmd  = p_cmdShow;
+	D3DApp::g_nShowCmd = p_cmdShow;
 
 	/*
     g_leftOverVar1 = 0;
@@ -75,12 +75,12 @@ int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char* p_cmdLine
     }*/
 
 	int32_t l_tokenCount = 0;
-	char*   l_tokenEntries[8];
-	char*   l_currentToken = strtok(p_cmdLine, " ");
+	char* l_tokenEntries[8];
+	char* l_currentToken = strtok(p_cmdLine, " ");
 
 	if ( l_currentToken )
 	{
-		l_tokenCount      = 1;
+		l_tokenCount = 1;
 		char* l_nextToken = strtok(0, " ");
 
 		if ( l_nextToken )

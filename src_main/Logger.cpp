@@ -7,7 +7,7 @@
 
 namespace Logger
 {
-	static char*   g_errorHandlerPath;
+	static char* g_errorHandlerPath;
 	static int32_t g_errorHandlerLine;
 
 	int32_t g_showMsgBoxOnThrow;

@@ -2,9 +2,9 @@
 Language:        Cpp
 AccessModifierOffset: -4
 AlignAfterOpenBracket: BlockIndent
-AlignConsecutiveMacros: true
-AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: false
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Left
 AlignOperands:   false
 AlignTrailingComments: true

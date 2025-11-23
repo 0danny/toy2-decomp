@@ -9,5 +9,5 @@ namespace Logger
 	typedef void (*ThrowErrorFunc)(char* p_format, ...);
 
 	ThrowErrorFunc GetErrorHandler(char* p_filePath, int32_t p_lineNumber);
-	void           ThrowError(char* p_format, ...);
+	void ThrowError(char* p_format, ...);
 }

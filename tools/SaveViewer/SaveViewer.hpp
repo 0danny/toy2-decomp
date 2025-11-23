@@ -26,8 +26,8 @@ namespace SaveViewer
 		uint32_t m_unkInt2;
 		uint8_t  m_zeros[304];
 		uint8_t  m_lives;
-		uint8_t  m_levelIndex;
-		uint8_t  m_unk;
+		uint8_t  m_lastLevel;
+		uint8_t  m_unlocks;
 		uint8_t  m_unkByte2_2;
 		uint8_t  m_cameraType;
 		uint8_t  m_musicVolume;

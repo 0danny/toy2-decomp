@@ -7,20 +7,20 @@
 
 namespace FileUtils
 {
-	char    g_pathRegValue[512];
-	char    g_cdPathRegValue[512];
+	char g_pathRegValue[512];
+	char g_cdPathRegValue[512];
 	int32_t g_registryKeysRead;
 
 	// $FUNC 004A6390 [IMPLEMENTED]
 	void ValidateInstall()
 	{
-		HKEY    l_keyHandle;
-		HKEY    l_phkResult;
+		HKEY l_keyHandle;
+		HKEY l_phkResult;
 		int32_t l_allow32B;
-		char    l_fileNameBuffer[1024];
+		char l_fileNameBuffer[1024];
 
 		g_cdPathRegValue[0] = 0;
-		g_pathRegValue[0]   = 0;
+		g_pathRegValue[0] = 0;
 
 		if ( ! RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software", 0, KEY_ALL_ACCESS, &l_phkResult) )
 		{

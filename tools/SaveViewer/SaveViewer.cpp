@@ -74,8 +74,8 @@ namespace SaveViewer
 		printf("m_unkInt1: %u\n", progData.m_unkInt1);
 		printf("m_unkInt2: %u\n", progData.m_unkInt2);
 		printf("m_lives: %u\n", progData.m_lives);
-		printf("m_levelIndex: %u\n", progData.m_levelIndex);
-		printf("m_unk: %u\n", progData.m_unk);
+		printf("m_lastLevel: %u\n", progData.m_lastLevel);
+		printf("m_unlocks: %u\n", progData.m_unlocks);
 		printf("m_unkByte2_2: %u\n", progData.m_unkByte2_2);
 		printf("m_cameraType: %u\n", progData.m_cameraType);
 		printf("m_musicVolume: %u\n", progData.m_musicVolume);

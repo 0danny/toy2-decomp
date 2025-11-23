@@ -153,7 +153,6 @@ def main():
     parser.add_argument(
         "--tools", 
         choices=["SaveViewer"],
-        default="SaveViewer",
         help="Build and launch the Toy2 tools",
     )
 
