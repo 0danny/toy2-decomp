@@ -45,6 +45,7 @@ set(TOY2_SOURCES
 
     src_main/Toy2/D3DApp.cpp
     src_main/Toy2/D3DApp.h
+    src_main/Toy2/D3DAppTypes.h
 
     src_main/Toy2/FileUtils.cpp
     src_main/Toy2/FileUtils.h

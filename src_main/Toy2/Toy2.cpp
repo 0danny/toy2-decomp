@@ -4,17 +4,49 @@
 #include "FileUtils.h"
 
 #include <windows.h>
+#include <fstream>
 
 namespace Toy2
 {
+	ToyCfg g_toyCfgData;
+
 	// $FUNC 0048E730 [UNFINISHED]
 	void OneInit() {}
 
 	// $FUNC 00490730 [UNFINISHED]
 	void CheckForQuit() {}
 
-	// $FUNC 004CE810 [UNFINISHED]
-	int32_t ReadCfg() { return 0; }
+	// $FUNC 004CE810 [IMPLEMENTED]
+	int32_t ReadCfg()
+	{
+		InitCfg();
+
+		FILE* l_fileHandle = fopen("toy2.cfg", "rb");
+
+		if ( ! l_fileHandle )
+			return 0;
+
+		fread(&g_toyCfgData, 1, sizeof(ToyCfg), l_fileHandle);
+		fclose(l_fileHandle);
+
+		return 1;
+	}
+
+	// $FUNC 004CE760 [IMPLEMENTED]
+	void InitCfg()
+	{
+		memset(&g_toyCfgData, 0, sizeof(g_toyCfgData));
+
+		uint32_t l_flags = g_toyCfgData.flags;
+
+		g_toyCfgData.driverIndex = -1;
+
+		l_flags = g_toyCfgData.flags | 7;
+
+		g_toyCfgData.detail = 1;
+		g_toyCfgData.flags = l_flags;
+		g_toyCfgData.gammaCorrection = 2.0;
+	}
 
 	// $FUNC 00412D70 [UNFINISHED]
 	int32_t ShowModeSelect() { return 0; }
@@ -23,12 +55,31 @@ namespace Toy2
 	int32_t Run(int32_t p_argCount, char** p_argList) { return 0; }
 }
 
+// $FUNC DEBUG METHOD
+void AllocateConsole()
+{
+	AllocConsole();
+
+	FILE* fp;
+
+	// redirect STDOUT
+	fp = freopen("CONOUT$", "w", stdout);
+	fp = freopen("CONOUT$", "w", stderr);
+
+	// redirect STDIN
+	fp = freopen("CONIN$", "r", stdin);
+
+	printf("[Debug Console Allocated!]\n");
+}
+
 // $FUNC 004316C0 [UNFINISHED]
 int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char* p_cmdLine, int32_t p_cmdShow)
 {
+	AllocateConsole();
+
 	// g_leftOverVar0 = 0;
 
-	// memset(&g_softwareRenderer, 0, sizeof(g_softwareRenderer));
+	memset(&D3DApp::g_d3dAppI, 0, sizeof(D3DApp::g_d3dAppI));
 
 	D3DApp::g_allow32BitColors = 1;
 
@@ -87,12 +138,14 @@ int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char* p_cmdLine
 		{
 			char** l_tokenArrayPtr = l_tokenEntries;
 
-			do {
+			do
+			{
 				*l_tokenArrayPtr = l_nextToken;
 				++l_tokenCount;
 				++l_tokenArrayPtr;
 				l_nextToken = strtok(0, " ");
-			} while ( l_nextToken );
+			}
+			while ( l_nextToken );
 		}
 	}
 
