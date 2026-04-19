@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-#include <directx7/d3d.h>
+#include <d3d.h>
 
 struct D3DAppMode
 {
@@ -129,7 +129,7 @@ struct ExamineDevice
 	int32_t isPrimaryDisplay;
 	int32_t isPreferredDevice;
 	GUID deviceGUID;
-	DDCAPS_DX7 ddCaps;
+	DDCAPS ddCaps;
 	char driverName[64];
 	char driverDesc[64];
 	int32_t displayModeCount;

@@ -20,7 +20,7 @@ namespace D3DApp
 	static int32_t g_checkAvailableMem = 1;
 	static int32_t g_sysParamsInfo;
 
-	// $FUNC 004093A0 [UNFINISHED]
+	// $FUNC 004093A0 [IMPLEMENTED]
 	int32_t BuildProfileMachine()
 	{
 		memset(&g_pcStruct, 0, sizeof(g_pcStruct));

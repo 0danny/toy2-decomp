@@ -23,6 +23,5 @@ namespace Toy2
 	void InitCfg();
 
 	int32_t ShowModeSelect();
-
 	int32_t Run(int32_t p_argCount, char** p_argList);
 }
