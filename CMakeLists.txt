@@ -9,8 +9,8 @@ project(PROJECT_NAME C CXX RC)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src_main)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src_testing)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Tests/Patcher)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/include)
 
 set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
@@ -38,17 +38,17 @@ set(NU3D_SOURCES
 
 # Toy2 Sources
 set(TOY2_SOURCES
-    src_main/Common.h
+    src/Common.h
     
-    src_main/Toy2/Toy2.cpp
-    src_main/Toy2/Toy2.h
+    src/Toy2/Toy2.cpp
+    src/Toy2/Toy2.h
 
-    src_main/Toy2/D3DApp.cpp
-    src_main/Toy2/D3DApp.h
-    src_main/Toy2/D3DAppTypes.h
+    src/Toy2/D3DApp.cpp
+    src/Toy2/D3DApp.h
+    src/Toy2/D3DAppTypes.h
 
-    src_main/Toy2/FileUtils.cpp
-    src_main/Toy2/FileUtils.h
+    src/Toy2/FileUtils.cpp
+    src/Toy2/FileUtils.h
 )
 
 # Build the game
@@ -56,22 +56,21 @@ add_executable(toy2decomp WIN32
     ${NU3D_SOURCES}
     ${TOY2_SOURCES}
 
-    src_main/Logger.cpp
-    src_main/Logger.h
+    src/Logger.cpp
+    src/Logger.h
 )
-
 
 # Build the testing dll(s)
 add_library(test_dll SHARED
-    src_testing/dllmain.cpp
+    src/Tests/Patcher/dllmain.cpp
 
-    src_testing/loader.cpp
-    src_testing/loader.h
+    src/Tests/Patcher/loader.cpp
+    src/Tests/Patcher/loader.h
 
-    src_testing/game_patches.cpp
-    src_testing/game_patches.h
+    src/Tests/Patcher/game_patches.cpp
+    src/Tests/Patcher/game_patches.h
 
-    src_testing/utilities.h
+    src/Tests/Patcher/utilities.h
 )
 
 target_link_directories(test_dll PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)

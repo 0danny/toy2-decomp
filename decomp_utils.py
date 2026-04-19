@@ -12,7 +12,7 @@ def count_lines():
 
 
 def parse_source_files():
-    src_main_path = Path("src_main")
+    src_main_path = Path("src")
     implemented_functions = {}
     
     # Pattern to match function comments with address and status
