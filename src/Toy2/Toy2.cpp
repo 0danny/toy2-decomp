@@ -21,13 +21,13 @@ namespace Toy2
 	{
 		InitCfg();
 
-		FILE* l_fileHandle = fopen("toy2.cfg", "rb");
+		FILE* fileHandle = fopen("toy2.cfg", "rb");
 
-		if ( ! l_fileHandle )
+		if ( ! fileHandle )
 			return 0;
 
-		fread(&g_toyCfgData, 1, sizeof(ToyCfg), l_fileHandle);
-		fclose(l_fileHandle);
+		fread(&g_toyCfgData, 1, sizeof(ToyCfg), fileHandle);
+		fclose(fileHandle);
 
 		return 1;
 	}
@@ -37,14 +37,14 @@ namespace Toy2
 	{
 		memset(&g_toyCfgData, 0, sizeof(g_toyCfgData));
 
-		uint32_t l_flags = g_toyCfgData.flags;
+		uint32_t flags = g_toyCfgData.flags;
 
 		g_toyCfgData.driverIndex = -1;
 
-		l_flags = g_toyCfgData.flags | 7;
+		flags = g_toyCfgData.flags | 7;
 
 		g_toyCfgData.detail = 1;
-		g_toyCfgData.flags = l_flags;
+		g_toyCfgData.flags = flags;
 		g_toyCfgData.gammaCorrection = 2.0;
 	}
 
@@ -52,7 +52,7 @@ namespace Toy2
 	int32_t ShowModeSelect() { return 0; }
 
 	// $FUNC 0049D910 [UNFINISHED]
-	int32_t Run(int32_t p_argCount, char** p_argList) { return 0; }
+	int32_t Run(int32_t argCount, char** argList) { return 0; }
 }
 
 // $FUNC DEBUG METHOD
@@ -73,7 +73,7 @@ void AllocateConsole()
 }
 
 // $FUNC 004316C0 [UNFINISHED]
-int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char* p_cmdLine, int32_t p_cmdShow)
+int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int32_t cmdShow)
 {
 	AllocateConsole();
 
@@ -89,10 +89,10 @@ int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char* p_cmdLine
 
 	// memset(&g_wndEventMsg, 0, 200u);
 
-	D3DApp::g_hInstance = p_hInstance;
-	D3DApp::g_hPrev = p_hPrev;
-	D3DApp::g_lpCmdLine = p_cmdLine;
-	D3DApp::g_nShowCmd = p_cmdShow;
+	D3DApp::g_hInstance = hInstance;
+	D3DApp::g_hPrev = hPrev;
+	D3DApp::g_lpCmdLine = cmdLine;
+	D3DApp::g_nShowCmd = cmdShow;
 
 	/*
     g_leftOverVar1 = 0;
@@ -125,31 +125,31 @@ int32_t WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrev, char* p_cmdLine
         Toy2::InitDirect3DRenderer();
     }*/
 
-	int32_t l_tokenCount = 0;
-	char* l_tokenEntries[8];
-	char* l_currentToken = strtok(p_cmdLine, " ");
+	int32_t tokenCount = 0;
+	char* tokenEntries[8];
+	char* currentToken = strtok(cmdLine, " ");
 
-	if ( l_currentToken )
+	if ( currentToken )
 	{
-		l_tokenCount = 1;
-		char* l_nextToken = strtok(0, " ");
+		tokenCount = 1;
+		char* nextToken = strtok(0, " ");
 
-		if ( l_nextToken )
+		if ( nextToken )
 		{
-			char** l_tokenArrayPtr = l_tokenEntries;
+			char** tokenArrayPtr = tokenEntries;
 
 			do
 			{
-				*l_tokenArrayPtr = l_nextToken;
-				++l_tokenCount;
-				++l_tokenArrayPtr;
-				l_nextToken = strtok(0, " ");
+				*tokenArrayPtr = nextToken;
+				++tokenCount;
+				++tokenArrayPtr;
+				nextToken = strtok(0, " ");
 			}
-			while ( l_nextToken );
+			while ( nextToken );
 		}
 	}
 
-	Toy2::Run(l_tokenCount, &l_currentToken);
+	Toy2::Run(tokenCount, &currentToken);
 
 	// g_appIsExiting = 1;
 

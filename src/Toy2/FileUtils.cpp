@@ -14,64 +14,61 @@ namespace FileUtils
 	// $FUNC 004A6390 [IMPLEMENTED]
 	void ValidateInstall()
 	{
-		HKEY l_keyHandle;
-		HKEY l_phkResult;
-		int32_t l_allow32B;
-		char l_fileNameBuffer[1024];
+		HKEY keyHandle;
+		HKEY phkResult;
+		int32_t allow32B;
+		char fileNameBuffer[1024];
 
 		g_cdPathRegValue[0] = 0;
 		g_pathRegValue[0] = 0;
 
-		if ( ! RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software", 0, KEY_ALL_ACCESS, &l_phkResult) )
+		if ( ! RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software", 0, KEY_ALL_ACCESS, &phkResult) )
 		{
-			if ( ! RegOpenKeyExA(l_phkResult, "TravellersTalesToyStory2", 0, KEY_ALL_ACCESS, &l_keyHandle) )
+			if ( ! RegOpenKeyExA(phkResult, "TravellersTalesToyStory2", 0, KEY_ALL_ACCESS, &keyHandle) )
 			{
-				DWORD l_dataSize = 512;
+				DWORD dataSize = 512;
 
-				if ( ! RegQueryValueExA(l_keyHandle, "path", 0, 0, (LPBYTE)g_pathRegValue, &l_dataSize) )
-					g_pathRegValue[l_dataSize] = 0;
+				if ( ! RegQueryValueExA(keyHandle, "path", 0, 0, (LPBYTE)g_pathRegValue, &dataSize) )
+					g_pathRegValue[dataSize] = 0;
 
-				l_dataSize = 512;
+				dataSize = 512;
 
-				if ( RegQueryValueExA(l_keyHandle, "cdpath", 0, 0, (LPBYTE)g_cdPathRegValue, &l_dataSize) )
+				if ( RegQueryValueExA(keyHandle, "cdpath", 0, 0, (LPBYTE)g_cdPathRegValue, &dataSize) )
 					strcpy(g_cdPathRegValue, g_pathRegValue);
 				else
-					g_cdPathRegValue[l_dataSize] = 0;
+					g_cdPathRegValue[dataSize] = 0;
 
-				l_dataSize = 4;
+				dataSize = 4;
 
-				if ( ! RegQueryValueExA(l_keyHandle, "allow32bit", 0, 0, (LPBYTE)&l_allow32B, &l_dataSize) &&
-				     l_allow32B )
+				if ( ! RegQueryValueExA(keyHandle, "allow32bit", 0, 0, (LPBYTE)&allow32B, &dataSize) && allow32B )
 					D3DApp::g_allow32BitColors = 0;
 
-				RegCloseKey(l_keyHandle);
+				RegCloseKey(keyHandle);
 			}
 
-			RegCloseKey(l_phkResult);
+			RegCloseKey(phkResult);
 		}
 
 		g_registryKeysRead = 1;
 
 		if ( ! g_pathRegValue[0] || ! g_cdPathRegValue[0] )
-			Logger::GetErrorHandler("C:\\projects\\toy2\\Win95.cpp", 217)(
-			    "Toy Story 2 is not correctly installed,\r\nplease re-install."
-			);
+			Logger::GetErrorHandler("C:\\projects\\toy2\\Win95.cpp", 217)("Toy Story 2 is not correctly installed,\r\nplease re-install.");
 
-		strcpy(l_fileNameBuffer, g_cdPathRegValue);
-		strcat(l_fileNameBuffer, "validate.tta");
+		strcpy(fileNameBuffer, g_cdPathRegValue);
+		strcat(fileNameBuffer, "validate.tta");
 
-		FILE* l_validateFile = fopen(l_fileNameBuffer, "rb");
+		FILE* validateFile = fopen(fileNameBuffer, "rb");
 
-		if ( l_validateFile )
+		if ( validateFile )
 		{
-			fclose(l_validateFile);
+			fclose(validateFile);
 		}
 		else
 		{
 			Logger::GetErrorHandler("C:\\projects\\toy2\\Win95.cpp", 227)(
 			    "Unable to find file \r\n\"%s\".\r\nPlease ensure your Toy Story 2 "
 			    "CD\r\nis in the specified drive.",
-			    l_fileNameBuffer
+			    fileNameBuffer
 			);
 		}
 	}

@@ -23,21 +23,21 @@ namespace D3DApp
 	int32_t BuildProfileMachine();
 	int32_t BuildWindow();
 
-	int32_t WINAPI EnumerateDevices(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_lpContext);
-	HRESULT WINAPI EnumDisplayModes(LPDDSURFACEDESC p_surfaceDesc, LPVOID p_context);
+	int32_t WINAPI EnumerateDevices(LPGUID guid, LPSTR driverDesc, LPSTR driverName, LPVOID lpContext);
+	HRESULT WINAPI EnumDisplayModes(LPDDSURFACEDESC surfaceDesc, LPVOID context);
 	HRESULT WINAPI EnumDevices(
-	    LPGUID p_guid,
-	    LPSTR p_deviceDesc,
-	    LPSTR p_deviceName,
-	    LPD3DDEVICEDESC p_d3DHWDeviceDesc,
-	    LPD3DDEVICEDESC p_d3DHELDeviceDesc,
-	    LPVOID p_context
+	    LPGUID guid,
+	    LPSTR deviceDesc,
+	    LPSTR deviceName,
+	    LPD3DDEVICEDESC d3DHWDeviceDesc,
+	    LPD3DDEVICEDESC d3DHELDeviceDesc,
+	    LPVOID context
 	);
 
-	int32_t SortDisplayModes(const void* p_modeA, const void* p_modeB);
+	int32_t SortDisplayModes(const void* modeA, const void* modeB);
 
-	LRESULT WINAPI ProfileWndProc(HWND p_hWnd, UINT p_msg, WPARAM p_wParam, LPARAM p_lParam);
-	LRESULT WINAPI NormalWndProc(HWND p_hWnd, UINT p_msg, WPARAM p_wParam, LPARAM p_lParam);
+	LRESULT WINAPI ProfileWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	void SysParmsOnExit();
 }

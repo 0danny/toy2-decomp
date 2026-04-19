@@ -156,6 +156,6 @@ struct PC
 
 enum RenderMode
 {
-	SoftwareRenderer = 0x1,
-	D3DRenderer = 0x2,
+	SoftwareRenderer = 1,
+	D3DRenderer = 2,
 };

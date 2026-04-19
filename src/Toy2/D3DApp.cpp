@@ -1,6 +1,13 @@
 #include "D3DApp.h"
 #include "Logger.h"
 
+namespace
+{
+	int32_t g_changingCoopLevel = 0;
+	int32_t g_checkAvailableMem = 1;
+	int32_t g_sysParamsInfo;
+}
+
 namespace D3DApp
 {
 	int32_t g_allow32BitColors = 0;
@@ -16,10 +23,6 @@ namespace D3DApp
 	WindowData g_windowData;
 	RenderMode g_renderMode;
 
-	static int32_t g_changingCoopLevel = 0;
-	static int32_t g_checkAvailableMem = 1;
-	static int32_t g_sysParamsInfo;
-
 	// $FUNC 004093A0 [IMPLEMENTED]
 	int32_t BuildProfileMachine()
 	{
@@ -28,24 +31,24 @@ namespace D3DApp
 		Logger::Log("---------------------\n");
 		Logger::Log("BEGIN EXAMINE MACHINE\n\n");
 
-		int32_t l_count = 0;
+		int32_t count = 0;
 
-		WNDCLASSA l_wndClass;
-		l_wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		l_wndClass.lpfnWndProc = ProfileWndProc;
-		l_wndClass.cbClsExtra = 0;
-		l_wndClass.cbWndExtra = 0;
-		l_wndClass.hInstance = g_windowData.hInstance;
-		l_wndClass.hIcon = LoadIconA(0, IDI_WINLOGO);
-		l_wndClass.hCursor = LoadCursorA(0, IDC_ARROW);
-		l_wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-		l_wndClass.lpszMenuName = "";
-		l_wndClass.lpszClassName = "Examining Machine";
+		WNDCLASSA wndClass;
+		wndClass.style = CS_HREDRAW | CS_VREDRAW;
+		wndClass.lpfnWndProc = ProfileWndProc;
+		wndClass.cbClsExtra = 0;
+		wndClass.cbWndExtra = 0;
+		wndClass.hInstance = g_windowData.hInstance;
+		wndClass.hIcon = LoadIconA(0, IDI_WINLOGO);
+		wndClass.hCursor = LoadCursorA(0, IDC_ARROW);
+		wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+		wndClass.lpszMenuName = "";
+		wndClass.lpszClassName = "Examining Machine";
 
-		if ( ! RegisterClassA(&l_wndClass) )
+		if ( ! RegisterClassA(&wndClass) )
 			return 0;
 
-		int32_t l_curDeviceCount = 1;
+		int32_t curDeviceCount = 1;
 
 		g_windowData.mainHwnd = CreateWindowExA(
 		    WS_EX_APPWINDOW, "Examining Machine", "Examining Machine",
@@ -59,9 +62,9 @@ namespace D3DApp
 
 		g_pcStruct.ddDeviceCount = 0;
 
-		HRESULT l_ddEnumResult = DirectDrawEnumerateA(EnumerateDevices, 0);
-		if ( l_ddEnumResult < 0 )
-			Logger::LogDDError("DirectDrawEnumerateA(ExamineDDEnumCallback, 0)", l_ddEnumResult);
+		HRESULT ddEnumResult = DirectDrawEnumerateA(EnumerateDevices, 0);
+		if ( ddEnumResult < 0 )
+			Logger::LogDDError("DirectDrawEnumerateA(ExamineDDEnumCallback, 0)", ddEnumResult);
 
 		Logger::Log("END EXAMINE MACHINE\n");
 		Logger::Log("-------------------\n\n");
@@ -78,36 +81,35 @@ namespace D3DApp
 
 		if ( g_pcStruct.ddDeviceCount > 1 )
 		{
-			int32_t l_deviceIter = 1;
+			int32_t deviceIter = 1;
 
 			do
 			{
-				ExamineDevice* l_curDevice = &g_pcStruct.examineDevices[l_deviceIter];
+				ExamineDevice* curDevice = &g_pcStruct.examineDevices[deviceIter];
 
-				if ( l_curDevice->valid && g_pcStruct.examineDevices[l_deviceIter].hasHardwareAccel &&
-				     g_pcStruct.examineDevices[l_deviceIter].has3DSupport )
+				if ( curDevice->valid && g_pcStruct.examineDevices[deviceIter].hasHardwareAccel &&
+				     g_pcStruct.examineDevices[deviceIter].has3DSupport )
 				{
-					g_pcStruct.defaultDriver = l_curDevice;
+					g_pcStruct.defaultDriver = curDevice;
 
 					Logger::Log(
-					    "INFO DirectDraw - Override default driver, new driver >>>%s,%s<<< selected.\n", l_curDevice->driverName,
-					    l_curDevice->driverDesc
+					    "INFO DirectDraw - Override default driver, new driver >>>%s,%s<<< selected.\n", curDevice->driverName, curDevice->driverDesc
 					);
 				}
 
-				l_deviceIter = ++l_curDeviceCount;
+				deviceIter = ++curDeviceCount;
 			}
-			while ( l_curDeviceCount < g_pcStruct.ddDeviceCount );
+			while ( curDeviceCount < g_pcStruct.ddDeviceCount );
 		}
 
 		if ( g_pcStruct.defaultDriver )
 		{
-			const char* l_hasHardwareAccel = "has";
+			const char* hasHardwareAccel = "has";
 
 			if ( ! g_pcStruct.defaultDriver->hasHardwareAccel )
-				l_hasHardwareAccel = "has no";
+				hasHardwareAccel = "has no";
 
-			Logger::Log("INFO DirectDraw - Device %s hardware acceleration.\n", l_hasHardwareAccel);
+			Logger::Log("INFO DirectDraw - Device %s hardware acceleration.\n", hasHardwareAccel);
 		}
 		else
 		{
@@ -121,7 +123,7 @@ namespace D3DApp
 		if ( g_pcStruct.defaultDriver->isPrimaryDisplay )
 		{
 			Logger::Log("INFO Direct3D - Searching for hardware RGB driver.\n");
-			ExamineDevice* l_defaultDriver = g_pcStruct.defaultDriver;
+			ExamineDevice* defaultDriver = g_pcStruct.defaultDriver;
 
 			int32_t hardwareRGBCount = 0;
 			int32_t softwareRGBCount = 0;
@@ -131,33 +133,33 @@ namespace D3DApp
 
 			if ( g_pcStruct.defaultDriver->deviceCount > 0 )
 			{
-				int32_t l_curInterfaceDev = 0;
+				int32_t curInterfaceDev = 0;
 
 				InterfaceDevice** softwareDevices = &softwareRGBDevice;
 				InterfaceDevice** hardwareDevices = &hardwareRGBDevice;
 
 				do
 				{
-					InterfaceDevice* l_interfaceDevice = &g_pcStruct.defaultDriver->interfaceDevices[l_curInterfaceDev];
+					InterfaceDevice* interfaceDevice = &g_pcStruct.defaultDriver->interfaceDevices[curInterfaceDev];
 
-					if ( l_interfaceDevice->isHardwareAccelerated )
+					if ( interfaceDevice->isHardwareAccelerated )
 					{
-						if ( (l_interfaceDevice->hwDeviceDesc.dcmColorModel & 2) != 0 )
+						if ( (interfaceDevice->hwDeviceDesc.dcmColorModel & 2) != 0 )
 						{
-							*hardwareDevices++ = l_interfaceDevice;
+							*hardwareDevices++ = interfaceDevice;
 							++hardwareRGBCount;
 						}
 					}
-					else if ( (l_interfaceDevice->hwDeviceDesc.dcmColorModel & 2) != 0 )
+					else if ( (interfaceDevice->hwDeviceDesc.dcmColorModel & 2) != 0 )
 					{
-						*softwareDevices = l_interfaceDevice;
+						*softwareDevices = interfaceDevice;
 						++softwareRGBCount;
 						++softwareDevices;
 					}
 
-					l_curInterfaceDev = ++l_count;
+					curInterfaceDev = ++count;
 				}
-				while ( l_count < l_defaultDriver->deviceCount );
+				while ( count < defaultDriver->deviceCount );
 			}
 
 			if ( hardwareRGBCount && hardwareRGBDevice->hasTexturing )
@@ -178,10 +180,10 @@ namespace D3DApp
 					{
 						g_pcStruct.selectedInterfaceDevice = softwareRGBDevice;
 						Logger::Log("INFO Direct3D - Driver >>>%s,%s<<< selected\n", softwareRGBDevice->baseName, softwareRGBDevice->description);
-						l_defaultDriver = g_pcStruct.defaultDriver;
+						defaultDriver = g_pcStruct.defaultDriver;
 					}
 
-					l_defaultDriver->hasHardwareAccel = 0;
+					defaultDriver->hasHardwareAccel = 0;
 				}
 				else
 				{
@@ -288,7 +290,7 @@ namespace D3DApp
 		Logger::Log("INFO Native software render mode is %s.\n", softwareRenderStatus);
 
 		ExamineDevice* defaultDriver = g_pcStruct.defaultDriver;
-		int32_t l_softwareRenderMode = g_pcStruct.softwareRenderMode;
+		int32_t softwareRenderMode = g_pcStruct.softwareRenderMode;
 
 		g_pcStruct.mode = g_pcStruct.defaultDriver->displayModes;
 
@@ -315,7 +317,7 @@ namespace D3DApp
 				}
 				while ( displayModeLoopIndex < defaultDriver->displayModeCount );
 
-				l_softwareRenderMode = g_pcStruct.softwareRenderMode;
+				softwareRenderMode = g_pcStruct.softwareRenderMode;
 			}
 		}
 		else
@@ -350,17 +352,17 @@ namespace D3DApp
 						break;
 				}
 
-				l_softwareRenderMode = g_pcStruct.softwareRenderMode;
+				softwareRenderMode = g_pcStruct.softwareRenderMode;
 			}
 		}
 
-		g_renderMode = (RenderMode)(2 - (l_softwareRenderMode != 0));
-		const char* l_renderMode = "native software render";
+		g_renderMode = (RenderMode)(2 - (softwareRenderMode != 0));
+		const char* renderMode = "native software render";
 
 		if ( g_renderMode != SoftwareRenderer )
-			l_renderMode = "Direct3d render";
+			renderMode = "Direct3d render";
 
-		Logger::Log("INFO RenderMode set to %s mode.\n", l_renderMode);
+		Logger::Log("INFO RenderMode set to %s mode.\n", renderMode);
 		Logger::Log("INFO Screen mode %dx%dx%d selected.\n", g_pcStruct.mode->width, g_pcStruct.mode->height, g_pcStruct.mode->rgbBitCount);
 		Logger::Log("\n");
 
@@ -408,21 +410,22 @@ namespace D3DApp
 
 		if ( RegisterClassExA(&g_windowData.wndClass) )
 		{
-			HWND l_window =
+			HWND window =
 			    CreateWindowExA(WS_EX_TOPMOST, "Toy2", "Toy2", WS_POPUP, CW_USEDEFAULT, CW_USEDEFAULT, 640, 480, 0, 0, g_windowData.hInstance, 0);
 
-			g_windowData.mainHwnd = l_window;
-			g_d3dAppI.hwnd = l_window;
+			g_windowData.mainHwnd = window;
+			g_d3dAppI.hwnd = window;
 
-			if ( l_window )
+			if ( window )
 			{
-				UpdateWindow(l_window);
+				UpdateWindow(window);
 				g_windowData.hAccTable = LoadAcceleratorsA(g_windowData.hInstance, "AppAccel");
 
 				if ( SystemParametersInfoA(SPI_SETSCREENSAVERRUNNING, 1u, &g_sysParamsInfo, 0) )
 					atexit(SysParmsOnExit);
 
 				static int32_t g_windowCreationError = 0;
+
 				return 1;
 			}
 			else
@@ -433,352 +436,348 @@ namespace D3DApp
 		}
 		else
 		{
-			int32_t l_lastError = GetLastError();
+			int32_t lastError = GetLastError();
 
-			char* l_buffer = NULL;
+			char* buffer = NULL;
 			FormatMessageA(
-			    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 0, l_lastError,
-			    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), l_buffer, 0, 0
+			    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 0, lastError,
+			    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), buffer, 0, 0
 			);
-			MessageBoxA(0, l_buffer, "GetLastError", MB_ICONINFORMATION);
-			LocalFree(l_buffer);
+			MessageBoxA(0, buffer, "GetLastError", MB_ICONINFORMATION);
+			LocalFree(buffer);
 			return 0;
 		}
 	}
 
 	// $FUNC 00408D30 [IMPLEMENTED]
-	int32_t WINAPI EnumerateDevices(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_lpContext)
+	int32_t WINAPI EnumerateDevices(LPGUID guid, LPSTR driverDesc, LPSTR driverName, LPVOID lpContext)
 	{
 		memset(&g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount], 0, sizeof(g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount]));
 
-		ExamineDevice* l_curDevice = &g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount];
+		ExamineDevice* curDevice = &g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount];
 
-		LPDIRECTDRAW l_lpDD;
-		if ( DirectDrawCreate(p_guid, &l_lpDD, 0) < 0 )
+		LPDIRECTDRAW lpDD;
+		if ( DirectDrawCreate(guid, &lpDD, 0) < 0 )
 		{
-			l_curDevice->dd2->Release();
+			curDevice->dd2->Release();
 			memset(&g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount], 0, sizeof(g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount]));
 			return 1;
 		}
 
-		HRESULT l_query1Result = l_lpDD->QueryInterface(IID_IDirectDraw2, (void**)&l_curDevice->dd2);
+		HRESULT query1Result = lpDD->QueryInterface(IID_IDirectDraw2, (void**)&curDevice->dd2);
 
-		if ( l_query1Result < 0 )
-			Logger::LogDDError("tempDD->QueryInterface(IID_IDirectDraw2, (LPVOID*)&(ddinfo->DDDevice))", l_query1Result);
+		if ( query1Result < 0 )
+			Logger::LogDDError("tempDD->QueryInterface(IID_IDirectDraw2, (LPVOID*)&(ddinfo->DDDevice))", query1Result);
 
-		if ( l_lpDD )
+		if ( lpDD )
 		{
-			l_lpDD->Release();
-			l_lpDD = 0;
+			lpDD->Release();
+			lpDD = 0;
 		}
 
 		g_changingCoopLevel = 1;
-		l_curDevice->dd2->SetCooperativeLevel(g_windowData.mainHwnd, 81);
+		curDevice->dd2->SetCooperativeLevel(g_windowData.mainHwnd, 81);
 		g_changingCoopLevel = 0;
 
-		memset(&l_curDevice->ddCaps, 0, sizeof(l_curDevice->ddCaps));
+		memset(&curDevice->ddCaps, 0, sizeof(curDevice->ddCaps));
 
-		l_curDevice->ddCaps.dwSize = 380;
+		curDevice->ddCaps.dwSize = 380;
 
-		if ( l_curDevice->dd2->GetCaps(&l_curDevice->ddCaps, 0) < 0 )
+		if ( curDevice->dd2->GetCaps(&curDevice->ddCaps, 0) < 0 )
 		{
-			l_curDevice->dd2->Release();
+			curDevice->dd2->Release();
 			memset(&g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount], 0, sizeof(g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount]));
 			return 1;
 		}
 
-		DDSCAPS l_ddsCaps;
-		l_ddsCaps.dwCaps = 4096;
+		DDSCAPS ddsCaps;
+		ddsCaps.dwCaps = 4096;
 
-		// Honestly who knows whats going on here (compiler artifact?)
-		if ( p_guid && p_guid != (GUID*)2 && g_checkAvailableMem != 1 )
+		// TODO: Honestly who knows whats going on here (compiler artifact?)
+		if ( guid && guid != (GUID*)2 && g_checkAvailableMem != 1 )
 		{
-			HRESULT l_availMemResult =
-			    l_curDevice->dd2->GetAvailableVidMem(&l_ddsCaps, (LPDWORD)&l_curDevice->texVidMemTot, (LPDWORD)&l_curDevice->texVidMemFree);
+			HRESULT availMemResult =
+			    curDevice->dd2->GetAvailableVidMem(&ddsCaps, (LPDWORD)&curDevice->texVidMemTot, (LPDWORD)&curDevice->texVidMemFree);
 
-			if ( l_availMemResult < 0 )
-				Logger::LogDDError("ddinfo->DDDevice->GetAvailableVidMem(&caps, &ddinfo->TexVidMemTotal, &ddinfo->TexVidMemFree)", l_availMemResult);
+			if ( availMemResult < 0 )
+				Logger::LogDDError("ddinfo->DDDevice->GetAvailableVidMem(&caps, &ddinfo->TexVidMemTotal, &ddinfo->TexVidMemFree)", availMemResult);
 
-			int32_t l_texVidMemFree = l_curDevice->texVidMemFree;
+			int32_t texVidMemFree = curDevice->texVidMemFree;
 
-			if ( l_texVidMemFree < 0x200000 )
+			if ( texVidMemFree < 0x200000 )
 			{
 				Logger::Log(
-				    "DIRECT DRAW DEVICE : Device %s,%s reports less than %d texture memory free - skipping.\n\n", p_driverName, p_driverDesc, 0x200000
+				    "DIRECT DRAW DEVICE : Device %s,%s reports less than %d texture memory free - skipping.\n\n", driverName, driverDesc, 0x200000
 				);
 
-				l_curDevice->dd2->Release();
+				curDevice->dd2->Release();
 				memset(&g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount], 0, sizeof(g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount]));
 				return 1;
 			}
 
-			l_curDevice->hasLowVideoMem = l_texVidMemFree < 0x400000;
+			curDevice->hasLowVideoMem = texVidMemFree < 0x400000;
 		}
 
-		int32_t l_dwCaps = l_curDevice->ddCaps.dwCaps;
+		int32_t dwCaps = curDevice->ddCaps.dwCaps;
 
-		l_curDevice->valid = 1;
-		l_curDevice->has3DSupport = l_dwCaps & 1;
-		l_curDevice->hasHardwareAccel = (~l_dwCaps >> 25) & 1;
+		curDevice->valid = 1;
+		curDevice->has3DSupport = dwCaps & 1;
+		curDevice->hasHardwareAccel = (~dwCaps >> 25) & 1;
 
-		int32_t l_dwSVBCaps = l_curDevice->ddCaps.dwSVBCaps;
+		int32_t dwSVBCaps = curDevice->ddCaps.dwSVBCaps;
 
-		l_curDevice->hasVideoDMA = l_dwSVBCaps >> 31;
+		curDevice->hasVideoDMA = dwSVBCaps >> 31;
 
-		if ( l_dwSVBCaps < 0 )
+		if ( dwSVBCaps < 0 )
 		{
-			int32_t l_dwSVBCKeyCaps = l_curDevice->ddCaps.dwSVBCKeyCaps;
-			int32_t l_dwSVBFXCaps = l_curDevice->ddCaps.dwSVBFXCaps;
+			int32_t dwSVBCKeyCaps = curDevice->ddCaps.dwSVBCKeyCaps;
+			int32_t dwSVBFXCaps = curDevice->ddCaps.dwSVBFXCaps;
 
-			l_curDevice->svbCaps = l_dwSVBCaps;
-			l_curDevice->svbcKeyCaps = l_dwSVBCKeyCaps;
-			l_curDevice->svbFxCaps = l_dwSVBFXCaps;
+			curDevice->svbCaps = dwSVBCaps;
+			curDevice->svbcKeyCaps = dwSVBCKeyCaps;
+			curDevice->svbFxCaps = dwSVBFXCaps;
 		}
 
-		strncpy(l_curDevice->driverName, p_driverName, 64u);
-		strncpy(l_curDevice->driverDesc, p_driverDesc, 64u);
+		strncpy(curDevice->driverName, driverName, 64u);
+		strncpy(curDevice->driverDesc, driverDesc, 64u);
 
-		if ( ! p_guid || p_guid == (GUID*)2 )
+		if ( ! guid || guid == (GUID*)2 )
 		{
-			l_curDevice->hasHardwareAccel = 0;
+			curDevice->hasHardwareAccel = 0;
 		}
 		else
 		{
-			l_curDevice->isPrimaryDisplay = 0;
-			l_curDevice->deviceGUID = *p_guid;
+			curDevice->isPrimaryDisplay = 0;
+			curDevice->deviceGUID = *guid;
 		}
 
-		HRESULT l_enumModesResult = l_curDevice->dd2->EnumDisplayModes(0, 0, l_curDevice, EnumDisplayModes);
+		HRESULT enumModesResult = curDevice->dd2->EnumDisplayModes(0, 0, curDevice, EnumDisplayModes);
 
-		if ( l_enumModesResult < 0 )
-			Logger::LogDDError("ddinfo->DDDevice->EnumDisplayModes(0, 0, (LPVOID)ddinfo, ExamineDDModesEnumCallback)", l_enumModesResult);
+		if ( enumModesResult < 0 )
+			Logger::LogDDError("ddinfo->DDDevice->EnumDisplayModes(0, 0, (LPVOID)ddinfo, ExamineDDModesEnumCallback)", enumModesResult);
 
-		qsort(l_curDevice->displayModes, l_curDevice->displayModeCount, 12, SortDisplayModes);
+		qsort(curDevice->displayModes, curDevice->displayModeCount, 12, SortDisplayModes);
 
-		Logger::Log("DIRECT DRAW DEVICE BASE NAME : %s.\n", l_curDevice->driverName);
-		Logger::Log("DIRECT DRAW DEVICE DESCRIPTION : %s.\n", l_curDevice->driverDesc);
+		Logger::Log("DIRECT DRAW DEVICE BASE NAME : %s.\n", curDevice->driverName);
+		Logger::Log("DIRECT DRAW DEVICE DESCRIPTION : %s.\n", curDevice->driverDesc);
 
-		const char* l_has3D = "TRUE";
+		const char* has3D = "TRUE";
 
-		if ( ! l_curDevice->has3DSupport )
-			l_has3D = "FALSE";
+		if ( ! curDevice->has3DSupport )
+			has3D = "FALSE";
 
-		Logger::Log("DIRECT DRAW DEVICE 3D SUPPORT : %s.\n", l_has3D);
+		Logger::Log("DIRECT DRAW DEVICE 3D SUPPORT : %s.\n", has3D);
 
-		const char* l_hasDDHardware = "TRUE";
+		const char* hasDDHardware = "TRUE";
 
-		if ( ! l_curDevice->hasHardwareAccel )
-			l_hasDDHardware = "FALSE";
+		if ( ! curDevice->hasHardwareAccel )
+			hasDDHardware = "FALSE";
 
-		Logger::Log("DIRECT DRAW DEVICE HARDWARE : %s.\n", l_hasDDHardware);
+		Logger::Log("DIRECT DRAW DEVICE HARDWARE : %s.\n", hasDDHardware);
 
-		const char* l_hasVideoDMA = "TRUE";
+		const char* hasVideoDMA = "TRUE";
 
-		if ( ! l_curDevice->hasVideoDMA )
-			l_hasVideoDMA = "FALSE";
+		if ( ! curDevice->hasVideoDMA )
+			hasVideoDMA = "FALSE";
 
-		Logger::Log("DIRECT DRAW SYSTEM-VIDEO DMA : %s.\n", l_hasVideoDMA);
+		Logger::Log("DIRECT DRAW SYSTEM-VIDEO DMA : %s.\n", hasVideoDMA);
 
-		if ( p_guid )
+		if ( guid )
 		{
-			const char* l_hasLowVidMem = "TRUE";
+			const char* hasLowVidMem = "TRUE";
 
-			if ( ! l_curDevice->hasLowVideoMem )
-				l_hasLowVidMem = "FALSE";
+			if ( ! curDevice->hasLowVideoMem )
+				hasLowVidMem = "FALSE";
 
-			Logger::Log("DIRECT DRAW LOW VIDEO MEMORY STATUS  : %s.\n", l_hasLowVidMem);
+			Logger::Log("DIRECT DRAW LOW VIDEO MEMORY STATUS  : %s.\n", hasLowVidMem);
 		}
 
 		Logger::Log("DIRECT DRAW DEVICE SCREEN MODES.\n");
 		Logger::Log("\n");
 
-		int32_t l_iter = 0;
+		int32_t iter = 0;
 
-		if ( l_curDevice->displayModeCount > 0 )
+		if ( curDevice->displayModeCount > 0 )
 		{
-			DisplayMode* l_item = &l_curDevice->displayModes[0];
+			DisplayMode* item = &curDevice->displayModes[0];
 
 			do
 			{
-				Logger::Log("DDMODE %i - %dx%dx%d bit.\n", l_iter++, l_item->rgbBitCount, l_item->width, l_item->height);
-				++l_item;
+				Logger::Log("DDMODE %i - %dx%dx%d bit.\n", iter++, item->rgbBitCount, item->width, item->height);
+				++item;
 			}
-			while ( l_iter < l_curDevice->displayModeCount );
+			while ( iter < curDevice->displayModeCount );
 		}
 
-		HRESULT l_query3D2Result = l_curDevice->dd2->QueryInterface(IID_IDirect3D2, (void**)&l_curDevice->dd3D);
+		HRESULT query3D2Result = curDevice->dd2->QueryInterface(IID_IDirect3D2, (void**)&curDevice->dd3D);
 
-		if ( l_query3D2Result < 0 )
-			Logger::LogDDError("ddinfo->DDDevice->QueryInterface(IID_IDirect3D2, (LPVOID *) &ddinfo->D3DDevice)", l_query3D2Result);
+		if ( query3D2Result < 0 )
+			Logger::LogDDError("ddinfo->DDDevice->QueryInterface(IID_IDirect3D2, (LPVOID *) &ddinfo->D3DDevice)", query3D2Result);
 
-		HRESULT l_enumDevicesResult = l_curDevice->dd3D->EnumDevices(EnumDevices, l_curDevice);
+		HRESULT enumDevicesResult = curDevice->dd3D->EnumDevices(EnumDevices, curDevice);
 
-		if ( l_enumDevicesResult < 0 )
-			Logger::LogDDError("ddinfo->D3DDevice->EnumDevices(ExamineD3DEnumCallback, (LPVOID*)ddinfo)", l_enumDevicesResult);
+		if ( enumDevicesResult < 0 )
+			Logger::LogDDError("ddinfo->D3DDevice->EnumDevices(ExamineD3DEnumCallback, (LPVOID*)ddinfo)", enumDevicesResult);
 
 		++g_pcStruct.ddDeviceCount;
 
-		if ( l_curDevice->dd3D )
+		if ( curDevice->dd3D )
 		{
-			l_curDevice->dd3D->Release();
-			l_curDevice->dd3D = 0;
+			curDevice->dd3D->Release();
+			curDevice->dd3D = 0;
 		}
 
-		if ( l_curDevice->dd2 )
+		if ( curDevice->dd2 )
 		{
-			l_curDevice->dd2->Release();
-			l_curDevice->dd2 = 0;
+			curDevice->dd2->Release();
+			curDevice->dd2 = 0;
 		}
 
 		return 1;
 	}
 
 	// $FUNC 00408D30 [IMPLEMENTED]
-	HRESULT WINAPI EnumDisplayModes(LPDDSURFACEDESC p_surfaceDesc, LPVOID p_context)
+	HRESULT WINAPI EnumDisplayModes(LPDDSURFACEDESC surfaceDesc, LPVOID context)
 	{
-		ExamineDevice* l_context = (ExamineDevice*)p_context;
+		ExamineDevice* examineContext = (ExamineDevice*)context;
 
-		int32_t l_dwWidth = p_surfaceDesc->dwWidth;
+		int32_t dwWidth = surfaceDesc->dwWidth;
 
-		if ( l_dwWidth < 320 || p_surfaceDesc->dwHeight < 200 )
+		if ( dwWidth < 320 || surfaceDesc->dwHeight < 200 )
 			return 1;
 
-		DisplayMode* l_displayMode = &l_context->displayModes[l_context->displayModeCount];
+		DisplayMode* displayMode = &examineContext->displayModes[examineContext->displayModeCount];
 
-		l_displayMode->width = l_dwWidth;
-		l_displayMode->height = p_surfaceDesc->dwHeight;
-		l_displayMode->rgbBitCount = p_surfaceDesc->ddpfPixelFormat.dwRGBBitCount;
+		displayMode->width = dwWidth;
+		displayMode->height = surfaceDesc->dwHeight;
+		displayMode->rgbBitCount = surfaceDesc->ddpfPixelFormat.dwRGBBitCount;
 
-		int32_t l_curDisplayModeCount = l_context->displayModeCount + 1;
-		l_context->displayModeCount = l_curDisplayModeCount;
+		int32_t curDisplayModeCount = examineContext->displayModeCount + 1;
+		examineContext->displayModeCount = curDisplayModeCount;
 
-		return l_curDisplayModeCount != 128;
+		return curDisplayModeCount != 128;
 	}
 
 	// $FUNC 00409130 [IMPLEMENTED]
-	HRESULT WINAPI EnumDevices(
-	    LPGUID p_guid,
-	    LPSTR p_deviceDesc,
-	    LPSTR p_deviceName,
-	    LPD3DDEVICEDESC p_d3DHWDeviceDesc,
-	    LPD3DDEVICEDESC p_d3DHELDeviceDesc,
-	    LPVOID p_context
-	)
+	HRESULT WINAPI
+	EnumDevices(LPGUID guid, LPSTR deviceDesc, LPSTR deviceName, LPD3DDEVICEDESC d3DHWDeviceDesc, LPD3DDEVICEDESC d3DHELDeviceDesc, LPVOID context)
 	{
-		LPD3DDEVICEDESC l_hwDeviceDesc = p_d3DHWDeviceDesc;
-		ExamineDevice* l_context = (ExamineDevice*)p_context;
+		LPD3DDEVICEDESC hwDeviceDesc = d3DHWDeviceDesc;
+		ExamineDevice* examineContext = (ExamineDevice*)context;
 
-		InterfaceDevice* l_item = &l_context->interfaceDevices[l_context->deviceCount];
+		InterfaceDevice* item = &examineContext->interfaceDevices[examineContext->deviceCount];
 
-		memset(l_item, 0, sizeof(InterfaceDevice));
+		memset(item, 0, sizeof(InterfaceDevice));
 
-		l_item->isHardwareAccelerated = p_d3DHWDeviceDesc->dcmColorModel != 0;
+		item->isHardwareAccelerated = d3DHWDeviceDesc->dcmColorModel != 0;
 
-		l_item->guid = *p_guid;
+		item->guid = *guid;
 
-		lstrcpyA(l_item->baseName, p_deviceName);
-		lstrcpyA(l_item->description, p_deviceDesc);
+		lstrcpyA(item->baseName, deviceName);
+		lstrcpyA(item->description, deviceDesc);
 
-		if ( ! p_d3DHWDeviceDesc->dcmColorModel )
-			l_hwDeviceDesc = p_d3DHELDeviceDesc;
+		if ( ! d3DHWDeviceDesc->dcmColorModel )
+			hwDeviceDesc = d3DHELDeviceDesc;
 
-		memcpy(&l_item->hwDeviceDesc, l_hwDeviceDesc, sizeof(l_item->hwDeviceDesc));
+		memcpy(&item->hwDeviceDesc, hwDeviceDesc, sizeof(item->hwDeviceDesc));
 
-		int32_t l_dwDeviceZBufferBitDepth = l_item->hwDeviceDesc.dwDeviceZBufferBitDepth;
-		int32_t l_hasTexturing = l_item->hwDeviceDesc.dpcTriCaps.dwTextureCaps & 1;
+		int32_t dwDeviceZBufferBitDepth = item->hwDeviceDesc.dwDeviceZBufferBitDepth;
+		int32_t hasTexturing = item->hwDeviceDesc.dpcTriCaps.dwTextureCaps & 1;
 
-		l_item->isSquareTexturesOnly = (l_item->hwDeviceDesc.dpcTriCaps.dwTextureCaps >> 5) & 1;
+		item->isSquareTexturesOnly = (item->hwDeviceDesc.dpcTriCaps.dwTextureCaps >> 5) & 1;
 
-		int32_t l_hasAlphaBlending = (l_item->hwDeviceDesc.dpcTriCaps.dwSrcBlendCaps >> 11) & 1;
+		int32_t hasAlphaBlending = (item->hwDeviceDesc.dpcTriCaps.dwSrcBlendCaps >> 11) & 1;
 
-		l_item->hasTexturing = l_hasTexturing;
-		l_item->hasAlphaBlending = l_hasAlphaBlending;
-		l_item->hasZBuffer = l_dwDeviceZBufferBitDepth != 0;
+		item->hasTexturing = hasTexturing;
+		item->hasAlphaBlending = hasAlphaBlending;
+		item->hasZBuffer = dwDeviceZBufferBitDepth != 0;
 
 		Logger::Log("\n");
-		Logger::Log("DIRECT 3D DEVICE BASE NAME : %s.\n", l_item->baseName);
-		Logger::Log("DIRECT 3D DEVICE DESCRIPTION : %s.\n", l_item->description);
+		Logger::Log("DIRECT 3D DEVICE BASE NAME : %s.\n", item->baseName);
+		Logger::Log("DIRECT 3D DEVICE DESCRIPTION : %s.\n", item->description);
 
-		const char* l_texFlag = "TRUE";
-		if ( ! l_item->hasTexturing )
-			l_texFlag = "FALSE";
+		const char* texFlag = "TRUE";
+		if ( ! item->hasTexturing )
+			texFlag = "FALSE";
 
-		Logger::Log("DIRECT 3D DEVICE TextureFlag\t:\t%s.\n", l_texFlag);
+		Logger::Log("DIRECT 3D DEVICE TextureFlag\t:\t%s.\n", texFlag);
 
-		const char* l_zBufferFlag = "TRUE";
-		if ( ! l_item->hasZBuffer )
-			l_zBufferFlag = "FALSE";
+		const char* zBufferFlag = "TRUE";
+		if ( ! item->hasZBuffer )
+			zBufferFlag = "FALSE";
 
-		Logger::Log("DIRECT 3D DEVICE ZBufferFlag : %s.\n", l_zBufferFlag);
+		Logger::Log("DIRECT 3D DEVICE ZBufferFlag : %s.\n", zBufferFlag);
 
-		const char* l_hardwareAccelFlag = "TRUE";
-		if ( ! l_item->isHardwareAccelerated )
-			l_hardwareAccelFlag = "FALSE";
+		const char* hardwareAccelFlag = "TRUE";
+		if ( ! item->isHardwareAccelerated )
+			hardwareAccelFlag = "FALSE";
 
-		Logger::Log("DIRECT 3D DEVICE HardwareAccel : %s.\n", l_hardwareAccelFlag);
+		Logger::Log("DIRECT 3D DEVICE HardwareAccel : %s.\n", hardwareAccelFlag);
 
-		const char* l_squareOnlyFlag = "TRUE";
-		if ( ! l_item->isSquareTexturesOnly )
-			l_squareOnlyFlag = "FALSE";
+		const char* squareOnlyFlag = "TRUE";
+		if ( ! item->isSquareTexturesOnly )
+			squareOnlyFlag = "FALSE";
 
-		Logger::Log("DIRECT 3D DEVICE SquareOnly : %s.\n", l_squareOnlyFlag);
+		Logger::Log("DIRECT 3D DEVICE SquareOnly : %s.\n", squareOnlyFlag);
 
-		const char* l_alphaBlending = "ON";
-		if ( ! l_item->hasAlphaBlending )
-			l_alphaBlending = "OFF";
+		const char* alphaBlending = "ON";
+		if ( ! item->hasAlphaBlending )
+			alphaBlending = "OFF";
 
-		Logger::Log("DIRECT 3D DEVICE Alpha blending is %s.\n", l_alphaBlending);
+		Logger::Log("DIRECT 3D DEVICE Alpha blending is %s.\n", alphaBlending);
 		Logger::Log("\n");
 
-		l_item->valid = 1;
-		++l_context->deviceCount;
+		item->valid = 1;
+		++examineContext->deviceCount;
 
 		return 1;
 	}
 
 	// $FUNC 00408CD0 [IMPLEMENTED]
-	int32_t SortDisplayModes(const void* p_modeA, const void* p_modeB)
+	int32_t SortDisplayModes(const void* modeA, const void* modeB)
 	{
-		DisplayMode* l_modeA = (DisplayMode*)p_modeA;
-		DisplayMode* l_modeB = (DisplayMode*)p_modeB;
+		DisplayMode* displayModeA = (DisplayMode*)modeA;
+		DisplayMode* displayModeB = (DisplayMode*)modeB;
 
-		int32_t l_bitCountA = l_modeA->rgbBitCount;
-		int32_t l_bitCountB = l_modeB->rgbBitCount;
+		int32_t bitCountA = displayModeA->rgbBitCount;
+		int32_t bitCountB = displayModeB->rgbBitCount;
 
-		if ( l_bitCountB > l_bitCountA )
+		if ( bitCountB > bitCountA )
 			return -1;
 
-		if ( l_bitCountB < l_bitCountA )
+		if ( bitCountB < bitCountA )
 			return 1;
 
-		if ( l_modeB->width > l_modeA->width )
+		if ( displayModeB->width > displayModeA->width )
 			return -1;
 
-		if ( l_modeB->width < l_modeA->width )
+		if ( displayModeB->width < displayModeA->width )
 			return 1;
 
-		int32_t l_heightA = l_modeA->height;
-		int32_t l_heightB = l_modeB->height;
+		int32_t heightA = displayModeA->height;
+		int32_t heightB = displayModeB->height;
 
-		if ( l_heightA >= l_heightB )
-			return l_heightB < l_heightA;
+		if ( heightA >= heightB )
+			return heightB < heightA;
 		else
 			return -1;
 	}
 
 	// $FUNC 00409360 [IMPLEMENTED]
-	LRESULT WINAPI ProfileWndProc(HWND p_hWnd, UINT p_msg, WPARAM p_wParam, LPARAM p_lParam)
+	LRESULT WINAPI ProfileWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		if ( p_msg == WM_DESTROY )
+		if ( msg == WM_DESTROY )
 		{
 			g_windowData.mainHwnd = 0;
 			PostQuitMessage(0);
 		}
 
-		return DefWindowProcA(p_hWnd, p_msg, p_wParam, p_lParam);
+		return DefWindowProcA(hWnd, msg, wParam, lParam);
 	}
 
-	LRESULT __stdcall NormalWndProc(HWND p_hWnd, UINT p_msg, WPARAM p_wParam, LPARAM p_lParam) { return LRESULT(); }
+	// $FUNC 004A6D40 [UNIMPLEMENTED]
+	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return LRESULT(); }
 
+	// $FUNC 004A6B10 [IMPLEMENTED]
 	void SysParmsOnExit() { SystemParametersInfoA(SPI_SETSCREENSAVERRUNNING, g_sysParamsInfo, &g_sysParamsInfo, 0); }
 }

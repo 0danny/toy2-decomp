@@ -4,113 +4,114 @@
 #include <cstdarg>
 #include <stdlib.h>
 
+namespace
+{
+	char* g_errorHandlerPath;
+	int32_t g_errorHandlerLine;
+}
+
 namespace Logger
 {
-	static char* g_errorHandlerPath;
-	static int32_t g_errorHandlerLine;
-
 	int32_t g_showMsgBoxOnThrow;
 	int32_t g_logsEnabled;
 	int32_t g_logFileExists = 1;
 
 	// $FUNC 004A87C0 [IMPLEMENTED]
-	ThrowErrorFunc GetErrorHandler(char* p_filePath, int32_t p_lineNumber)
+	ThrowErrorFunc GetErrorHandler(char* filePath, int32_t lineNumber)
 	{
-		g_errorHandlerPath = p_filePath;
-		g_errorHandlerLine = p_lineNumber;
+		g_errorHandlerPath = filePath;
+		g_errorHandlerLine = lineNumber;
 
 		return ThrowError;
 	}
 
 	// $FUNC 004A8710 [IMPLEMENTED]
-	void ThrowError(char* p_format, ...)
+	void ThrowError(char* format, ...)
 	{
-		char l_caption[256];
-		char l_text[1024];
+		char caption[256];
+		char text[1024];
 
-		va_list l_argList;
-		va_start(l_argList, p_format);
+		va_list argList;
+		va_start(argList, format);
 
-		if ( *p_format )
+		if ( *format )
 		{
-			sprintf(l_caption, "Soft Abort - %s Line %d", g_errorHandlerPath, g_errorHandlerLine);
-			vsprintf(l_text, p_format, l_argList);
+			sprintf(caption, "Soft Abort - %s Line %d", g_errorHandlerPath, g_errorHandlerLine);
+			vsprintf(text, format, argList);
 
-			FILE* l_file = fopen("toy2.err", "wb");
+			FILE* file = fopen("toy2.err", "wb");
 
-			if ( l_file )
+			if ( file )
 			{
-				fprintf(l_file, "%s\r\n%s\r\n", l_caption, l_text);
-				fclose(l_file);
+				fprintf(file, "%s\r\n%s\r\n", caption, text);
+				fclose(file);
 			}
 
 			if ( ! g_showMsgBoxOnThrow )
-				MessageBoxA(0, l_text, l_caption, 0);
+				MessageBoxA(0, text, caption, 0);
 		}
 
 		exit(-1);
 	}
 
 	// $FUNC 004A66A0 [IMPLEMENTED] [MODIFIED]
-	void Log(char* p_format, ...)
+	void Log(char* format, ...)
 	{
-		char l_buffer[1024];
+		char buffer[1024];
 
-		va_list l_argList;
-		va_start(l_argList, p_format);
+		va_list argList;
+		va_start(argList, format);
 
-		memset(l_buffer, 0, sizeof(l_buffer));
-		vsprintf(l_buffer, p_format, l_argList);
+		memset(buffer, 0, sizeof(buffer));
+		vsprintf(buffer, format, argList);
 
-		printf("%s", l_buffer);
+		printf("%s", buffer); // Addition
 
 		if ( g_logsEnabled )
 		{
-
-
 			if ( g_logFileExists )
 			{
 				g_logFileExists = 0;
 				remove("toy2.log");
 			}
 
-			FILE* l_file = fopen("toy2.log", "at");
+			FILE* file = fopen("toy2.log", "at");
 
-			if ( l_file )
+			if ( file )
 			{
-				fprintf(l_file, l_buffer);
-				fclose(l_file);
+				fprintf(file, buffer);
+				fclose(file);
 			}
 		}
 	}
 
 	// $FUNC 004A6730 [IMPLEMENTED]
-	void LogLn(char* p_format, ...)
+	void LogLn(char* format, ...)
 	{
-		char l_buffer[1024];
+		char buffer[1024];
 
-		va_list l_argList;
-		va_start(l_argList, p_format);
+		va_list argList;
+		va_start(argList, format);
 
-		memset(l_buffer, 0, sizeof(l_buffer));
-		vsprintf(l_buffer, p_format, l_argList);
-		lstrcatA(l_buffer, "\r\n");
+		memset(buffer, 0, sizeof(buffer));
+		vsprintf(buffer, format, argList);
+		lstrcatA(buffer, "\r\n");
 
-		Log(l_buffer);
+		Log(buffer);
 	}
 
 	// $FUNC 00431900 [IMPLEMENTED]
-	void LogDDError(const char* p_message, HRESULT p_error)
+	void LogDDError(const char* message, HRESULT error)
 	{
-		char l_buffer[2048];
+		char buffer[2048];
 
-		memset(l_buffer, 0, sizeof(l_buffer));
-		char* l_message = ErrorToMessage(p_error);
-		sprintf(l_buffer, "ERROR - %s\nERROR - %s\n", p_message, l_message);
+		memset(buffer, 0, sizeof(buffer));
+		char* message = ErrorToMessage(error);
+		sprintf(buffer, "ERROR - %s\nERROR - %s\n", message, message);
 
-		LogLn(l_buffer);
+		LogLn(buffer);
 	}
 
 	// $FUNC 0040D490 [Unimplemented];
-	char* ErrorToMessage(HRESULT p_error) { return "Unimplemented"; }
+	char* ErrorToMessage(HRESULT error) { return "Unimplemented"; }
 }
