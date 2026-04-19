@@ -106,12 +106,12 @@ namespace Logger
 		char buffer[2048];
 
 		memset(buffer, 0, sizeof(buffer));
-		char* message = ErrorToMessage(error);
-		sprintf(buffer, "ERROR - %s\nERROR - %s\n", message, message);
+		char* errorToMsg = ErrorToMessage(error);
+		sprintf(buffer, "ERROR - %s\nERROR - %s\n", message, errorToMsg);
 
 		LogLn(buffer);
 	}
 
-	// $FUNC 0040D490 [Unimplemented];
+	// $FUNC 0040D490 [UNFINISHED];
 	char* ErrorToMessage(HRESULT error) { return "Unimplemented"; }
 }

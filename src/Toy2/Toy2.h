@@ -2,18 +2,18 @@
 
 #include "Common.h"
 
-struct ToyCfg
-{
-	uint32_t flags;
-	uint32_t detail;
-	float gammaCorrection;
-	int32_t driverIndex;
-	int32_t deviceIndex;
-	int32_t displayModeIndex;
-};
-
 namespace Toy2
 {
+	struct ToyCfg
+	{
+		uint32_t flags;
+		uint32_t detail;
+		float gammaCorrection;
+		int32_t driverIndex;
+		int32_t deviceIndex;
+		int32_t displayModeIndex;
+	};
+
 	extern ToyCfg g_toyCfgData;
 
 	void OneInit();

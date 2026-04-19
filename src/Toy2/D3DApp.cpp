@@ -775,7 +775,7 @@ namespace D3DApp
 		return DefWindowProcA(hWnd, msg, wParam, lParam);
 	}
 
-	// $FUNC 004A6D40 [UNIMPLEMENTED]
+	// $FUNC 004A6D40 [UNFINISHED]
 	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return LRESULT(); }
 
 	// $FUNC 004A6B10 [IMPLEMENTED]

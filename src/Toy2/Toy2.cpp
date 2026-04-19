@@ -8,7 +8,9 @@
 
 namespace Toy2
 {
-	ToyCfg g_toyCfgData;
+	ToyCfg g_toyCfgData = {
+		7, 1, 2.0, -1, -1, -1,
+	};
 
 	// $FUNC 0048E730 [UNFINISHED]
 	void OneInit() {}
@@ -25,6 +27,7 @@ namespace Toy2
 
 		if ( ! fileHandle )
 			return 0;
+
 
 		fread(&g_toyCfgData, 1, sizeof(ToyCfg), fileHandle);
 		fclose(fileHandle);
@@ -53,6 +56,23 @@ namespace Toy2
 
 	// $FUNC 0049D910 [UNFINISHED]
 	int32_t Run(int32_t argCount, char** argList) { return 0; }
+
+	// $FUNC 0047CC90 [UNFINISHED]
+	void InitSoftwareRenderer()
+	{
+		// Some back story on this, the game has two rendering modes. Hardware accelerated (DirectX) or full software based rendering.
+		// This is normal for the time, considering it was uncommon for people to have dedicated graphics hardware as it was expensive.
+		//
+		// The software renderer will be decompiled last, as it is extremely math heavy and optimized, making it difficult to produce
+		// code that can be read by human eyes.
+		return;
+	}
+
+	// $FUNC 00499950 [UNFINISHED]
+	void InitDirect3DRenderer()
+	{
+		// Weird method, a good portion of these variables are never even used in the game
+	}
 }
 
 // $FUNC DEBUG METHOD
@@ -115,15 +135,14 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 	D3DApp::BuildWindow();
 	Toy2::ShowModeSelect();
 
-	/*
-    if ( g_renderMode == 1 )
-    {
-        Toy2::InitSoftwareRenderer();
-    }
-    else if ( g_renderMode == 2 )
-    {
-        Toy2::InitDirect3DRenderer();
-    }*/
+	if ( D3DApp::g_renderMode == SoftwareRenderer )
+	{
+		Toy2::InitSoftwareRenderer();
+	}
+	else if ( D3DApp::g_renderMode == D3DRenderer )
+	{
+		Toy2::InitDirect3DRenderer();
+	}
 
 	int32_t tokenCount = 0;
 	char* tokenEntries[8];

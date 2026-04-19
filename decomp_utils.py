@@ -95,6 +95,8 @@ def count_progress():
         elif info['status'] == 'UNFINISHED':
             unfinished_count += 1
             unfinished_addresses.add(address)
+        else:
+            print(f"Found an unknown $FUNC type for {address}")
     
     # Functions that are in IDA but not found in source files
     not_started_addresses = ida_functions - implemented_addresses - unfinished_addresses
