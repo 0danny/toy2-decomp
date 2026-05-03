@@ -138,11 +138,6 @@ def build_tools(app):
     track_process(build_arguments)
     track_process(['ninja'])
 
-    if app != "nl":
-        exe_path = os.path.join(os.getcwd(), f"{app}.exe")
-        print(f"----------------- Starting {app} -----------------")
-        subprocess.run([exe_path])
-
 def main():
     parser = argparse.ArgumentParser(
         description=f"Build script for {PROJECT_NAME} using VS6 NMake."
@@ -152,7 +147,7 @@ def main():
 
     parser.add_argument(
         "--tools", 
-        choices=["SaveViewer"],
+        action="store_true",
         help="Build and launch the Toy2 tools",
     )
 
