@@ -15,6 +15,8 @@
 #include <print>
 #include <format>
 
+#include "Common/CSVWriter.hpp"
+
 namespace fs = std::filesystem;
 
 #define LOBYTE(x) (*((uint8_t*)&(x)))
@@ -22,6 +24,36 @@ namespace fs = std::filesystem;
 
 #define LOWORD(x) (*((uint16_t*)&(x)))
 #define HIWORD(x) (*((uint16_t*)&(x) + 1))
+
+namespace
+{
+	constexpr int32_t kMaxActors = 64;
+
+	struct Vector3I
+	{
+		int32_t x;
+		int32_t y;
+		int32_t z;
+	};
+
+	struct CreatureRam
+	{
+		Vector3I pos;
+		uint8_t creatureId;
+		uint8_t movCtrl;
+		uint8_t rotSpeed;
+		uint8_t collectableId;
+		int32_t entCtrl;
+		int16_t movDistX;
+		int16_t movDistX2;
+		int16_t unk;
+		int16_t defenseMode;
+		uint8_t latSpeedNoTarget;
+		uint8_t latSpeedTarget;
+		uint8_t speedNoTarget;
+		uint8_t speedTarget;
+	};
+}
 
 // Original function -> Toy2.exe -> 0x0047B170
 void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
@@ -381,28 +413,17 @@ void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
 	while ( exitFlag );
 }
 
-int main(int argc, char* argv[])
+bool dumpFile(const fs::path& inputFilePath, bool writeType35Dump, bool writePacket)
 {
 	auto toBigEndian = [](uint32_t num) -> uint32_t {
 		return ((num & 0x000000ff) << 24) | ((num & 0x0000ff00) << 8) | ((num & 0x00ff0000) >> 8) | ((num & 0xff000000) >> 24);
 	};
 
-	if ( argc < 2 )
-	{
-		std::println("Usage: {} <input_file>", argv[0]);
-		return 1;
-	}
-
-	fs::path inputFilePath(argv[1]);
-	fs::path outputDir = inputFilePath.parent_path() / inputFilePath.stem();
-
-	fs::create_directories(outputDir);
-
 	std::ifstream inFile(inputFilePath, std::ios::binary);
 	if ( ! inFile )
 	{
 		std::println("Failed to open {}", inputFilePath.string());
-		return 1;
+		return false;
 	}
 
 	uint32_t beUncompressedSize = 0;
@@ -432,26 +453,137 @@ int main(int argc, char* argv[])
 		if ( ! inFile )
 		{
 			std::println("Failed to read compressed packet {}", counter);
-			return 1;
+			return false;
 		}
 
-		fs::path outPath = outputDir / std::format("packet_{:03}.bin", ++counter);
-
-		std::println("Inflating {} {}->{}", outPath.string(), compressedSize, uncompressedSize);
+		std::println("Inflating {}->{}", compressedSize, uncompressedSize);
 
 		DecompressBuffer(compressedBuffer.data(), decompressedBuffer.data());
 
-		std::ofstream outFile(outPath, std::ios::binary);
-		if ( ! outFile )
+		if ( decompressedBuffer[0] == 35 )
 		{
-			std::println("Failed to write {}", outPath.string());
-			return 1;
+			std::string parentName = inputFilePath.parent_path().stem().string();
+			std::string csvName = parentName + "_" + inputFilePath.stem().string() + "_type35_dump.csv";
+
+			CSVWriter writer(csvName);
+
+			if ( ! writer.open() )
+			{
+				throw std::runtime_error("Could not open CSV file for writing");
+				return false;
+			}
+
+			CreatureRam* creatureRamList = reinterpret_cast<CreatureRam*>(&decompressedBuffer[4]);
+
+			// clang-format off
+			writer.writeLine<std::string>(
+			    "CreatureIndex",
+			    "PosX",
+			    "PosY",
+			    "PosZ",
+				"CreatureId",
+				"MovCtrl",
+				"RotSpeed",
+				"CollectableId",
+				"EntCtrl",
+				"MovDistX",
+				"MovDistX2",
+				"Unk",
+				"DefenseMode",
+				"LatSpeedNoTarget",
+				"LatSpeedTarget",
+				"SpeedNoTarget",
+				"SpeedTarget"
+			);
+
+			auto writeCreatureRam = [&writer](const CreatureRam& t, uint64_t index) {
+				writer.writeLine(
+					(index + 1),
+					t.pos.x,
+					t.pos.y,
+					t.pos.z,
+					static_cast<int32_t>(t.creatureId),
+					static_cast<int32_t>(t.movCtrl),
+					static_cast<int32_t>(t.rotSpeed),
+					static_cast<int32_t>(t.collectableId),
+					t.entCtrl,
+					t.movDistX,
+					t.movDistX2,
+					t.unk,
+					t.defenseMode,
+					static_cast<int32_t>(t.latSpeedNoTarget),
+					static_cast<int32_t>(t.latSpeedTarget),
+					static_cast<int32_t>(t.speedNoTarget),
+					static_cast<int32_t>(t.speedTarget)
+				);
+			};
+			// clang-format on
+
+			for ( int32_t idx = 0; idx < kMaxActors; idx++ )
+				writeCreatureRam(creatureRamList[idx], idx);
 		}
 
-		outFile.write(reinterpret_cast<const char*>(decompressedBuffer.data()), decompressedBuffer.size());
+		if ( writePacket )
+		{
+			fs::path outputDir = inputFilePath.parent_path() / inputFilePath.stem();
+			fs::path outPath = outputDir / std::format("packet_{:03}.bin", ++counter);
+
+			if ( ! fs::exists(outputDir) && ! fs::create_directories(outputDir) )
+			{
+				std::println("Failed to make directory {}", outputDir.string());
+				return false;
+			}
+
+			std::ofstream outFile(outPath, std::ios::binary);
+			if ( ! outFile )
+			{
+				std::println("Failed to write {}", outPath.string());
+				return false;
+			}
+
+			outFile.write(reinterpret_cast<const char*>(decompressedBuffer.data()), decompressedBuffer.size());
+		}
+
+
 		inFile.read(reinterpret_cast<char*>(&beUncompressedSize), sizeof(beUncompressedSize));
 	}
 
-	std::println("Done. {} packets extracted.", counter);
+	return true;
+}
+
+int main(int argc, char* argv[])
+{
+	if ( argc < 2 )
+	{
+		std::println("Usage: {} <input_file>", argv[0]);
+		return 1;
+	}
+
+	fs::path inputFilePath(argv[1]);
+
+	if ( fs::is_directory(inputFilePath) )
+	{
+		std::println("Running directory code!\n");
+
+		for ( const auto& entry : fs::recursive_directory_iterator(inputFilePath) )
+		{
+			if ( ! entry.is_regular_file() )
+				continue;
+
+			if ( entry.path().extension() != ".raw" )
+				continue;
+
+			std::println("Found: {}", entry.path().string());
+
+			if ( ! dumpFile(entry.path(), true, false) )
+				break;
+		}
+	}
+	else
+	{
+		std::println("Running file code!\n");
+		dumpFile(inputFilePath, false, true);
+	}
+
 	return 0;
 }
