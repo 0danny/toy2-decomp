@@ -1,13 +1,14 @@
 #pragma once
 
-#include "utilities.h"
-
 #include <ddraw.h>
 #include <minhook.h>
+
+#include "Utilities.h"
 
 namespace GamePatches
 {
 	void InjectHooks();
+	void PollInput();
 
 	// globals
 

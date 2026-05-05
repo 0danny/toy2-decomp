@@ -1,13 +1,16 @@
 #pragma once
 
+#include "Utilities.h"
+#include "GamePatches.h"
+
 #include <minhook.h>
-#include "utilities.h"
-#include "game_patches.h"
 
 namespace Loader
 {
 	// hooking functions
-	void InjectHooks();
+	DWORD WINAPI InjectHooks(LPVOID lpParam);
+	void OpenConsole();
+	void Cleanup();
 
 	// addresses to hook
 

@@ -61,20 +61,20 @@ add_executable(toy2decomp WIN32
 )
 
 # Build the testing dll(s)
-add_library(test_dll SHARED
-    src/Tests/Patcher/dllmain.cpp
+add_library(patcher SHARED
+    src/Tests/Patcher/main.cpp
 
-    src/Tests/Patcher/loader.cpp
-    src/Tests/Patcher/loader.h
+    src/Tests/Patcher/Loader.cpp
+    src/Tests/Patcher/Loader.h
 
-    src/Tests/Patcher/game_patches.cpp
-    src/Tests/Patcher/game_patches.h
+    src/Tests/Patcher/GamePatches.cpp
+    src/Tests/Patcher/GamePatches.h
 
-    src/Tests/Patcher/utilities.h
+    src/Tests/Patcher/Utilities.h
 )
 
-target_link_directories(test_dll PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
-target_link_libraries(test_dll PRIVATE minhook_x86)
+target_link_directories(patcher PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
+target_link_libraries(patcher PRIVATE minhook_x86)
 
 target_link_directories(toy2decomp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
 target_link_libraries(toy2decomp PRIVATE ddraw dxguid)
