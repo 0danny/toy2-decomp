@@ -1,5 +1,5 @@
 #include "SaveViewer.hpp"
-#include "Common/Utils.hpp"
+#include "Common/GameStructs.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -9,8 +9,8 @@ namespace SaveViewer
 {
 	void readSave(const std::string& savePath)
 	{
-		const auto filePath      = std::filesystem::path(savePath);
-		const auto fileName      = filePath.filename().string();
+		const auto filePath = std::filesystem::path(savePath);
+		const auto fileName = filePath.filename().string();
 		const auto fileExtension = filePath.extension().string();
 
 		if ( fileExtension != ".sav" )
@@ -112,7 +112,7 @@ namespace SaveViewer
 		printf("m_unused1: %d\n", controlData.m_unused1);
 		printf("m_unused2: %d\n", controlData.m_unused2);
 
-		int32_t index          = 1;
+		int32_t index = 1;
 		int32_t unusedControls = 0;
 
 		for ( SaveControlMapping mapping : controlData.m_mappings )
@@ -123,19 +123,13 @@ namespace SaveViewer
 				continue;
 			}
 
-			auto inputMapping = std::find_if(
-			    Utils::g_inputMapping, Utils::g_inputMapping + Utils::g_inputMappingCount,
-			    [&mapping](const Utils::InputMapping& item) {
-				    return item.m_id == mapping.m_dInputCode;
-			    }
-			);
+			auto inputMapping = std::find_if(g_inputMapping, g_inputMapping + g_inputMappingCount, [&mapping](const InputMapping& item) {
+				return item.m_id == mapping.m_dInputCode;
+			});
 
-			auto gameControl = std::find_if(
-			    Utils::g_gameControls, Utils::g_gameControls + Utils::g_gameControlsCount,
-			    [&mapping](const Utils::GameControl& item) {
-				    return item.m_id == mapping.m_gameControlId;
-			    }
-			);
+			auto gameControl = std::find_if(g_gameControls, g_gameControls + g_gameControlsCount, [&mapping](const GameControl& item) {
+				return item.m_id == mapping.m_gameControlId;
+			});
 
 			printf("Mapping %d: \"%s\" mapped to \"%s\"\n", index, inputMapping->m_name, gameControl->m_name);
 			index++;

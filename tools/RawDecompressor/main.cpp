@@ -16,6 +16,7 @@
 #include <format>
 
 #include "Common/CSVWriter.hpp"
+#include "Common/GameStructs.hpp"
 
 namespace fs = std::filesystem;
 
@@ -24,36 +25,6 @@ namespace fs = std::filesystem;
 
 #define LOWORD(x) (*((uint16_t*)&(x)))
 #define HIWORD(x) (*((uint16_t*)&(x) + 1))
-
-namespace
-{
-	constexpr int32_t kMaxActors = 64;
-
-	struct Vector3I
-	{
-		int32_t x;
-		int32_t y;
-		int32_t z;
-	};
-
-	struct CreatureRam
-	{
-		Vector3I pos;
-		uint8_t creatureId;
-		uint8_t movCtrl;
-		uint8_t rotSpeed;
-		uint8_t collectableId;
-		int32_t entCtrl;
-		int16_t movDistX;
-		int16_t movDistX2;
-		int16_t unk;
-		int16_t defenseMode;
-		uint8_t latSpeedNoTarget;
-		uint8_t latSpeedTarget;
-		uint8_t speedNoTarget;
-		uint8_t speedTarget;
-	};
-}
 
 // Original function -> Toy2.exe -> 0x0047B170
 void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
@@ -484,11 +455,13 @@ bool dumpFile(const fs::path& inputFilePath, bool writeType35Dump, bool writePac
 				"CreatureId",
 				"MovCtrl",
 				"RotSpeed",
-				"CollectableId",
-				"EntCtrl",
-				"MovDistX",
-				"MovDistX2",
-				"Unk",
+				"InitialFacingAngle",
+				"ActorPhase",
+				"UnkByte",
+				"ActorFlags",
+				"BoundHalfX",
+				"BoundHalfZ",
+				"BoundAngle",
 				"DefenseMode",
 				"LatSpeedNoTarget",
 				"LatSpeedTarget",
@@ -505,11 +478,13 @@ bool dumpFile(const fs::path& inputFilePath, bool writeType35Dump, bool writePac
 					static_cast<int32_t>(t.creatureId),
 					static_cast<int32_t>(t.movCtrl),
 					static_cast<int32_t>(t.rotSpeed),
-					static_cast<int32_t>(t.collectableId),
-					t.entCtrl,
-					t.movDistX,
-					t.movDistX2,
-					t.unk,
+					static_cast<int32_t>(t.initialFacingAngle),
+					static_cast<int32_t>(t.entCtrl.actorPhase),
+					static_cast<int32_t>(t.entCtrl.unkByte),
+					t.entCtrl.actorFlags,
+					t.boundHalfX,
+					t.boundHalfZ,
+					t.boundAngle,
 					t.defenseMode,
 					static_cast<int32_t>(t.latSpeedNoTarget),
 					static_cast<int32_t>(t.latSpeedTarget),

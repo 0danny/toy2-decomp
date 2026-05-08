@@ -8,7 +8,7 @@
 namespace Loader
 {
 	// hooking functions
-	DWORD WINAPI InjectHooks(LPVOID lpParam);
+	void InjectHooks();
 	void OpenConsole();
 	void Cleanup();
 

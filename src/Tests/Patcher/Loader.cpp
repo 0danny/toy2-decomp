@@ -2,7 +2,6 @@
 
 namespace Loader
 {
-
 	void OpenConsole()
 	{
 		AllocConsole();
@@ -24,7 +23,7 @@ namespace Loader
 		printf("[LOADER]: Hooks uninstalled successfully.\n");
 	}
 
-	DWORD WINAPI InjectHooks(LPVOID lpParam)
+	void InjectHooks()
 	{
 		OpenConsole();
 
@@ -33,13 +32,11 @@ namespace Loader
 		if ( MH_Initialize() != MH_OK )
 		{
 			printf("[LOADER]: Failed to initialize MinHook.\n");
-			return FALSE;
+			return;
 		}
 
 		GamePatches::InjectHooks();
 
 		MH_EnableHook(MH_ALL_HOOKS);
-
-		return 0;
 	}
 }
