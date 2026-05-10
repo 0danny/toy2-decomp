@@ -42,7 +42,7 @@ namespace NoClip
 	inline void WriteBuzzNoclipPos()
 	{
 		g_buzzActor->pos = g_buzzNoclipPos;
-		g_buzzActor->motionTargetPos = g_buzzNoclipPos;
+		//g_buzzActor->motionTargetPos = g_buzzNoclipPos;
 	}
 
 	inline void UpdateBuzzNoclip()

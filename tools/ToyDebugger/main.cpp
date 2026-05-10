@@ -7,6 +7,7 @@
 #include "GameInterface.hpp"
 #include "ImGuiWrapper.hpp"
 #include "NoClip.hpp"
+#include "FreeCam.hpp"
 
 namespace
 {
@@ -40,6 +41,7 @@ namespace Loader
 		}
 
 		ImGuiWrapper::Init();
+		FreeCam::Init();
 
 		MH_EnableHook(MH_ALL_HOOKS);
 	}
@@ -101,23 +103,10 @@ namespace Loader
 
 			bool oldNoclip = NoClip::g_buzzNoclipEnabled;
 
-			if ( ImGui::Checkbox("Buzz Noclip", &NoClip::g_buzzNoclipEnabled) )
+			if ( ImGui::Checkbox("Noclip", &NoClip::g_buzzNoclipEnabled) )
 				NoClip::SetBuzzNoclipEnabled(NoClip::g_buzzNoclipEnabled);
 
-			ImGui::InputInt("Noclip Speed", &NoClip::g_buzzNoclipSpeed);
-			ImGui::InputInt("Fast Noclip Speed", &NoClip::g_buzzNoclipFastSpeed);
-
-			if ( NoClip::g_buzzNoclipEnabled )
-			{
-				ImGui::Text("WASD = move");
-				ImGui::Text("Space = up");
-				ImGui::Text("Ctrl = down");
-				ImGui::Text("Shift = fast");
-
-				ImGui::InputInt("Buzz X", &NoClip::g_buzzNoclipPos.x);
-				ImGui::InputInt("Buzz Y", &NoClip::g_buzzNoclipPos.y);
-				ImGui::InputInt("Buzz Z", &NoClip::g_buzzNoclipPos.z);
-			}
+			ImGui::Checkbox("FreeCam", &FreeCam::g_enabled);
 
 			// Actor Dropdowns
 			ImGui::Text("Actors");

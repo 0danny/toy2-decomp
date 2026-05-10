@@ -16,7 +16,7 @@ struct GameControl
 };
 
 // $STATIC_VAR 00500E58
-GameControl g_gameControls[14] = {
+inline GameControl g_gameControls[14] = {
 	{ 16, "up" },
 	{ 64, "down" },
 	{ 128, "left" },
@@ -39,7 +39,7 @@ GameControl g_gameControls[14] = {
 constexpr size_t g_gameControlsCount = sizeof(g_gameControls) / sizeof(GameControl);
 
 // $STATIC_VAR 004ED398
-InputMapping g_inputMapping[] = {
+inline InputMapping g_inputMapping[] = {
 	{ "esc", 1 },
 	{ "1", 2 },
 	{ "2", 3 },
@@ -371,5 +371,40 @@ struct ActorBehaviourContext
 };
 
 constexpr int32_t kMaxActors = 64;
+
+struct Angles
+{
+	uint16_t pitch;
+	uint16_t yaw;
+};
+
+struct ActiveCameraTransform
+{
+	Vector3I pos;
+	Angles angles;
+	int16_t roll;
+	int16_t unkShort;
+};
+
+enum ActorFlags : uint16_t
+{
+	ACTOR_CUTSCENE_MOVE = 0x1,
+	ACTOR_VISIBLE_ACTIVE = 0x2,
+	ACTOR_LOCKED_MOVE = 0x4,
+	ACTOR_GROUNDED = 0x8,
+	ACTOR_FLOOR_SNAP = 0x10,
+	ACTOR_STUNNED = 0x20,
+	ACTOR_OOB_SPECIAL_MOVE = 0x40,
+	ACTOR_DEATH_DAMAGE = 0x80,
+	ACTOR_AIRBORNE_SPECIAL = 0x100,
+	ACTOR_PLAYER_TRIGGER = 0x200,
+	ACTOR_VEL_CLAMP_OVERRIDE = 0x400,
+	ACTOR_NO_DESPAWN = 0x800,
+	ACTOR_UNUSED_1000 = 0x1000,
+	ACTOR_FORCE_REMOVE = 0x2000,
+	ACTOR_CAMERA_HOVER = 0x4000,
+	ACTOR_UNKNOWN_8000 = 0x8000,
+};
+
 
 constexpr size_t g_inputMappingCount = sizeof(g_inputMapping) / sizeof(InputMapping);

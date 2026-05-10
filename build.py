@@ -117,7 +117,7 @@ def check_executable_size(build_test_type):
     print(f"[size]: Executable is {size_kb:.2f} KB ({size_mb:.2f} MB)")
 
 
-def build_tools(app):
+def build_tools(app, build_type):
     # we want to use clang for toy2 tools
     os.environ['CC'] = 'clang'
     os.environ['CXX'] = 'clang++'
@@ -130,7 +130,7 @@ def build_tools(app):
     build_arguments = [
         'cmake',
         '-G', 'Ninja',
-        f'-DCMAKE_BUILD_TYPE=RelWithDebInfo',
+        f'-DCMAKE_BUILD_TYPE={build_type}',
         '-Wno-dev',
         '../../tools'
     ]
@@ -161,7 +161,7 @@ def main():
     args = parser.parse_args()
 
     if args.tools:
-        build_tools(args.tools)
+        build_tools(args.tools, args.bt)
         return
 
     if args.cs:

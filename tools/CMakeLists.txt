@@ -50,6 +50,9 @@ add_library(ToyDebugger SHARED
     ToyDebugger/NoClip.hpp
     ToyDebugger/GameInterface.hpp
 
+    ToyDebugger/FreeCam.cpp
+    ToyDebugger/FreeCam.hpp
+
     ${IMGUI_SOURCES}
 )
 
