@@ -8,6 +8,7 @@
 #include "NoClip.hpp"
 #include "FreeCam.hpp"
 #include "GameInterface.hpp"
+#include "Common/Creatures.hpp"
 
 namespace
 {
@@ -355,8 +356,8 @@ namespace Loader
 			ImGui::Spacing();
 
 			int32_t w1 = curActor->unkWord1, w2 = curActor->unkWord2, w3 = curActor->unkWord3, w4 = curActor->unkWord4;
-			int32_t w15 = curActor->unkWord15, w16 = curActor->unkWord16;
 			int32_t s1 = curActor->unkShort1, s2 = curActor->unkShort2, s3 = curActor->unkShort3, s4 = curActor->unkShort4;
+			int32_t w15 = curActor->unkWord15, w16 = curActor->unkWord16;
 			int32_t v10 = curActor->unkVar10;
 
 			if ( ImGui::InputInt("Unk Word 1", &w1) )
@@ -425,13 +426,19 @@ namespace Loader
 			ImGui::Text("Actors");
 			ImGui::Spacing();
 
-			if ( ImGui::BeginCombo("", std::format("Actor {}", g_selectedActor + 1).c_str()) )
+			auto GetActorLabel = [](int32_t idx) -> std::string {
+				const Toy2Actor& actor = g_levelActors[idx];
+				const char* name = actor.creatureRam ? GetCreatureName(actor.creatureId) : kUnknownCreature;
+				return std::format("Actor {} - {}", idx + 1, name);
+			};
+
+			if ( ImGui::BeginCombo("", GetActorLabel(g_selectedActor).c_str()) )
 			{
 				for ( int32_t idx = 0; idx < kMaxActors; idx++ )
 				{
-					bool isSelected = (g_selectedActor == idx);
+					const bool isSelected = (g_selectedActor == idx);
 
-					if ( ImGui::Selectable(std::format("Actor {}", idx + 1).c_str(), isSelected) )
+					if ( ImGui::Selectable(GetActorLabel(idx).c_str(), isSelected) )
 						g_selectedActor = idx;
 
 					if ( isSelected )
