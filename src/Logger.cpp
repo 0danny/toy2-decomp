@@ -6,7 +6,7 @@
 
 namespace
 {
-	char* g_errorHandlerPath;
+	const char* g_errorHandlerPath;
 	int32_t g_errorHandlerLine;
 }
 
@@ -113,5 +113,8 @@ namespace Logger
 	}
 
 	// $FUNC 0040D490 [UNFINISHED];
-	char* ErrorToMessage(HRESULT error) { return "Unimplemented"; }
+	char* ErrorToMessage(HRESULT error)
+	{
+		return "Unimplemented";
+	}
 }

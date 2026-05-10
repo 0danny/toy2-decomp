@@ -13,10 +13,12 @@ namespace Toy2
 	};
 
 	// $FUNC 0048E730 [UNFINISHED]
-	void OneInit() {}
+	void OneInit()
+	{}
 
 	// $FUNC 00490730 [UNFINISHED]
-	void CheckForQuit() {}
+	void CheckForQuit()
+	{}
 
 	// $FUNC 004CE810 [IMPLEMENTED]
 	int32_t ReadCfg()
@@ -52,10 +54,16 @@ namespace Toy2
 	}
 
 	// $FUNC 00412D70 [UNFINISHED]
-	int32_t ShowModeSelect() { return 0; }
+	int32_t ShowModeSelect()
+	{
+		return 0;
+	}
 
 	// $FUNC 0049D910 [UNFINISHED]
-	int32_t Run(int32_t argCount, char** argList) { return 0; }
+	int32_t Run(int32_t argCount, char** argList)
+	{
+		return 0;
+	}
 
 	// $FUNC 0047CC90 [UNFINISHED]
 	void InitSoftwareRenderer()
@@ -75,7 +83,7 @@ namespace Toy2
 	}
 }
 
-// $FUNC DEBUG METHOD
+// $FUNC DEBUG
 void AllocateConsole()
 {
 	AllocConsole();

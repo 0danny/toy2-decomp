@@ -10,7 +10,7 @@
 
 namespace NoClip
 {
-	inline bool g_buzzNoclipEnabled = false;
+	inline bool g_enabled = false;
 	inline Vector3I g_buzzNoclipPos = {};
 
 	// Toy Story 2 positions look like fixed-point/world-unit integers.
@@ -31,14 +31,6 @@ namespace NoClip
 		return static_cast<float>(angle & 0xFFF) * ((2.0f * kPi) / 4096.0f);
 	}
 
-	inline void SetBuzzNoclipEnabled(bool enabled)
-	{
-		g_buzzNoclipEnabled = enabled;
-
-		if ( g_buzzNoclipEnabled )
-			g_buzzNoclipPos = g_buzzActor->pos;
-	}
-
 	inline void WriteBuzzNoclipPos()
 	{
 		g_buzzActor->pos = g_buzzNoclipPos;
@@ -47,7 +39,7 @@ namespace NoClip
 
 	inline void UpdateBuzzNoclip()
 	{
-		if ( ! g_buzzNoclipEnabled )
+		if ( ! g_enabled )
 			return;
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -57,6 +49,9 @@ namespace NoClip
 			WriteBuzzNoclipPos();
 			return;
 		}
+
+		if ( g_buzzNoclipPos.x == 0 )
+			g_buzzNoclipPos = g_buzzActor->pos;
 
 		float inputX = 0.0f; // strafe
 		float inputY = 0.0f; // up/down

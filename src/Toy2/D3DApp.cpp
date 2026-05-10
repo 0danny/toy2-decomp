@@ -3,9 +3,9 @@
 
 namespace
 {
-	int32_t g_changingCoopLevel = 0;
-	int32_t g_checkAvailableMem = 1;
-	int32_t g_sysParamsInfo;
+	static int32_t g_changingCoopLevel = 0;
+	static int32_t g_checkAvailableMem = 1;
+	static int32_t g_sysParamsInfo;
 }
 
 namespace D3DApp
@@ -659,8 +659,9 @@ namespace D3DApp
 	}
 
 	// $FUNC 00409130 [IMPLEMENTED]
-	HRESULT WINAPI
-	EnumDevices(LPGUID guid, LPSTR deviceDesc, LPSTR deviceName, LPD3DDEVICEDESC d3DHWDeviceDesc, LPD3DDEVICEDESC d3DHELDeviceDesc, LPVOID context)
+	HRESULT WINAPI EnumDevices(
+	    LPGUID guid, LPSTR deviceDesc, LPSTR deviceName, LPD3DDEVICEDESC d3DHWDeviceDesc, LPD3DDEVICEDESC d3DHELDeviceDesc, LPVOID context
+	)
 	{
 		LPD3DDEVICEDESC hwDeviceDesc = d3DHWDeviceDesc;
 		ExamineDevice* examineContext = (ExamineDevice*)context;
@@ -776,8 +777,14 @@ namespace D3DApp
 	}
 
 	// $FUNC 004A6D40 [UNFINISHED]
-	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return LRESULT(); }
+	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		return LRESULT();
+	}
 
 	// $FUNC 004A6B10 [IMPLEMENTED]
-	void SysParmsOnExit() { SystemParametersInfoA(SPI_SETSCREENSAVERRUNNING, g_sysParamsInfo, &g_sysParamsInfo, 0); }
+	void SysParmsOnExit()
+	{
+		SystemParametersInfoA(SPI_SETSCREENSAVERRUNNING, g_sysParamsInfo, &g_sysParamsInfo, 0);
+	}
 }
