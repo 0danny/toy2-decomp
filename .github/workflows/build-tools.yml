@@ -70,14 +70,11 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force dist/tools
 
-          Get-ChildItem -Path build/build_tools -Recurse -Include *.exe,*.dll,*.pdb |
+          Get-ChildItem -Path build/build_tools -File |
+            Where-Object { $_.Extension -in ".exe", ".dll" } |
             Copy-Item -Destination dist/tools -Force
 
-          if (Test-Path tools/Resources) {
-            Copy-Item -Recurse -Force tools/Resources dist/tools/Resources
-          }
-
-          Get-ChildItem -Path dist/tools -Recurse
+          Get-ChildItem -Path dist/tools
 
       - name: Upload tools artifact
         uses: actions/upload-artifact@v6

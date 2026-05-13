@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.20.0)
 project("toy2tools" CXX)
 
 set(CMAKE_CXX_STANDARD 23)
