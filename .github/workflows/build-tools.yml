@@ -20,12 +20,12 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
 
       - name: Checkout DirectX 7 SDK mini
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ai4rei/D3D7SDK-Mini
           path: D3D7SDK-Mini
@@ -80,7 +80,7 @@ jobs:
           Get-ChildItem -Path dist/tools -Recurse
 
       - name: Upload tools artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: toy2-tools-${{ github.sha }}
           if-no-files-found: error
