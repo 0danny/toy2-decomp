@@ -39,8 +39,8 @@ public:
 
 		if (! m_stream.read(reinterpret_cast<char*>(&output), sizeof(T)))
         {
-            std::println("[FileReader]: Offset {}, File Size {}, Size Of Type {}", getOffset(), getFileSize(), sizeof(T));
-            throw std::runtime_error("Read failed!");
+            std::println("[Dump]: Offset {}, File Size {}, Size Of Read {}", getOffset(), getFileSize(), sizeof(T));
+            throw std::runtime_error("[FileReader]: Read failed!");
         }
 
 		return output;

@@ -8,38 +8,38 @@ namespace SaveViewer
 {
 	struct [[gnu::packed]] SaveControlMapping
 	{
-		int32_t m_dInputCode;
-		int32_t m_gameControlId;
+		int32_t dInputCode;
+		int32_t gameControlId;
 	};
 
 	struct [[gnu::packed]] Save99Data
 	{
-		int32_t            m_unused1;
-		int32_t            m_unused2;
-		SaveControlMapping m_mappings[38];
-		uint8_t            m_unusedPad[80];
+		int32_t unused1;
+		int32_t unused2;
+		SaveControlMapping mappings[38];
+		uint8_t unusedPad[80];
 	};
 
 	struct [[gnu::packed]] Save0Data
 	{
-		uint32_t m_unkInt1;
-		uint32_t m_unkInt2;
-		uint8_t  m_zeros[304];
-		uint8_t  m_lives;
-		uint8_t  m_lastLevel;
-		uint8_t  m_unlocks;
-		uint8_t  m_unkByte2_2;
-		uint8_t  m_cameraType;
-		uint8_t  m_musicVolume;
-		uint8_t  m_soundVolume;
-		uint8_t  m_unkByte4_2;
-		uint16_t m_unkShort3;
-		uint16_t m_unkShort4;
-		uint16_t m_health;
-		uint8_t  m_unkByte5;
-		uint8_t  m_tokens[16];
-		uint8_t  m_unkBytes[48];
-		uint8_t  m_unkByte8;
+		uint32_t unkInt1;
+		uint32_t unkInt2;
+		uint8_t zeros[304];
+		uint8_t lives;
+		uint8_t lastLevel;
+		uint8_t unlocks;
+		uint8_t unkByte2_2;
+		uint8_t cameraType;
+		uint8_t musicVolume;
+		uint8_t soundVolume;
+		uint8_t unkByte4_2;
+		uint16_t unkShort3;
+		uint16_t unkShort4;
+		uint16_t health;
+		uint8_t unkByte5;
+		uint8_t tokens[16];
+		uint8_t unkBytes[48];
+		uint8_t unkByte8;
 	};
 
 	enum class SaveType
@@ -49,7 +49,6 @@ namespace SaveViewer
 	};
 
 	void readSave(const std::string& savePath);
-
 	void readControlData(std::ifstream& file);
 	void readProgressionData(std::ifstream& file, const int32_t strSize);
 }

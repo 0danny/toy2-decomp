@@ -5,14 +5,14 @@
 
 struct InputMapping
 {
-	const char* m_name;
-	int32_t m_id;
+	const char* name;
+	int32_t id;
 };
 
 struct GameControl
 {
-	int32_t m_id;
-	const char* m_name;
+	int32_t id;
+	const char* name;
 };
 
 // $STATIC_VAR 00500E58
