@@ -68,7 +68,11 @@ target_link_options(ToyDebugger PRIVATE
     "LINKER:/SAFESEH:NO"
 )
 
-target_link_directories(ToyDebugger PRIVATE ${EXTERNAL_FOLDER}/libs)
+target_link_directories(ToyDebugger PRIVATE 
+    ${EXTERNAL_FOLDER}/libs
+    ${EXTERNAL_FOLDER}/libs/directx7
+)
+
 target_link_libraries(ToyDebugger PRIVATE minhook_x86 ddraw dxguid)
 target_include_directories(ToyDebugger PRIVATE
     ${EXTERNAL_FOLDER}/include

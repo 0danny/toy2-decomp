@@ -24,6 +24,24 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Checkout DirectX 7 SDK mini
+        uses: actions/checkout@v4
+        with:
+          repository: ai4rei/D3D7SDK-Mini
+          path: D3D7SDK-Mini
+
+      - name: Install DirectX 7 SDK mini
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force external/include/directx7
+          New-Item -ItemType Directory -Force external/libs/directx7
+
+          Copy-Item -Recurse -Force D3D7SDK-Mini/Include/* external/include/directx7/
+          Copy-Item -Recurse -Force D3D7SDK-Mini/Lib/* external/libs/directx7/
+
+          Get-ChildItem external/include/directx7
+          Get-ChildItem external/libs/directx7
+
       - name: Show tool versions
         shell: pwsh
         run: |
