@@ -1,0 +1,69 @@
+name: Build Tools
+
+on:
+  push:
+    paths:
+      - "tools/**"
+      - "external/**"
+      - ".github/workflows/build-tools.yml"
+  pull_request:
+    paths:
+      - "tools/**"
+      - "external/**"
+      - ".github/workflows/build-tools.yml"
+  workflow_dispatch:
+
+jobs:
+  build-tools:
+    name: Build Toy2 Tools
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Show tool versions
+        shell: pwsh
+        run: |
+          cmake --version
+          ninja --version
+          clang --version
+
+      - name: Configure tools
+        shell: pwsh
+        run: |
+          cmake `
+            -S tools `
+            -B build/build_tools `
+            -G Ninja `
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo `
+            -DCMAKE_C_COMPILER=clang `
+            -DCMAKE_CXX_COMPILER=clang++
+
+      - name: Build tools
+        shell: pwsh
+        run: |
+          cmake --build build/build_tools --config RelWithDebInfo
+
+      - name: Collect tools
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist/tools
+
+          Get-ChildItem -Path build/build_tools -Recurse -Include *.exe,*.dll,*.pdb |
+            Copy-Item -Destination dist/tools -Force
+
+          if (Test-Path tools/Resources) {
+            Copy-Item -Recurse -Force tools/Resources dist/tools/Resources
+          }
+
+          Get-ChildItem -Path dist/tools -Recurse
+
+      - name: Upload tools artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: toy2-tools-${{ github.sha }}
+          if-no-files-found: error
+          path: dist/tools/
