@@ -436,6 +436,9 @@ namespace Loader
 			{
 				for ( int32_t idx = 0; idx < kMaxActors; idx++ )
 				{
+					if (! g_levelActors[idx].creatureRam)
+						continue;
+
 					const bool isSelected = (g_selectedActor == idx);
 
 					if ( ImGui::Selectable(GetActorLabel(idx).c_str(), isSelected) )
