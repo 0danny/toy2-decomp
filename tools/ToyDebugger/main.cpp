@@ -9,6 +9,7 @@
 #include "FreeCam.hpp"
 #include "GameInterface.hpp"
 #include "Common/Creatures.hpp"
+#include "Common/DLLCommon.hpp"
 
 namespace
 {
@@ -17,21 +18,6 @@ namespace
 
 namespace Loader
 {
-	void OpenConsole()
-	{
-		AllocConsole();
-
-		FILE* stream = nullptr;
-
-		freopen_s(&stream, "CONOUT$", "w", stdout);
-		freopen_s(&stream, "CONOUT$", "w", stderr);
-		freopen_s(&stream, "CONIN$", "r", stdin);
-
-		printf("[LOADER]: Dll loaded.\n");
-
-		SetConsoleTitleA("ToyDebugger");
-	}
-
 	void InitMinhook()
 	{
 		if ( MH_Initialize() != MH_OK )
@@ -459,7 +445,7 @@ namespace Loader
 
 	DWORD WINAPI InjectHooks(LPVOID lpParam)
 	{
-		OpenConsole();
+		OpenConsole("ToyDebugger");
 		InitMinhook();
 
 		ImGuiWrapper::SubscribeRenderCallback(std::bind(&RenderGui));

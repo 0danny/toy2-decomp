@@ -20,11 +20,11 @@
 
 namespace fs = std::filesystem;
 
-#define LOBYTE(x) (*((uint8_t*)&(x)))
-#define HIBYTE(x) (*((uint8_t*)&(x) + 1))
+#define LOBYTE_RD(x) (*((uint8_t*)&(x)))
+#define HIBYTE_RD(x) (*((uint8_t*)&(x) + 1))
 
-#define LOWORD(x) (*((uint16_t*)&(x)))
-#define HIWORD(x) (*((uint16_t*)&(x) + 1))
+#define LOWORD_RD(x) (*((uint16_t*)&(x)))
+#define HIWORD_RD(x) (*((uint16_t*)&(x) + 1))
 
 // Original function -> Toy2.exe -> 0x0047B170
 void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
@@ -76,7 +76,7 @@ void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
 					*p_outBuffer++ = *afterHeader++;
 				}
 
-				LOBYTE(lengthCode) = 2 * bitAccum;
+				LOBYTE_RD(lengthCode) = 2 * bitAccum;
 				distanceHighOrLiteralCount = 0;
 				copyLength = 2;
 
@@ -98,12 +98,12 @@ void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
 
 				if ( ! shiftedLengthCode )
 				{
-					LOBYTE(lengthCodeBit) = (*afterHeader++);
+					LOBYTE_RD(lengthCodeBit) = (*afterHeader++);
 					shiftedLengthCode = shiftedLengthBit + 2 * lengthCodeBit;
 					shiftedLengthBit = (shiftedLengthCode >> 8) & 1;
 				}
 
-				LOBYTE(bitAccum) = 2 * shiftedLengthCode;
+				LOBYTE_RD(bitAccum) = 2 * shiftedLengthCode;
 				copyLength = shiftedLengthBit + 4;
 
 				uint32_t extraLengthBit = ((2 * shiftedLengthCode) >> 8) & 1;
@@ -180,7 +180,7 @@ void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
 				}
 			}
 
-			LOBYTE(bitAccum) = 2 * lengthCode;
+			LOBYTE_RD(bitAccum) = 2 * lengthCode;
 			lengthFollowupBit = ((2 * lengthCode) >> 8) & 1;
 			bitAccum &= 0xFF;
 
@@ -279,8 +279,8 @@ void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
 					LBL_COMMIT_DISTANCE:
 
 						int16_t distanceHighWord = 0;
-						HIBYTE(distanceHighWord) = distanceHighBits;
-						LOWORD(distanceHighOrLiteralCount) = distanceHighWord | (distanceHighBits >> 8);
+						HIBYTE_RD(distanceHighWord) = distanceHighBits;
+						LOWORD_RD(distanceHighOrLiteralCount) = distanceHighWord | (distanceHighBits >> 8);
 
 						goto LBL_COPY_MATCH;
 					}

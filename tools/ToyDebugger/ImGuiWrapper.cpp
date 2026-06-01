@@ -1,5 +1,6 @@
 #include "ImGuiWrapper.hpp"
 #include "imgui_impl_d3d3.hpp"
+#include "Common/GameStructs.hpp"
 
 #include <imgui.h>
 #include <backends/imgui_impl_win32.h>
@@ -29,28 +30,6 @@ namespace
 	static ImGuiContext* g_imguiContext = nullptr;
 	static DWORD g_lastFrameTick = 0;
 	static bool g_showWindow = false;
-
-	struct CD3DFramework
-	{
-		int32_t hWnd;
-		int32_t bIsFullscreen;
-		int32_t dwRenderWidth;
-		int32_t dwRenderHeight;
-		RECT rcScreenRect;
-		RECT rcViewportRect;
-		LPDIRECTDRAWSURFACE4 pddsFrontBuffer;
-		LPDIRECTDRAWSURFACE4 pddsBackBuffer;
-		LPDIRECTDRAWSURFACE4 pddsRenderTarget;
-		LPDIRECTDRAWSURFACE4 pddsZBuffer;
-		LPDIRECT3DDEVICE3 pd3dDevice;
-		LPDIRECT3DVIEWPORT3 pvViewport;
-		LPDIRECTDRAW4 pDD;
-		LPDIRECT3D3 pD3D;
-		D3DDEVICEDESC ddDeviceDesc;
-		int32_t dwDeviceMemType;
-		DDPIXELFORMAT ddpfZBuffer;
-		int32_t initialized;
-	};
 
 	static CD3DFramework** g_drawingDevice = reinterpret_cast<CD3DFramework**>(0x00884008);
 	static CD3DFramework* g_framework = nullptr;

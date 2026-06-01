@@ -35,7 +35,7 @@ public:
 		if (getOffset() + sizeof(T) > m_fileSize)
 			throw std::runtime_error("[FileReader]: Read will go past file bounds!");
 
-		T output = 0;
+		T output;
 
 		if (! m_stream.read(reinterpret_cast<char*>(&output), sizeof(T)))
         {

@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <iostream>
 
+#include <directx7/d3d.h>
+#include <directx7/d3dtypes.h>
+
 struct InputMapping
 {
 	const char* name;
@@ -404,6 +407,28 @@ enum ActorFlags : uint16_t
 	ACTOR_FORCE_REMOVE = 0x2000,
 	ACTOR_CAMERA_HOVER = 0x4000,
 	ACTOR_UNKNOWN_8000 = 0x8000,
+};
+
+struct CD3DFramework
+{
+	int32_t hWnd;
+	int32_t bIsFullscreen;
+	int32_t dwRenderWidth;
+	int32_t dwRenderHeight;
+	RECT rcScreenRect;
+	RECT rcViewportRect;
+	LPDIRECTDRAWSURFACE4 pddsFrontBuffer;
+	LPDIRECTDRAWSURFACE4 pddsBackBuffer;
+	LPDIRECTDRAWSURFACE4 pddsRenderTarget;
+	LPDIRECTDRAWSURFACE4 pddsZBuffer;
+	LPDIRECT3DDEVICE3 pd3dDevice;
+	LPDIRECT3DVIEWPORT3 pvViewport;
+	LPDIRECTDRAW4 pDD;
+	LPDIRECT3D3 pD3D;
+	D3DDEVICEDESC ddDeviceDesc;
+	int32_t dwDeviceMemType;
+	DDPIXELFORMAT ddpfZBuffer;
+	int32_t initialized;
 };
 
 

@@ -4,6 +4,17 @@ project("toy2tools" CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(EXTERNAL_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/../external")
 
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${EXTERNAL_FOLDER}/include
+    ${EXTERNAL_FOLDER}/submodules/imgui
+)
+
+link_directories(
+    ${EXTERNAL_FOLDER}/libs
+    ${EXTERNAL_FOLDER}/libs/directx7
+)
+
 # Build SaveViewer
 add_executable(SaveViewer 
     SaveViewer/SaveViewer.cpp
@@ -21,6 +32,15 @@ add_executable(RawDecompressor
 
 target_compile_options(RawDecompressor PRIVATE -m32)
 target_link_options(RawDecompressor PRIVATE -m32)
+
+# Build ToyRadar
+add_library(ToyRadar SHARED
+    ToyRadar/main.cpp
+)
+
+target_compile_options(ToyRadar PRIVATE -m32)
+target_link_options(ToyRadar PRIVATE -m32 "LINKER:/SAFESEH:NO")
+target_link_libraries(ToyRadar PRIVATE minhook_x86)
 
 # Build DatDumper
 add_executable(DatDumper 
@@ -63,20 +83,5 @@ add_library(ToyDebugger SHARED
 )
 
 target_compile_options(ToyDebugger PRIVATE -m32)
-target_link_options(ToyDebugger PRIVATE
-    -m32
-    "LINKER:/SAFESEH:NO"
-)
-
-target_link_directories(ToyDebugger PRIVATE 
-    ${EXTERNAL_FOLDER}/libs
-    ${EXTERNAL_FOLDER}/libs/directx7
-)
-
+target_link_options(ToyDebugger PRIVATE -m32 "LINKER:/SAFESEH:NO")
 target_link_libraries(ToyDebugger PRIVATE minhook_x86 ddraw dxguid)
-target_include_directories(ToyDebugger PRIVATE
-    ${EXTERNAL_FOLDER}/include
-    ${EXTERNAL_FOLDER}/submodules/imgui
-)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
