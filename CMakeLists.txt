@@ -53,15 +53,15 @@ add_executable(toy2decomp WIN32
 
 # Build the testing dll(s)
 add_library(patcher SHARED
-    src/Tests/Patcher/main.cpp
+    patcher/main.cpp
 
-    src/Tests/Patcher/Loader.cpp
-    src/Tests/Patcher/Loader.h
+    patcher/Loader.cpp
+    patcher/Loader.h
 
-    src/Tests/Patcher/GamePatches.cpp
-    src/Tests/Patcher/GamePatches.h
+    patcher/GamePatches.cpp
+    patcher/GamePatches.h
 
-    src/Tests/Patcher/Utilities.h
+    patcher/Utilities.h
 )
 
 target_link_directories(patcher PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
