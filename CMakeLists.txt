@@ -50,16 +50,19 @@ set(TOY2_SOURCES
     # Nu3D
     src/Nu3D/Creature.h
     src/Nu3D/Link.h
+    src/Nu3D/Link.cpp
     src/Nu3D/Material.h
     src/Nu3D/Nu3D.h
     src/Nu3D/Patch.h
     src/Nu3D/Portal.h
+    src/Nu3D/Portal.cpp
     src/Nu3D/Primitive.h
     src/Nu3D/Sprite.h
     src/Nu3D/Viewport.h
 
     # Renderer
     src/Renderer/Renderer.h
+    src/Renderer/RenderType.h
     src/Renderer/SpriteRenderer.h
 
     # NGNLoader

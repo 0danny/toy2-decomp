@@ -15,12 +15,19 @@
 
 namespace NGNLoader
 {
-	struct NGNTextureEntry
+	struct TextureEntry
 	{
 		int32_t isBGR;
 		int32_t textureDataIndex;
 		int32_t unused1;
 		int32_t unused2;
+	};
+
+	struct Type266Entry
+	{
+		int16_t count;
+		int16_t index;
+		Vector3F* points;
 	};
 
 	struct NGNImage
@@ -43,7 +50,7 @@ namespace NGNLoader
 		int32_t actualPortalCount;
 		Nu3D::Link::Linker* links;
 		int32_t maxLinkId;
-		int32_t data266[128];
+		Type266Entry* data266[128];
 		Nu3D::Portal::PortalHashTable* portalHashTable;
 		Nu3D::Portal::ScalerEntry* scalerEntryPool;
 		int32_t scalerEntryCount;
@@ -54,9 +61,9 @@ namespace NGNLoader
 		int32_t bucketCount;
 		Nu3D::Creature** creatureData;
 		int32_t creatureCount;
-		NGNTextureEntry textureEntries[64];
+		TextureEntry textureEntries[64];
 	};
 
-    STATIC_ASSERT(sizeof(NGNImage) == 0x67C);
-    STATIC_ASSERT(sizeof(NGNTextureEntry) == 0x10);
+	STATIC_ASSERT(sizeof(NGNImage) == 0x67C);
+	STATIC_ASSERT(sizeof(NGNTextureEntry) == 0x10);
 }

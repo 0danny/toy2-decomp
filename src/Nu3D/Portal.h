@@ -43,6 +43,10 @@ namespace Nu3D
 			PortalBucket buckets[64];
 		};
 
+		extern uint8_t g_visibleAreaFlags[64];
+
+		void ClearVisibleAreaFlags();
+
 		STATIC_ASSERT(sizeof(AreaPortal) == 0x20);
 		STATIC_ASSERT(sizeof(PortalState) == 0x14);
 		STATIC_ASSERT(sizeof(PortalBucket) == 0x8);

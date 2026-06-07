@@ -4,6 +4,7 @@
 #include "Numerics.h"
 #include "Viewport.h"
 #include "Renderer/RenderType.h"
+#include <directx7/d3d.h>
 
 namespace Nu3D
 {
@@ -27,5 +28,20 @@ namespace Nu3D
 		Viewport::ViewportRect viewportRect;
 	};
 
+	struct InstanceData
+	{
+		D3DMATRIX matrices[4];
+		int32_t renderFlags;
+		float lodFactor;
+		float horzOffset;
+		float vertOffset;
+		int32_t renderModeFlags;
+		int32_t unkInt6;
+		RGB32 vertexModColor;
+		Viewport::ViewportRect clipRect;
+		Sprite sprite;
+	};
+
+	STATIC_ASSERT(sizeof(InstanceData) == 0x1B8);
 	STATIC_ASSERT(sizeof(Sprite) == 0x84);
 }

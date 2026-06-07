@@ -5,5 +5,7 @@
 
 namespace NGNLoader
 {
-	void SetNewImage(const char* fileName);
+	extern NGNImage* g_ngnImage;
+
+	void SetNewImage(char* fileName);
 }

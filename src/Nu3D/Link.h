@@ -38,4 +38,9 @@ namespace Nu3D
 		STATIC_ASSERT(sizeof(DynamicScaler) == 0x94);
 		STATIC_ASSERT(sizeof(Linker) == 0x74);
 	}
+
+	namespace Spatial
+	{
+		
+	}
 }
