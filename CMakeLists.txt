@@ -36,7 +36,9 @@ set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 set(TOY2_SOURCES
     src/Logger.cpp
     src/Logger.h
+
     src/Common.h
+    src/Numerics.h
     
     src/Toy2/Toy2.cpp
     src/Toy2/Toy2.h
@@ -44,6 +46,26 @@ set(TOY2_SOURCES
     src/Toy2/D3DApp.cpp
     src/Toy2/D3DApp.h
     src/Toy2/D3DAppTypes.h
+
+    # Nu3D
+    src/Nu3D/Creature.h
+    src/Nu3D/Link.h
+    src/Nu3D/Material.h
+    src/Nu3D/Nu3D.h
+    src/Nu3D/Patch.h
+    src/Nu3D/Portal.h
+    src/Nu3D/Primitive.h
+    src/Nu3D/Sprite.h
+    src/Nu3D/Viewport.h
+
+    # Renderer
+    src/Renderer/Renderer.h
+    src/Renderer/SpriteRenderer.h
+
+    # NGNLoader
+    src/NGNLoader/NGNLoader.cpp
+    src/NGNLoader/NGNLoader.h
+    src/NGNLoader/NGNTypes.h
 )
 
 # Build the game

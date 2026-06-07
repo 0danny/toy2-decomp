@@ -19,3 +19,19 @@ typedef double float64_t;
 #define STATIC_ASSERT_JOIN(a, b) STATIC_ASSERT_GLUE(a, b)
 
 #define STATIC_ASSERT(expr) typedef char STATIC_ASSERT_JOIN(static_assert_failed_at_line_, __LINE__)[(expr) ? 1 : -1]
+
+// Colors
+struct RGB32
+{
+	int32_t r;
+	int32_t g;
+	int32_t b;
+};
+
+struct RGBA
+{
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
+};
