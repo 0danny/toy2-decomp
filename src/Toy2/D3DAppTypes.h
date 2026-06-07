@@ -17,8 +17,8 @@ struct D3DAppInfo
 	uint8_t pad0[768];
 	LPDIRECTDRAWSURFACE lpTextureSurf[15];
 	LPDIRECT3DTEXTURE2 lpTexture[15];
-	uint8_t pad0_0[136];
-	uint8_t pad1[52276];
+	uint8_t pad1[136];
+	uint8_t pad2[52276];
 	int32_t unkInt1;
 	int32_t unkInt2;
 	int32_t unkInt3;
@@ -96,7 +96,6 @@ struct DisplayMode
 	DWORD rgbBitCount;
 };
 
-#pragma pack(push, 1)
 struct InterfaceDevice
 {
 	int32_t valid;
@@ -109,7 +108,7 @@ struct InterfaceDevice
 	GUID guid;
 	char baseName[64];
 	char description[64];
-	uint8_t pad1[1800];
+	uint8_t pad0[1800];
 	D3DDEVICEDESC hwDeviceDesc;
 };
 
@@ -140,7 +139,6 @@ struct ExamineDevice
 	int32_t deviceCount;
 	InterfaceDevice interfaceDevices[6];
 };
-#pragma pack(pop)
 
 struct PC
 {
@@ -159,3 +157,13 @@ enum RenderMode
 	SoftwareRenderer = 1,
 	D3DRenderer = 2,
 };
+
+// Size Assertions
+STATIC_ASSERT(sizeof(D3DAppMode) == 0x10);
+STATIC_ASSERT(sizeof(D3DAppInfo) == 0xD0A0);
+STATIC_ASSERT(sizeof(RenderStateCache) == 0x38);
+STATIC_ASSERT(sizeof(WindowData) == 0xC8);
+STATIC_ASSERT(sizeof(DisplayMode) == 0xC);
+STATIC_ASSERT(sizeof(InterfaceDevice) == 0x8B0);
+STATIC_ASSERT(sizeof(ExamineDevice) == 0x3C74);
+STATIC_ASSERT(sizeof(PC) == 0xF1EC);

@@ -9,7 +9,7 @@ namespace GamePatches
 	{
 		printf("[GAME_PATCHES]: Injecting hooks...\n");
 
-		if ( MH_CreateHook(Nu3DLogAddress, (LPVOID)&Nu3DLogHook, NULL) != MH_OK )
+		if (MH_CreateHook(Nu3DLogAddress, (LPVOID)&Nu3DLogHook, NULL) != MH_OK)
 			printf("[CONSTRUCTOR HOOK]: Could not hook Nu3DLogHook constructor.\n");
 	}
 

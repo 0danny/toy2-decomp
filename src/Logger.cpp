@@ -2,20 +2,27 @@
 
 #include <cstdio>
 #include <cstdarg>
-#include <stdlib.h>
 
-namespace
+namespace Logger
 {
+	// $GLOBAL 00B6269C
 	const char* g_errorHandlerPath;
+
+	// $GLOBAL 00B626A0
 	int32_t g_errorHandlerLine;
+
+	// $GLOBAL 00883348
+	int32_t g_showMsgBoxOnThrow;
+
+	// $GLOBAL 00882F38
+	int32_t g_logsEnabled;
+
+	// $GLOBAL 00504E54
+	int32_t g_logFileExists = 1;
 }
 
 namespace Logger
 {
-	int32_t g_showMsgBoxOnThrow;
-	int32_t g_logsEnabled;
-	int32_t g_logFileExists = 1;
-
 	// $FUNC 004A87C0 [IMPLEMENTED]
 	ThrowErrorFunc GetErrorHandler(char* filePath, int32_t lineNumber)
 	{
@@ -34,20 +41,20 @@ namespace Logger
 		va_list argList;
 		va_start(argList, format);
 
-		if ( *format )
+		if (*format)
 		{
 			sprintf(caption, "Soft Abort - %s Line %d", g_errorHandlerPath, g_errorHandlerLine);
 			vsprintf(text, format, argList);
 
 			FILE* file = fopen("toy2.err", "wb");
 
-			if ( file )
+			if (file)
 			{
 				fprintf(file, "%s\r\n%s\r\n", caption, text);
 				fclose(file);
 			}
 
-			if ( ! g_showMsgBoxOnThrow )
+			if (! g_showMsgBoxOnThrow)
 				MessageBoxA(0, text, caption, 0);
 		}
 
@@ -67,9 +74,9 @@ namespace Logger
 
 		printf("%s", buffer); // Addition
 
-		if ( g_logsEnabled )
+		if (g_logsEnabled)
 		{
-			if ( g_logFileExists )
+			if (g_logFileExists)
 			{
 				g_logFileExists = 0;
 				remove("toy2.log");
@@ -77,7 +84,7 @@ namespace Logger
 
 			FILE* file = fopen("toy2.log", "at");
 
-			if ( file )
+			if (file)
 			{
 				fprintf(file, buffer);
 				fclose(file);
@@ -113,8 +120,5 @@ namespace Logger
 	}
 
 	// $FUNC 0040D490 [UNFINISHED];
-	char* ErrorToMessage(HRESULT error)
-	{
-		return "Unimplemented";
-	}
+	char* ErrorToMessage(HRESULT error) { return "Unimplemented"; }
 }

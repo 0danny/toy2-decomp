@@ -23,11 +23,11 @@ namespace D3DApp
 	int32_t BuildProfileMachine();
 	int32_t BuildWindow();
 
+	// clang-format off
 	int32_t WINAPI EnumerateDevices(LPGUID guid, LPSTR driverDesc, LPSTR driverName, LPVOID lpContext);
 	HRESULT WINAPI EnumDisplayModes(LPDDSURFACEDESC surfaceDesc, LPVOID context);
-	HRESULT WINAPI EnumDevices(
-	    LPGUID guid, LPSTR deviceDesc, LPSTR deviceName, LPD3DDEVICEDESC d3DHWDeviceDesc, LPD3DDEVICEDESC d3DHELDeviceDesc, LPVOID context
-	);
+	HRESULT WINAPI EnumDevices(LPGUID guid, LPSTR deviceDesc, LPSTR deviceName, LPD3DDEVICEDESC d3DHWDeviceDesc, LPD3DDEVICEDESC d3DHELDeviceDesc, LPVOID context);
+	// clang-format on
 
 	int32_t SortDisplayModes(const void* modeA, const void* modeB);
 

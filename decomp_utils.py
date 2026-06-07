@@ -7,6 +7,11 @@ from pathlib import Path
 
 import build as build_script
 
+# Templates
+
+# Functions: $FUNC 004CE810 [IMPLEMENTED] || $FUNC 004CE810 [UNFINISHED]
+# Global Vars: $GLOBAL 004CE810
+
 def count_lines():
     build_script.track_process(["cloc", "src_main"], "CountLines")
 

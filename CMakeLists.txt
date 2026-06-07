@@ -1,10 +1,11 @@
+cmake_minimum_required(VERSION 3.20.0)
+
 set(PROJECT_NAME "toy2decomp")
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-cmake_minimum_required(VERSION 3.20.0)
 project(${PROJECT_NAME} C CXX RC)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -31,13 +32,10 @@ set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
 set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
 set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-# Nu3D Sources
-set(NU3D_SOURCES
-    
-)
-
 # Toy2 Sources
 set(TOY2_SOURCES
+    src/Logger.cpp
+    src/Logger.h
     src/Common.h
     
     src/Toy2/Toy2.cpp
@@ -46,18 +44,11 @@ set(TOY2_SOURCES
     src/Toy2/D3DApp.cpp
     src/Toy2/D3DApp.h
     src/Toy2/D3DAppTypes.h
-
-    src/Toy2/FileUtils.cpp
-    src/Toy2/FileUtils.h
 )
 
 # Build the game
 add_executable(toy2decomp WIN32 
-    ${NU3D_SOURCES}
     ${TOY2_SOURCES}
-
-    src/Logger.cpp
-    src/Logger.h
 )
 
 # Build the testing dll(s)

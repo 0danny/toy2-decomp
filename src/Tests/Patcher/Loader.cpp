@@ -29,7 +29,7 @@ namespace Loader
 
 		printf("[LOADER]: Injecting hooks...\n");
 
-		if ( MH_Initialize() != MH_OK )
+		if (MH_Initialize() != MH_OK)
 		{
 			printf("[LOADER]: Failed to initialize MinHook.\n");
 			return;
