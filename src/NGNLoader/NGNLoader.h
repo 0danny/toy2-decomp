@@ -2,6 +2,7 @@
 
 #include "NGNTypes.h"
 #include <windows.h>
+#include <cstdio>
 
 namespace NGNLoader
 {

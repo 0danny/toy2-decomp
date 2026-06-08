@@ -22,7 +22,7 @@ namespace NGNLoader
 	void GetScaleVector(Vector3F* output) { *output = g_vertexScaleVector; }
 
 	// $FUNC 004B3350 [IMPLEMENTED]
-	Nu3D::Portal::AreaPortal* NGNLoader::AllocPortalVertices(int32_t vertexCount)
+	Nu3D::Portal::AreaPortal* AllocPortalVertices(int32_t vertexCount)
 	{
 		int32_t size = sizeof(Vector3F) * vertexCount * sizeof(Nu3D::Portal::AreaPortal);
 
@@ -44,7 +44,7 @@ namespace NGNLoader
 		return alloc;
 	}
 
-	// $FUNC 004C4080 [UNIMPLEMENTED]
+	// $FUNC 004C4080 [UNFINISHED]
 	void ParseTextures(FILE* stream, NGNImage* ngnImage) {}
 
 	// $FUNC 004C3EB0 [IMPLEMENTED]
@@ -119,7 +119,7 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C4220 [UNIMPLEMENTED]
+	// $FUNC 004C4220 [UNFINISHED]
 	void ParseCreatures(FILE* stream, NGNImage* ngnImage) {}
 
 	// $FUNC 004C3CA0 [IMPLEMENTED]
@@ -173,7 +173,7 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C3DF0 [UNIMPLEMENTED]
+	// $FUNC 004C3DF0 [UNFINISHED]
 	void ParseAreaPortalRot(FILE* stream, NGNImage* ngnImage) {}
 
 	// $FUNC 004C3BE0 [IMPLEMENTED]
@@ -219,19 +219,19 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C3740 [UNIMPLEMENTED]
+	// $FUNC 004C3740 [UNFINISHED]
 	void ParseGscale(FILE* stream, NGNImage* ngnImage) {}
 
-	// $FUNC 004C35C0 [UNIMPLEMENTED]
+	// $FUNC 004C35C0 [UNFINISHED]
 	void ParseGeometry(FILE* stream, NGNImage* ngnImage) {}
 
-	// $FUNC 004B9630 [UNIMPLEMENTED]
+	// $FUNC 004B9630 [UNFINISHED]
 	void BuildTex14() {}
 
-	// $FUNC 004C36A0 [UNIMPLEMENTED]
+	// $FUNC 004C36A0 [UNFINISHED]
 	void BuildGrid(int32_t gridWidth, int32_t gridHeight, int32_t type, NGNImage* ngnImage) {}
 
-	// $FUNC 004C3240 [UNIMPLEMENTED]
+	// $FUNC 004C3240 [UNFINISHED]
 	void BuildScalerEntries(NGNImage* p_ngnImage) {}
 
 	// $FUNC 004C33F0 [IMPLEMENTED]

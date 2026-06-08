@@ -39,9 +39,6 @@ set(TOY2_SOURCES
 
     src/Common.h
     src/Numerics.h
-    
-    src/Toy2/Toy2.cpp
-    src/Toy2/Toy2.h
 
     src/Toy2/D3DApp.cpp
     src/Toy2/D3DApp.h
@@ -74,6 +71,9 @@ set(TOY2_SOURCES
 # Build the game
 add_executable(toy2decomp WIN32 
     ${TOY2_SOURCES}
+
+    src/Toy2/Toy2.cpp
+    src/Toy2/Toy2.h
 )
 
 # Build the testing dll(s)
@@ -87,10 +87,12 @@ add_library(patcher SHARED
     patcher/GamePatches.h
 
     patcher/Utilities.h
+
+    ${TOY2_SOURCES}
 )
 
 target_link_directories(patcher PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
-target_link_libraries(patcher PRIVATE minhook_x86)
+target_link_libraries(patcher PRIVATE minhook_x86 ddraw dxguid)
 
 target_link_directories(toy2decomp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
 target_link_libraries(toy2decomp PRIVATE ddraw dxguid)

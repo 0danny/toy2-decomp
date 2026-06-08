@@ -65,5 +65,6 @@ namespace NGNLoader
 	};
 
 	STATIC_ASSERT(sizeof(NGNImage) == 0x67C);
-	STATIC_ASSERT(sizeof(NGNTextureEntry) == 0x10);
+	STATIC_ASSERT(sizeof(TextureEntry) == 0x10);
+	STATIC_ASSERT(sizeof(Type266Entry) == 0x8);
 }

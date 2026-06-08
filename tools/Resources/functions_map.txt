@@ -1,1099 +1,1099 @@
-0x401000
-0x4011D0
-0x4019D0
-0x401A00
-0x401B60
-0x401C30
-0x401FB0
-0x402030
-0x4020F0
-0x402290
-0x4025C0
-0x402610
-0x4027F0
-0x402A10
-0x403450
-0x403640
-0x403730
-0x4037E0
-0x4038E0
-0x4045E0
-0x405860
-0x405C80
-0x405CF0
-0x405D20
-0x406220
-0x4064A0
-0x406620
-0x4068E0
-0x406960
-0x406A60
-0x406A90
-0x406C70
-0x406CD0
-0x407150
-0x4071E0
-0x407440
-0x4076F0
-0x4086F0
-0x408A60
-0x408CD0
-0x408D30
-0x409130
-0x4092F0
-0x409360
-0x4093A0
-0x40BAE0
-0x40C130
-0x40CAC0
-0x40CD80
-0x40D2C0
-0x40D490
-0x40FAC0
-0x40FAE0
-0x40FDF0
-0x4100F0
-0x410410
-0x4104D0
-0x410540
-0x4106C0
-0x410850
-0x410B80
-0x410F40
-0x412B00
-0x412B10
-0x412B50
-0x412D70
-0x412E80
-0x412EE0
-0x412FF0
-0x413150
-0x413240
-0x4132A0
-0x413300
-0x413310
-0x414110
-0x414270
-0x414320
-0x414550
-0x414720
-0x414A80
-0x414AF0
-0x414EA0
-0x414F20
-0x415120
-0x415180
-0x4151E0
-0x415210
-0x415240
-0x415270
-0x4152A0
-0x4152E0
-0x415460
-0x415640
-0x4157E0
-0x415800
-0x415860
-0x416A60
-0x416AB0
-0x416F30
-0x417380
-0x417510
-0x417680
-0x418610
-0x418720
-0x4189C0
-0x418CE0
-0x4190C0
-0x41AA10
-0x41B780
-0x41BB80
-0x41BC20
-0x41BEE0
-0x41C100
-0x41C190
-0x41C640
-0x41DDB0
-0x41DEC0
-0x41DF70
-0x41E020
-0x41E150
-0x41E300
-0x41E390
-0x41E880
-0x420060
-0x420AF0
-0x420ED0
-0x420F70
-0x421090
-0x421340
-0x422660
-0x422C70
-0x422D20
-0x423200
-0x424390
-0x424490
-0x425680
-0x425700
-0x4259B0
-0x425A80
-0x425AD0
-0x425B60
-0x425EB0
-0x425F60
-0x4282D0
-0x428650
-0x428700
-0x428890
-0x428BA0
-0x428C80
-0x428E70
-0x4292C0
-0x4293D0
-0x4295B0
-0x429800
-0x429910
-0x429CE0
-0x429FB0
-0x42A130
-0x42B090
-0x42B250
-0x42B2D0
-0x42B3A0
-0x42BE60
-0x42C150
-0x42C200
-0x42C2B0
-0x42C3E0
-0x42C810
-0x42C8A0
-0x42CA60
-0x42D3E0
-0x42D620
-0x42D710
-0x42D8B0
-0x42D9C0
-0x42DB10
-0x42DCB0
-0x42E1D0
-0x42E600
-0x42E790
-0x42F310
-0x42F530
-0x42F7B0
-0x42FC50
-0x430BF0
-0x430E90
-0x4316C0
-0x4318F0
-0x431900
-0x4319E0
-0x431C40
-0x431CA0
-0x431CE0
-0x431D40
-0x431DA0
-0x431E00
-0x432020
-0x432AD0
-0x433410
-0x4334B0
-0x4334D0
-0x4335D0
-0x433700
-0x433D50
-0x433ED0
-0x433F40
-0x434090
-0x4340D0
-0x4343D0
-0x434550
-0x4346C0
-0x434990
-0x434D20
-0x434EB0
-0x435100
-0x4354E0
-0x4359D0
-0x435F30
-0x436220
-0x436C90
-0x436CC0
-0x436CE0
-0x436D40
-0x436D80
-0x437010
-0x4371B0
-0x437B20
-0x437C40
-0x437FB0
-0x4381F0
-0x438520
-0x438650
-0x438790
-0x438910
-0x438A50
-0x4398B0
-0x43A130
-0x43A380
-0x43A600
-0x43ABC0
-0x43ACA0
-0x43AED0
-0x43B0C0
-0x43B9B0
-0x43BA80
-0x43C070
-0x43C0E0
-0x43C1C0
-0x43C700
-0x43C750
-0x43D6B0
-0x43D820
-0x43D9E0
-0x43E070
-0x43E2D0
-0x43E430
-0x43E5A0
-0x43E6E0
-0x43F3D0
-0x43FEF0
-0x440260
-0x4402B0
-0x440E90
-0x440F70
-0x441980
-0x445720
-0x445980
-0x446FA0
-0x446FC0
-0x447BD0
-0x447D30
-0x447D40
-0x447DB0
-0x448080
-0x448F00
-0x44DD80
-0x44DF90
-0x44E100
-0x44E1A0
-0x44E520
-0x44E620
-0x44E6D0
-0x44E6F0
-0x44E710
-0x44EB90
-0x44ED60
-0x44ED90
-0x44F010
-0x44F190
-0x44F200
-0x44F420
-0x44F580
-0x44F820
-0x44F840
-0x44F860
-0x44FF50
-0x450010
-0x4500A0
-0x4507F0
-0x450850
-0x450AC0
-0x450C70
-0x451280
-0x451F80
-0x451FD0
-0x452040
-0x4520D0
-0x452130
-0x452170
-0x452180
-0x4521A0
-0x452310
-0x452FC0
-0x453CA0
-0x453CD0
-0x453CF0
-0x453D90
-0x453F20
-0x453FA0
-0x454020
-0x454D30
-0x4560E0
-0x457440
-0x458770
-0x459AB0
-0x45A5C0
-0x45B0B0
-0x45BBC0
-0x45C6B0
-0x45D110
-0x45DB80
-0x45E390
-0x461D20
-0x463090
-0x463B80
-0x464690
-0x465180
-0x467080
-0x468430
-0x468E90
-0x469900
-0x46AC60
-0x46BF90
-0x46D2C0
-0x46D7B0
-0x470BF0
-0x470C70
-0x470D00
-0x470D60
-0x470FB0
-0x4710C0
-0x471190
-0x471250
-0x471300
-0x471520
-0x471B30
-0x472E70
-0x474190
-0x474C80
-0x476340
-0x476D00
-0x4776C0
-0x477EB0
-0x47B170
-0x47C800
-0x47C870
-0x47C8B0
-0x47CC90
-0x47D0F0
-0x47D120
-0x47D210
-0x47D4E0
-0x47D520
-0x47D540
-0x47D650
-0x47D670
-0x47D7F0
-0x47D840
-0x47D880
-0x47D8D0
-0x47D8E0
-0x47D930
-0x47DE50
-0x47E3C0
-0x47E420
-0x47E4E0
-0x47E5B0
-0x47E7D0
-0x47E850
-0x47EC20
-0x47EDE0
-0x47EF80
-0x480660
-0x480AE0
-0x481140
-0x4813B0
-0x481D00
-0x481FB0
-0x482A00
-0x483EF0
-0x484380
-0x4855F0
-0x485680
-0x4857E0
-0x485940
-0x486280
-0x486310
-0x4863A0
-0x486520
-0x4878A0
-0x4878D0
-0x487900
-0x487970
-0x4879C0
-0x487A20
-0x487A60
-0x487AB0
-0x487AD0
-0x487B20
-0x4882F0
-0x488510
-0x488580
-0x4885A0
-0x4885C0
-0x488A60
-0x488A80
-0x488AA0
-0x488AF0
-0x488BD0
-0x488C10
-0x488E10
-0x489980
-0x489C30
-0x48A4C0
-0x48ACC0
-0x48B640
-0x48B660
-0x48B750
-0x48C030
-0x48C860
-0x48D530
-0x48E1B0
-0x48E1D0
-0x48E200
-0x48E730
-0x48F1B0
-0x48F230
-0x48F3E0
-0x48F410
-0x48FB70
-0x490290
-0x490410
-0x490470
-0x4905C0
-0x490730
-0x4907E0
-0x490860
-0x4909E0
-0x490B90
-0x490BF0
-0x493A60
-0x493C30
-0x493DC0
-0x493F40
-0x494130
-0x4942D0
-0x4946A0
-0x494820
-0x4949B0
-0x498470
-0x498550
-0x498620
-0x499950
-0x49A930
-0x49AB90
-0x49AE20
-0x49AE40
-0x49B260
-0x49B2A0
-0x49B3B0
-0x49B580
-0x49B630
-0x49B830
-0x49B990
-0x49B9E0
-0x49C420
-0x49CAA0
-0x49D2D0
-0x49D390
-0x49D750
-0x49D7A0
-0x49D910
-0x49DFE0
-0x49E330
-0x49E660
-0x49E8D0
-0x49E910
-0x49E9C0
-0x49E9D0
-0x49EA60
-0x49EA90
-0x49EAC0
-0x49EB20
-0x49EB50
-0x49EBA0
-0x49EC00
-0x49EE50
-0x49EEE0
-0x49F350
-0x49F3C0
-0x49F400
-0x49F460
-0x49F490
-0x49F4B0
-0x49FAB0
-0x49FB40
-0x49FC60
-0x49FD40
-0x4A0C80
-0x4A0DB0
-0x4A0E60
-0x4A0F80
-0x4A1A50
-0x4A1B00
-0x4A1BB0
-0x4A1BE0
-0x4A1CE0
-0x4A1E60
-0x4A2080
-0x4A2480
-0x4A26F0
-0x4A27A0
-0x4A28B0
-0x4A28F0
-0x4A2960
-0x4A2C20
-0x4A2C80
-0x4A2CC0
-0x4A2D80
-0x4A3770
-0x4A37E0
-0x4A3810
-0x4A3980
-0x4A3B90
-0x4A3BC0
-0x4A3BE0
-0x4A3C80
-0x4A3E60
-0x4A3ED0
-0x4A3EF0
-0x4A3F10
-0x4A40F0
-0x4A4130
-0x4A4200
-0x4A4680
-0x4A48B0
-0x4A4910
-0x4A4960
-0x4A4B70
-0x4A4B90
-0x4A4BB0
-0x4A4D60
-0x4A4E60
-0x4A4F80
-0x4A5070
-0x4A50D0
-0x4A5170
-0x4A5340
-0x4A5370
-0x4A5540
-0x4A5870
-0x4A5C40
-0x4A5D30
-0x4A62A0
-0x4A6390
-0x4A65A0
-0x4A65E0
-0x4A66A0
-0x4A6730
-0x4A6790
-0x4A67D0
-0x4A6940
-0x4A6B10
-0x4A6B30
-0x4A6CC0
-0x4A6D30
-0x4A6D40
-0x4A8710
-0x4A87C0
-0x4A8870
-0x4A88B0
-0x4A8B30
-0x4A8BF0
-0x4A8C60
-0x4A8D20
-0x4A8D80
-0x4A91B0
-0x4A91E0
-0x4A9210
-0x4A9270
-0x4A92C0
-0x4A92E0
-0x4A9340
-0x4A9400
-0x4A94C0
-0x4A9530
-0x4A9750
-0x4A97E0
-0x4A9800
-0x4A9820
-0x4A9840
-0x4A9860
-0x4A98D0
-0x4A9930
-0x4A9AA0
-0x4A9B40
-0x4A9CB0
-0x4A9D50
-0x4A9EC0
-0x4A9F60
-0x4AA100
-0x4AA520
-0x4AA620
-0x4AAC40
-0x4AB7D0
-0x4AB850
-0x4AB8C0
-0x4AB8E0
-0x4AB950
-0x4ABA40
-0x4ABA70
-0x4ABA80
-0x4ABA90
-0x4ABAD0
-0x4ABAE0
-0x4ABAF0
-0x4ABB30
-0x4ABB80
-0x4ABBC0
-0x4ABBD0
-0x4ABBF0
-0x4ABC40
-0x4ABC60
-0x4ABCA0
-0x4ABD40
-0x4ABD50
-0x4ABD80
-0x4ABD90
-0x4ABDA0
-0x4ABE30
-0x4ABE90
-0x4ABEA0
-0x4ABEB0
-0x4ABF00
-0x4ABF30
-0x4ABF50
-0x4ABF60
-0x4ABF80
-0x4ABFA0
-0x4ABFC0
-0x4ABFD0
-0x4ABFF0
-0x4AC010
-0x4AC030
-0x4AC070
-0x4AC080
-0x4AC0A0
-0x4AC0C0
-0x4AC0D0
-0x4AC0F0
-0x4AC100
-0x4AC120
-0x4AC140
-0x4AC150
-0x4AC180
-0x4AC1A0
-0x4AC1F0
-0x4AC220
-0x4AC240
-0x4AC260
-0x4AC2A0
-0x4AC300
-0x4AC340
-0x4AC370
-0x4AC390
-0x4AC3A0
-0x4AC420
-0x4AC4D0
-0x4AC540
-0x4AC760
-0x4AC9C0
-0x4ACBC0
-0x4ACBE0
-0x4ACD90
-0x4ACFB0
-0x4ACFC0
-0x4AD000
-0x4AD060
-0x4AD090
-0x4AD0C0
-0x4AD130
-0x4AD1C0
-0x4AD610
-0x4AD640
-0x4ADFD0
-0x4ADFF0
-0x4AEC80
-0x4AECE0
-0x4AEDA0
-0x4AEE10
-0x4AEEE0
-0x4AEF80
-0x4AF0D0
-0x4AF110
-0x4AF420
-0x4AF4E0
-0x4AF550
-0x4AF640
-0x4AFA20
-0x4AFAF0
-0x4AFB20
-0x4AFBA0
-0x4AFBE0
-0x4AFC10
-0x4AFC70
-0x4AFCB0
-0x4AFD30
-0x4AFF80
-0x4B0200
-0x4B0380
-0x4B0400
-0x4B0620
-0x4B06D0
-0x4B0740
-0x4B0760
-0x4B0780
-0x4B07A0
-0x4B0870
-0x4B0A30
-0x4B0B60
-0x4B0C90
-0x4B0CF0
-0x4B0D90
-0x4B0E00
-0x4B1150
-0x4B1880
-0x4B2B20
-0x4B2B30
-0x4B2B80
-0x4B2BB0
-0x4B2BD0
-0x4B2BE0
-0x4B2BF0
-0x4B2C80
-0x4B2CC0
-0x4B2CE0
-0x4B2CF0
-0x4B2D20
-0x4B2D50
-0x4B2D80
-0x4B2DE0
-0x4B2E30
-0x4B2E60
-0x4B2EB0
-0x4B2ED0
-0x4B3110
-0x4B3170
-0x4B3190
-0x4B31D0
-0x4B3210
-0x4B3240
-0x4B3280
-0x4B32E0
-0x4B3350
-0x4B33A0
-0x4B33B0
-0x4B34F0
-0x4B3530
-0x4B3570
-0x4B35A0
-0x4B3600
-0x4B3630
-0x4B3740
-0x4B37B0
-0x4B37F0
-0x4B3860
-0x4B3870
-0x4B38C0
-0x4B38E0
-0x4B3980
-0x4B39D0
-0x4B3A20
-0x4B3A90
-0x4B3AD0
-0x4B3C20
-0x4B3C60
-0x4B3CC0
-0x4B3FD0
-0x4B4010
-0x4B4080
-0x4B4110
-0x4B4450
-0x4B44D0
-0x4B45A0
-0x4B46B0
-0x4B4880
-0x4B4C10
-0x4B4CD0
-0x4B4DE0
-0x4B4FA0
-0x4B5310
-0x4B53D0
-0x4B5480
-0x4B5590
-0x4B55D0
-0x4B5630
-0x4B5700
-0x4B5AA0
-0x4B5AD0
-0x4B5BD0
-0x4B5C00
-0x4B5CE0
-0x4B5CF0
-0x4B5E20
-0x4B5E40
-0x4B5FB0
-0x4B6040
-0x4B6140
-0x4B6220
-0x4B62C0
-0x4B6300
-0x4B6320
-0x4B6660
-0x4B6760
-0x4B6850
-0x4B68A0
-0x4B68B0
-0x4B6A50
-0x4B6A90
-0x4B6AD0
-0x4B6C10
-0x4B6ED0
-0x4B6F50
-0x4B70E0
-0x4B75E0
-0x4B7710
-0x4B7830
-0x4B7920
-0x4B7B30
-0x4B7D60
-0x4B7FC0
-0x4B8160
-0x4B8330
-0x4B8400
-0x4B8450
-0x4B8460
-0x4B8490
-0x4B84E0
-0x4B85E0
-0x4B8670
-0x4B86F0
-0x4B87F0
-0x4B8840
-0x4B8940
-0x4B89B0
-0x4B8A30
-0x4B8B10
-0x4B8BF0
-0x4B8CC0
-0x4B8DD0
-0x4B8E60
-0x4B8F40
-0x4B9100
-0x4B9210
-0x4B92B0
-0x4B92E0
-0x4B9300
-0x4B9600
-0x4B9630
-0x4B9710
-0x4B9950
-0x4B99F0
-0x4B9A60
-0x4B9B90
-0x4BA1F0
-0x4BA270
-0x4BA2F0
-0x4BA3A0
-0x4BA420
-0x4BABE0
-0x4BAC40
-0x4BAC70
-0x4BACF0
-0x4BB0E0
-0x4BB150
-0x4BB1B0
-0x4BB270
-0x4BB2F0
-0x4BB320
-0x4BB3C0
-0x4BB4C0
-0x4BB540
-0x4BB590
-0x4BB5E0
-0x4BB690
-0x4BB6C0
-0x4BB720
-0x4BB7D0
-0x4BB810
-0x4BB850
-0x4BB890
-0x4BB920
-0x4BB9C0
-0x4BB9D0
-0x4BBA10
-0x4BBAB0
-0x4BBC00
-0x4BBC50
-0x4BBE10
-0x4BC080
-0x4BC120
-0x4BC140
-0x4BC160
-0x4BC170
-0x4BC1B0
-0x4BC230
-0x4BC2C0
-0x4BC320
-0x4BC360
-0x4BC3A0
-0x4BC410
-0x4BC430
-0x4BC460
-0x4BC720
-0x4BC900
-0x4BC980
-0x4BCAD0
-0x4BCB60
-0x4BCBE0
-0x4BCC40
-0x4BCC70
-0x4BCE00
-0x4BCF60
-0x4BCFA0
-0x4BD040
-0x4BE0B0
-0x4C0100
-0x4C0320
-0x4C14A0
-0x4C1540
-0x4C1720
-0x4C17B0
-0x4C19E0
-0x4C1C20
-0x4C1C40
-0x4C1E70
-0x4C1F00
-0x4C1FC0
-0x4C2080
-0x4C20E0
-0x4C20F0
-0x4C2150
-0x4C22E0
-0x4C23B0
-0x4C2450
-0x4C24D0
-0x4C2630
-0x4C26D0
-0x4C2720
-0x4C2750
-0x4C27D0
-0x4C2870
-0x4C28E0
-0x4C28F0
-0x4C2910
-0x4C29A0
-0x4C29D0
-0x4C2A20
-0x4C2A70
-0x4C2BE0
-0x4C2E70
-0x4C2FF0
-0x4C3090
-0x4C30D0
-0x4C3130
-0x4C3170
-0x4C31C0
-0x4C3240
-0x4C32B0
-0x4C33F0
-0x4C35C0
-0x4C36A0
-0x4C3740
-0x4C3BE0
-0x4C3CA0
-0x4C3DF0
-0x4C3EB0
-0x4C4080
-0x4C4220
-0x4C4340
-0x4C4370
-0x4C4640
-0x4C48E0
-0x4C4A60
-0x4C4BE0
-0x4C4E00
-0x4C4F30
-0x4C5060
-0x4C5280
-0x4C5490
-0x4C55B0
-0x4C56D0
-0x4C58E0
-0x4C5AC0
-0x4C5D80
-0x4C5F00
-0x4C6080
-0x4C6340
-0x4C6B80
-0x4C7630
-0x4C80D0
-0x4C8930
-0x4C9190
-0x4C9A50
-0x4C9D00
-0x4C9F50
-0x4CA040
-0x4CA0C0
-0x4CA1D0
-0x4CA420
-0x4CAA60
-0x4CAB80
-0x4CB270
-0x4CB2A0
-0x4CB2C0
-0x4CB300
-0x4CB320
-0x4CB4E0
-0x4CB940
-0x4CB970
-0x4CBC40
-0x4CBC90
-0x4CC430
-0x4CC480
-0x4CC970
-0x4CCB20
-0x4CCBE0
-0x4CCC70
-0x4CCCE0
-0x4CCD40
-0x4CCDA0
-0x4CCE30
-0x4CCEF0
-0x4CCF70
-0x4CCFF0
-0x4CD0C0
-0x4CD110
-0x4CD120
-0x4CD140
-0x4CD170
-0x4CD1B0
-0x4CD7B0
-0x4CD880
-0x4CDBB0
-0x4CDBF0
-0x4CDC20
-0x4CDD10
-0x4CDD80
-0x4CDD90
-0x4CDDB0
-0x4CDDD0
-0x4CE020
-0x4CE030
-0x4CE050
-0x4CE2C0
-0x4CE340
-0x4CE380
-0x4CE4D0
-0x4CE510
-0x4CE570
-0x4CE5B0
-0x4CE5F0
-0x4CE6C0
-0x4CE760
-0x4CE810
-0x4CE8B0
-0x4CE910
-0x4CEA20
-0x4CEA50
-0x4CEAE0
-0x4DA850
-0x4DB040
-0x4DB600
-0x4DB8C0
-0x4DB910
-0x4DB940
-0x4DB950
-0x4DBB00
-0x4DBB80
+0x00401000 Toy2::Animation::StepEventTrack
+0x004011D0 Toy2::Buzz::UpdateAnimationState
+0x004019D0 Toy2::Actor::UpdatePrimaryAnimation
+0x00401A00 Toy2::Dialogue::WrapSubtitleText
+0x00401B60 Renderer::DrawBlackBorderBox
+0x00401C30 Toy2::Dialogue::UpdateSubtitleBox
+0x00401FB0 Renderer::DrawString
+0x00402030 Toy2::Camera::InitCutsceneCamera
+0x004020F0 Toy2::Camera::BeginScriptedCutsceneAtPoint
+0x00402290 Toy2::Camera::BeginScriptedCutsceneOnBuzz
+0x004025C0 Toy2::Collectables::LoadTokenTable
+0x00402610 Toy2::Collectables::Token
+0x004027F0 Toy2::Dialogue::Begin
+0x00402A10 Toy2::Cutscene::Update
+0x00403450 Toy2::Camera::InitGameplayCamera
+0x00403640 Toy2::Camera::SmoothToTarget
+0x00403730 Toy2::Camera::SnapBehindBuzz
+0x004037E0 Toy2::Visor::GetActorLockOnPoint
+0x004038E0 Toy2::Camera::VisorMode
+0x004045E0 Toy2::Camera::GameplayMode
+0x00405860 Toy2::Camera::UpdateActiveTransform
+0x00405C80 Toy2::Actor::StepCreatureAnimFrame
+0x00405CF0 Toy2::Actor::SetAnimation
+0x00405D20 Toy2::Actor::Kill
+0x00406220 Toy2::CreatureBehaviour::Zurg3
+0x004064A0 Toy2::CreatureBehaviour::ZgCar
+0x00406620 Toy2::CreatureBehaviour::ZPod
+0x004068E0 Toy2::CreatureBehaviour::Box
+0x00406960 Toy2::CreatureBehaviour::BPlane
+0x00406A60 Toy2::CreatureBehaviour::RCCar
+0x00406A90 Toy2::CreatureBehaviour::FatBloke
+0x00406C70 Toy2::CreatureBehaviour::Buzzard
+0x00406CD0 Toy2::Game::InitActor
+0x00407150 Toy2::Actor::InitCreatureRam
+0x004071E0 Toy2::Buzz::HandleDamage
+0x00407440 Toy2::Game::ActorCollisionCheck
+0x004076F0 Toy2::Actor::UpdateAIMovement
+0x004086F0 Toy2::Game::UpdateActors
+0x00408A60 Toy2::Actor::HandleDamage
+0x00408CD0 D3DApp::SortDisplayModes
+0x00408D30 D3DApp::EnumerateDevices
+0x00409130 D3DApp::EnumDevices
+0x004092F0 D3DApp::EnumDisplayModes
+0x00409360 D3DApp::ProfileWndProc
+0x004093A0 D3DApp::BuildProfileMachine
+0x0040BAE0 SoftwareRenderer::ClearRenderSurfaces
+0x0040C130 Logger::LogErrorNotSetLn
+0x0040CAC0 D3DApp::ProcessWndProc
+0x0040CD80 SoftwareRenderer::ShowBackBuffer
+0x0040D2C0 D3DApp::GetErrorNotSet
+0x0040D490 Logger::ErrorToMessage
+0x0040FAC0 Nu3D::Particles::Init
+0x0040FAE0 Nu3D::Particles::SpawnInstance
+0x0040FDF0 Nu3D::Particles::SpawnFromPreset
+0x004100F0 Toy2::Buzz::CheckParticleCollisions
+0x00410410 Toy2::Particles::SpawnCollectSparkle
+0x004104D0 Toy2::Actor::HitType1Particles
+0x00410540 Toy2::Particles::SpawnBurstRingAtPoint
+0x004106C0 Toy2::Particles::SpawnBurstRingAtActor
+0x00410850 Nu3D::Particles::SpawnBreakBurst
+0x00410B80 Nu3D::Particles::DeathEffect
+0x00410F40 Nu3D::Particles::Update
+0x00412B00 D3DApp::DeviceFilterCallback
+0x00412B10 DrawingDevice::Quit
+0x00412B50 Toy2::RunModeSelect
+0x00412D70 Toy2::ShowModeSelect
+0x00412E80 Toy2::CleanupManagers
+0x00412EE0 AudioManager::ShutdownHandles
+0x00412FF0 AudioManager::Stream::Init
+0x00413150 AudioManager::PlayTrackByIndex
+0x00413240 AudioManager::ThreadPlay
+0x004132A0 AudioManager::Stream::Stop
+0x00413300 AudioManager::IsStreamActive
+0x00413310 AudioManager::LoadFile
+0x00414110 Toy2::Buzz::Respawn
+0x00414270 Toy2::LoadLevelWithFadeIn
+0x00414320 Toy2::ShowLevelIntroScreen
+0x00414550 Toy2::Level::FixupRecordCoordinates
+0x00414720 Toy2::EnterLevel
+0x00414A80 Toy2::Actor::GetCreatureList
+0x00414AF0 InputManager::UpdateInputState
+0x00414EA0 InputManager::EnumDevices
+0x00414F20 SaveManager::Init
+0x00415120 InputManager::GetPressedInput
+0x00415180 SaveManager::AddInputEntry
+0x004151E0 SaveManager::ClearBindByControlId
+0x00415210 SaveManager::ClearBindByInputCode
+0x00415240 SaveManager::GetInputCodeByControlId
+0x00415270 SaveManager::GetControlSettingId
+0x004152A0 InputManager::GetGameControlName
+0x004152E0 InputManager::Init
+0x00415460 InputManager::Cleanup
+0x00415640 Toy2::Input::KeyNameToScancode
+0x004157E0 InputManager::IsKeyPressed
+0x00415800 InputManager::FindKeyPressed
+0x00415860 InputManager::FindKeyReleased
+0x00416A60 Toy2::CreatureBehaviour::Sheep
+0x00416AB0 Toy2::CreatureBehaviour::TinMan
+0x00416F30 Toy2::CreatureBehaviour::RCCar::Level1
+0x00417380 Toy2::AndysHouse::Method2
+0x00417510 Toy2::AndysHouse::Method1
+0x00417680 Toy2::AndysHouse::Interactions
+0x00418610 Toy2::CreatureBehaviour::Army
+0x00418720 Toy2::CreatureBehaviour::RCCar::Level2
+0x004189C0 Toy2::CreatureBehaviour::ZKite
+0x00418CE0 Toy2::CreatureBehaviour::LawnMower
+0x004190C0 Toy2::AndysNeighborhood::Interactions
+0x0041AA10 Toy2::BombsAway::Interactions
+0x0041B780 Toy2::CreatureBehaviour::Drill
+0x0041BB80 Toy2::CreatureBehaviour::LTyke
+0x0041BC20 Toy2::ConstructionYard::MoveDrills
+0x0041BEE0 Toy2::ConstructionYard::Method1
+0x0041C100 Toy2::ConstructionYard::InitHiddenCollectibles
+0x0041C190 Toy2::ConstructionYard::Init
+0x0041C640 Toy2::ConstructionYard::Interactions
+0x0041DDB0 Toy2::CreatureBehaviour::Clown
+0x0041DEC0 Toy2::CreatureBehaviour::Ducks
+0x0041DF70 Toy2::CreatureBehaviour::ZBoat
+0x0041E020 Toy2::InterpolatePathPoint
+0x0041E150 Toy2::AlleysAndGullies::UpdateMovingWood
+0x0041E300 Toy2::AlleysAndGullies::InitHiddenCollectibles
+0x0041E390 Toy2::AlleysAndGulleys::Init
+0x0041E880 Toy2::AlleysAndGullies::Interactions
+0x00420060 Toy2::SlimeTime::Interactions
+0x00420AF0 Toy2::CreatureBehaviour::Dino
+0x00420ED0 Toy2::CreatureBehaviour::Chick
+0x00420F70 Toy2::AlsToyBarn::Method1
+0x00421090 Toy2::InitialiseLevel7
+0x00421340 Toy2::AlsToyBarn::Interactions
+0x00422660 Toy2::CreatureBehaviour::BBuggy
+0x00422C70 Toy2::CreatureBehaviour::Martian
+0x00422D20 Toy2::AlsSpaceLand::FireLaser
+0x00423200 Toy2::AlsSpaceLand::Interactions
+0x00424390 Toy2::InitialiseLevel9
+0x00424490 Toy2::BarnEncounter::Interactions
+0x00425680 Toy2::ElevatorHop::Method2
+0x00425700 Toy2::CreatureBehaviour::GunsP
+0x004259B0 Toy2::CreatureBehaviour::Mouse
+0x00425A80 Toy2::ElevatorHop::InitMouse
+0x00425AD0 Nu3D::Particles::ReflectWallsSquareArena
+0x00425B60 Toy2::InitialiseLevel10
+0x00425EB0 Toy2::ElevatorHop::Method1
+0x00425F60 Toy2::ElevatorHop::Interactions
+0x004282D0 Toy2::CreatureBehaviour::GunsL::Level11
+0x00428650 Toy2::CreatureBehaviour::Rabid
+0x00428700 Toy2::AlsPenthouse::Method10
+0x00428890 Toy2::AlsPenthouse::Method2
+0x00428BA0 Toy2::AlsPenthouse::Method4
+0x00428C80 Toy2::AlsPenthouse::Method1
+0x00428E70 Toy2::AlsPenthouse::Method8
+0x004292C0 Toy2::AlsPenthouse::Method6
+0x004293D0 Toy2::AlsPenthouse::Method5
+0x004295B0 Toy2::AlsPenthouse::Method9
+0x00429800 Toy2::AlsPenthouse::Method12
+0x00429910 Toy2::AlsPenthouse::Method3
+0x00429CE0 Toy2::AlsPenthouse::InitHiddenCollectibles
+0x00429FB0 Toy2::AlsPenthouse::Method7
+0x0042A130 Toy2::AlsPenthouse::Interactions
+0x0042B090 Nu3D::Particles::UpdateArenaBounce
+0x0042B250 Nu3D::Particles::UpdateDrainTrail
+0x0042B2D0 Toy2::EvilEmperorZurg::BuzzRespawn
+0x0042B3A0 Toy2::EvilEmperorZerg::Interactions
+0x0042BE60 Toy2::CreatureBehaviour::ProsP::Level13
+0x0042C150 Toy2::CreatureBehaviour::Pilot
+0x0042C200 Toy2::Path::SamplePoint
+0x0042C2B0 Toy2::Platform::InitPathPlatform
+0x0042C3E0 Toy2::AirportInfiltration::Method2
+0x0042C810 Toy2::AirportInfiltration::Method1
+0x0042C8A0 Toy2::AirportInfiltration::InitHiddenCollectibles
+0x0042CA60 Toy2::AirportInfiltration::Interactions
+0x0042D3E0 Toy2::CreatureBehaviour::Smith::Level14
+0x0042D620 Toy2::CreatureBehaviour::Luggage
+0x0042D710 Toy2::TarmacTrouble::Method3
+0x0042D8B0 Toy2::TarmacTrouble::Method4
+0x0042D9C0 Toy2::TarmacTrouble::Method5
+0x0042DB10 Toy2::TarmacTrouble::Method2
+0x0042DCB0 Toy2::TarmacTrouble::Method1
+0x0042E1D0 Toy2::TarmacTrouble::Method6
+0x0042E600 Toy2::InitialiseLevel14
+0x0042E790 Toy2::TarmacTrouble::Interactions
+0x0042F310 Toy2::CreatureBehaviour::Smith
+0x0042F530 Toy2::CreatureBehaviour::GunsL
+0x0042F7B0 Toy2::CreatureBehaviour::ProsP
+0x0042FC50 Toy2::FinalShowdown::Interactions
+0x00430BF0 Toy2::Ini::ParseDefText
+0x00430E90 Toy2::ReadIniFile
+0x004316C0 _WinMain@16
+0x004318F0 D3DApp::LogErrorNotSet
+0x00431900 Logger::LogDDError
+0x004319E0 SoftwareRenderer::UnkFunc11
+0x00431C40 ModeSelect::TextOutA
+0x00431CA0 D3DApp::SelectDDAppByIndex
+0x00431CE0 D3DApp::SelectDeviceByIndex
+0x00431D40 D3DApp::FindFirstHardwareDevice
+0x00431DA0 D3DApp::SelectDisplayModeByIndex
+0x00431E00 D3DApp::SelectSuitableDisplayMode
+0x00432020 ModeSelect::Run
+0x00432AD0 ModeSelect::WndProc
+0x00433410 ModeSelect::ApplyTextStyle
+0x004334B0 ModeSelect::Show
+0x004334D0 Toy2::MoveableObject::ComputeSegment
+0x004335D0 Toy2::MoveableObject::InitTable
+0x00433700 Toy2::MoveableObject::Update
+0x00433D50 Toy2::Buzz::Init
+0x00433ED0 Toy2::ResetBuzzState
+0x00433F40 Camera::CaculateMaxTurnAngle
+0x00434090 Toy2::Levels::Method2
+0x004340D0 Toy2::Buzz::UpdateJumpAndGravity
+0x004343D0 Toy2::Buzz::UpdateHorizontalMovement
+0x00434550 Toy2::Buzz::ResolveFooting
+0x004346C0 Toy2::Buzz::UpdateFacing
+0x00434990 Toy2::Buzz::TickGunFire
+0x00434D20 Toy2::Buzz::TickGroundSlam
+0x00434EB0 Toy2::Buzz::TickSpinHover
+0x00435100 Toy2::Buzz::HandleSwing
+0x004354E0 Toy2::Buzz::HandlePoleClimb
+0x004359D0 Toy2::Buzz::HandleZipline
+0x00435F30 Toy2::Camera::HandleLedgeClimb
+0x00436220 Toy2::Buzz::HandleGameplay
+0x00436C90 AudioManager::SignalThreadExit
+0x00436CC0 AudioManager::Stream::IsThreadReady
+0x00436CE0 AudioManager::QueuePlay
+0x00436D40 AudioManager::StopAndWait
+0x00436D80 AudioManager::FillBuffer
+0x00437010 AudioManager::Stream::ThreadProc
+0x004371B0 Toy2::ShowMainSettingsMenu
+0x00437B20 Toy2::GameOver::Tick
+0x00437C40 Toy2::MainMenu::Draw
+0x00437FB0 Toy2::MainMenu::Tick
+0x004381F0 Toy2::Screen::Dispatcher
+0x00438520 Toy2::ShowStaticScreen
+0x00438650 Toy2::LevelSelect::Method1
+0x00438790 Toy2::LevelSelect::Method2
+0x00438910 Nu3D::FollowWaypointPath
+0x00438A50 Toy2::LevelSelect::Tick
+0x004398B0 Toy2::PostGameRecap::Tick
+0x0043A130 Toy2::PostGameSaveMenu::Tick
+0x0043A380 Toy2::ShowCredits
+0x0043A600 Toy2::MovieViewer::Tick
+0x0043ABC0 CharLoader::LoadFirstSection
+0x0043ACA0 CharLoader::Load
+0x0043AED0 CharLoader::LoadBuzzLight
+0x0043B0C0 CharLoader::LoadCharacterData
+0x0043B9B0 CharLoader::Start
+0x0043BA80 Toy2::Animation::EvaluateClip
+0x0043C070 Toy2::CreatureBehaviour::RCCar::Method1
+0x0043C0E0 Toy2::Animation::TransformByBone
+0x0043C1C0 Toy2::Actor::ResolveBoneAttachmentPos
+0x0043C700 CharLoader::InitGlobals
+0x0043C750 CharLoader::LoadSecondSection
+0x0043D6B0 CharLoader::ParseUnkData
+0x0043D820 Toy2::Characters::LoadAll
+0x0043D9E0 Nu3D::Camera::WorldToView
+0x0043E070 Toy2::Level::LoaderHelper
+0x0043E2D0 Toy2::Level::PolyCountHelper
+0x0043E430 Toy2::Level::CalculatePolyCount
+0x0043E5A0 Toy2::InitZoneData
+0x0043E6E0 Toy2::LoadLevelData
+0x0043F3D0 Toy2::Portal::FloodVisibility
+0x0043FEF0 Toy2::Portal::UpdateActiveSector
+0x00440260 Toy2::Portal::UpdateActiveSectorAt
+0x004402B0 Toy2::Sector::UpdateLighting
+0x00440E90 Renderer::DrawCinematicBars
+0x00440F70 Toy2::RenderGame
+0x00441980 Renderer::RenderMenu
+0x00445720 Renderer::Shadows::DrawAll
+0x00445980 Renderer::Particles::DrawParticles
+0x00446FA0 Nu3D::Particles::UpdateUnkShort6
+0x00446FC0 Nu3D::Camera::SetupViewMatrix
+0x00447BD0 Toy2::Camera::CullActors
+0x00447D30 Toy2::Shadow::ResetShadowCount
+0x00447D40 Toy2::InitSpriteSheets
+0x00447DB0 Toy2::Collectables::BuildPickupTable
+0x00448080 Toy2::AndysNeighbourhood::Method1
+0x00448F00 Nu3D::Camera::LineOfSightCheck
+0x0044DD80 Renderer::DrawTintOverlay
+0x0044DF90 Nu3D::Camera::InitViewMatrixGlobals
+0x0044E100 Renderer::Beam::QueueBeam
+0x0044E1A0 Renderer::Beam::DrawSegmentedBeam
+0x0044E520 Toy2::Object::Classify
+0x0044E620 Toy2::KiteTail::Init
+0x0044E6D0 Toy2::KiteTail::Activate
+0x0044E6F0 Toy2::KiteTail::Deactivate
+0x0044E710 Toy2::KiteTail::Simulate
+0x0044EB90 Toy2::KiteTail::Draw
+0x0044ED60 Toy2::Weather::Init
+0x0044ED90 Toy2::Weather::StepPrecipitation
+0x0044F010 Renderer::DrawFallingParticles
+0x0044F190 Renderer::DrawLensFlares
+0x0044F200 Renderer::LensFlare::RegisterLight
+0x0044F420 Renderer::LensFlare::CullAndQueue
+0x0044F580 Renderer::LensFlare::RenderSlot
+0x0044F820 Nu3D::Camera::EnableCameraSkew
+0x0044F840 Toy2::ShowModelNode
+0x0044F860 Toy2::HideModelNode
+0x0044FF50 NGNLoader::DetectBackdropTextures
+0x00450010 RawLoader::LoadRawAndNGN
+0x004500A0 Toy2::LoadLevelGraphics
+0x004507F0 Nu3D::Camera::SetObjectViewMatrix
+0x00450850 Nu3D::Camera::SetObjectViewPosition
+0x00450AC0 Nu3D::ViewMatrix::Helper1
+0x00450C70 Nu3D::Math::EulerToRotationMatrix
+0x00451280 Nu3D::Camera::ProjectQuad
+0x00451F80 Nu3D::Math::Cross2D
+0x00451FD0 Nu3D::Math::NormalizeToFixedPoint
+0x00452040 Nu3D::Math::NormalizeToFixedPoint16
+0x004520D0 Nu3D::Math::CartesianToFixedAngle
+0x00452130 SoftwareRenderer::SwapRenderBuffer
+0x00452170 Toy2::LevelSelect::ResetCursor
+0x00452180 InputManager::UpdateButtonStates
+0x004521A0 Toy2::BuildLevelPath
+0x00452310 RawLoader::LoadPacketData
+0x00452FC0 Toy2::InitLevelPlay
+0x00453CA0 Toy2::ResetBackdropState
+0x00453CD0 Renderer::SetVirtualRatio::54
+0x00453CF0 Toy2::ShowLevelSelect
+0x00453D90 Toy2::ShowActClearScreen
+0x00453F20 Toy2::ShowSaveScreen
+0x00453FA0 Toy2::ShowMovieViewer
+0x00454020 Toy2::ShowPostGameSaveMenu
+0x00454D30 SoftwareRenderer::UnkRenderAPI5
+0x004560E0 SoftwareRenderer::UnkRenderAPI6
+0x00457440 SoftwareRenderer::UnkRenderAPI7
+0x00458770 SoftwareRenderer::UnkRenderAPI8
+0x00459AB0 SoftwareRenderer::UnkRenderAPI10
+0x0045A5C0 SoftwareRenderer::UnkRenderAPI11
+0x0045B0B0 SoftwareRenderer::UnkRenderAPI12
+0x0045BBC0 SoftwareRenderer::UnkRenderAPI9
+0x0045C6B0 SoftwareRenderer::UnkRenderAPI4
+0x0045D110 SoftwareRenderer::UnkRenderAPI3
+0x0045DB80 SoftwareRenderer::UnkRenderAPI1
+0x0045E390 SoftwareRenderer::UnkRenderAPI13
+0x00461D20 SoftwareRenderer::UnkRenderAPI14
+0x00463090 SoftwareRenderer::UnkRenderAPI21
+0x00463B80 SoftwareRenderer::UnkRenderAPI22
+0x00464690 SoftwareRenderer::UnkRenderAPI23
+0x00465180 SoftwareRenderer::UnkRenderAPI24
+0x00467080 SoftwareRenderer::UnkRenderAPI17
+0x00468430 SoftwareRenderer::UnkRenderAPI16
+0x00468E90 SoftwareRenderer::UnkRenderAPI15
+0x00469900 SoftwareRenderer::UnkRenderAPI18
+0x0046AC60 SoftwareRenderer::UnkRenderAPI19
+0x0046BF90 SoftwareRenderer::UnkRenderAPI20
+0x0046D2C0 SoftwareRenderer::UnkRenderAPI2
+0x0046D7B0 SoftwareRenderer::UnkRenderAPI25
+0x00470BF0 SoftwareRenderer::SetPaletteOnAPI
+0x00470C70 SoftwareRenderer::UnkFunc7
+0x00470D00 SoftwareRenderer::UnkFunc9
+0x00470D60 SoftwareRenderer::UnkFunc10
+0x00470FB0 SoftwareRenderer::UnkFunc15
+0x004710C0 SoftwareRenderer::UnkFunc12
+0x00471190 SoftwareRenderer::UnkFunc13
+0x00471250 SoftwareRenderer::UnkFunc14
+0x00471300 SoftwareRenderer::SetNewPalette
+0x00471520 SoftwareRenderer::UnkRenderAPI26
+0x00471B30 SoftwareRenderer::UnkRenderAPI30
+0x00472E70 SoftwareRenderer::UnkRenderAPI31
+0x00474190 SoftwareRenderer::UnkRenderAPI32
+0x00474C80 SoftwareRenderer::UnkRenderAPI33
+0x00476340 SoftwareRenderer::UnkRenderAPI29
+0x00476D00 SoftwareRenderer::UnkRenderAPI28
+0x004776C0 SoftwareRenderer::UnkRenderAPI27
+0x00477EB0 SoftwareRenderer::UnkRenderAPI34
+0x0047B170 RawLoader::DecompressBuffer
+0x0047C800 SoftwareRenderer::UnkFunc4
+0x0047C870 SoftwareRenderer::UnlockBackBuffer
+0x0047C8B0 SoftwareRenderer::UnkFunc1
+0x0047CC90 Toy2::InitSoftwareRenderer
+0x0047D0F0 SoftwareRenderer::Destroy
+0x0047D120 SoftwareRenderer::UnkFunc5
+0x0047D210 SoftwareRenderer::UnkFunc8
+0x0047D4E0 Toy2::BuildPerspectiveDivideTable
+0x0047D520 MemUtils::MemSet32
+0x0047D540 SoftwareRenderer::UnkFunc6
+0x0047D650 SoftwareRenderer__UnkFunc66
+0x0047D670 AudioManager::LoadSoundPack
+0x0047D7F0 AudioManager::PlayMusicOneShot
+0x0047D840 AudioManager::StopAndFlush
+0x0047D880 AudioManager::PlayMusicLooping
+0x0047D8D0 Toy2::UnusedInit
+0x0047D8E0 AudioManager::IsEffectPlaying
+0x0047D930 AudioManager::ReassertChannelPlaying
+0x0047DE50 AudioManager::PlaySoundBuffer
+0x0047E3C0 AudioManager::Enumerate
+0x0047E420 AudioManager::CreateDirectSoundBuffer
+0x0047E4E0 AudioManager::WriteToBuffer
+0x0047E5B0 AudioManager::LoadSoundEffect
+0x0047E7D0 AudioManager::ReleaseAllBuffers
+0x0047E850 AudioManager::ReleaseBuffers
+0x0047EC20 AudioManager::LoadSfxPackForLevel
+0x0047EDE0 AudioManager::Init
+0x0047EF80 Toy2::ProfileCPU
+0x00480660 Toy2::Collision::SweepWallSegments
+0x00480AE0 Nu3D::Math::PointIntersectsTriangle
+0x00481140 Nu3D::Collision::IsPointInTriangle
+0x004813B0 Toy2::Collision::SweepEdge
+0x00481D00 Toy2::Collision::SweepVertex
+0x00481FB0 Toy2::Collision::SweepTriangle
+0x00482A00 Toy2::Collision::ResolveSubstep
+0x00483EF0 Toy2::Collision::ResolvePlatformFooting
+0x00484380 Toy2::Buzz::ResolveCollisions
+0x004855F0 Toy2::Buzz::HandleCollisions
+0x00485680 Toy2::Shadow::QueueStretched
+0x004857E0 Toy2::Shadow::QueueStretchedForBuzz
+0x00485940 Nu3D::Collision::GatherTrianglesAtXZ
+0x00486280 Nu3D::Collision::GetGroundHeight
+0x00486310 Nu3D::Collision::GetGroundHeightEx
+0x004863A0 Toy2::Buzz::UpdateFloorHeight
+0x00486520 Nu3D::Collision::ResolveGroundCeiling
+0x004878A0 Toy2::Collision::MarkPlatformAsMoving
+0x004878D0 Toy2::Platform::DisableCollision
+0x00487900 Toy2::Platform::SetVelocity
+0x00487970 Toy2::Platform::SetAngularVelocity
+0x004879C0 Toy2::Platform::GetOrigin
+0x00487A20 Toy2::Platform::GetRotation
+0x00487A60 Nu3D::Collision::IsFloorWalkable
+0x00487AB0 Nu3D::Collision::GetSurfaceQuality
+0x00487AD0 Toy2::Collision::IsSafeFooting
+0x00487B20 Nu3D::Collision::SweepAgainstEdges
+0x004882F0 Nu3D::Collision::RaycastAgainstEdges
+0x00488510 Toy2::Platform::SetOrigin
+0x00488580 Toy2::Platform::GetFlags
+0x004885A0 Toy2::Platform::GetContactFace32
+0x004885C0 Toy2::Level::GetSectorAtPosition
+0x00488A60 Toy2::Platform::AddFlags
+0x00488A80 Toy2::Platform::ClearFlags
+0x00488AA0 Toy2::Platform::SetRotationAngles
+0x00488AF0 Toy2::Platform::GetRotationAngles
+0x00488BD0 Toy2::Platform::CommitRotationToLink
+0x00488C10 Toy2::Platform::AdvancePartialMotion
+0x00488E10 Toy2::Platform::UpdateBuzzPlatformMotion
+0x00489980 Toy2::Terrain::LoadAll
+0x00489C30 Toy2::Collision::BuildCollisionWorld
+0x0048A4C0 Toy2::Camera::PrepareCameraCollisionCandidates
+0x0048ACC0 Toy2::Platform::StepMotionScript
+0x0048B640 Toy2::Platform::HadBuzzContactThisFrame
+0x0048B660 Toy2::Levels::Method1
+0x0048B750 Nu3D::Collision::SweepAgainstCandidates
+0x0048C030 Nu3D::Collision::RaycastAgainstCandidates
+0x0048C860 Nu3D::Collision::SweepAndSlide
+0x0048D530 Nu3D::Collision::SweepQuery
+0x0048E1B0 Toy2::Collision::IsMeshMoving
+0x0048E1D0 Toy2::Collision::GetGroundContactIdx
+0x0048E200 Toy2::Platform::CopyVelocity
+0x0048E730 Toy2::OneInit
+0x0048F1B0 Toy2::SetBackdropByIndex
+0x0048F230 Renderer::UpdateBackgroundScroll
+0x0048F3E0 Renderer::ResetParallax
+0x0048F410 Renderer::RenderParallaxBackground
+0x0048FB70 SoftwareRenderer::UnkFunc2
+0x00490290 SoftwareRenderer::UnkFunc3
+0x00490410 SoftwareRenderer::UnkFunc67
+0x00490470 DevDraw::FlushDrawBufferSlot
+0x004905C0 DevDraw::FlushTransparentDrawBufferSlot
+0x00490730 Toy2::CheckForQuit
+0x004907E0 DevDraw::DrawSlots
+0x00490860 Renderer::DoFrameDelay
+0x004909E0 Toy2::ProcessMiscEventsEx
+0x00490B90 Nu3D::Math::3DCrossProduct
+0x00490BF0 Toy2::UpdateD3DState
+0x00493A60 Renderer::Sprite::DrawTinted
+0x00493C30 Renderer::Sprite::DrawColoured
+0x00493DC0 Renderer::Sprite::DrawColouredFixed
+0x00493F40 Renderer::Sprite::DrawScaled
+0x00494130 Toy2::LevelSelect::DrawArrows
+0x004942D0 Renderer::Sprite::DrawScaledFixed
+0x004946A0 Renderer::Sprite::DrawTiledFixed
+0x00494820 Renderer::Sprite::DrawTile
+0x004949B0 Renderer::Sprite::DrawClipped
+0x00498470 SaveManager::SetLightShadowEffects
+0x00498550 Toy2::ProcessMiscEvents
+0x00498620 InputManager::GetCurButtonsPressed
+0x00499950 Toy2::InitDirect3DRenderer
+0x0049A930 Toy2::PlayMovie
+0x0049AB90 Toy2::PlayMovieWithTransition
+0x0049AE20 AudioManager::SetSfxVolume
+0x0049AE40 AudioManager::SetMusicVolume
+0x0049B260 Renderer::BlitTextureByIndexOffset
+0x0049B2A0 Renderer::DrawMenuText
+0x0049B3B0 Renderer::DrawMenuTextScaled
+0x0049B580 Renderer::DrawMainMenuText
+0x0049B630 Renderer::DrawChar
+0x0049B830 SaveManager::SaveToFile
+0x0049B990 Renderer::DrawFormattedText
+0x0049B9E0 Toy2::TickSaveMenuMachine
+0x0049C420 Toy2::ShowControlConfig
+0x0049CAA0 Toy2::ShowGraphicsConfig
+0x0049D2D0 Renderer::Sprite::QueueSegment
+0x0049D390 Renderer::DrawBitmapText
+0x0049D750 Renderer::DrawWhiteText
+0x0049D7A0 Renderer::Sprite::DrawBackdropTransition
+0x0049D910 Toy2::Run
+0x0049DFE0 Toy2::Game::MainLoop
+0x0049E330 Toy2::Game::PauseLoop
+0x0049E660 AudioManager::PlaySoundEffect
+0x0049E8D0 AudioManager::SetVolumesProcessed
+0x0049E910 AudioManager::StartSoundSequenceOnActor
+0x0049E9C0 AudioManager::ClearSequence7Cursor
+0x0049E9D0 AudioManager::UpdateSoundSequences
+0x0049EA60 AudioManager::Preset::PlayOneShotSound2
+0x0049EA90 AudioManager::Preset::PlayOneShotSound
+0x0049EAC0 Toy2::PlayLevelMusic
+0x0049EB20 Toy2::UnlockAndPlayMovie
+0x0049EB50 Toy2::Save::ComputeTokenProgress
+0x0049EBA0 InputManager::UpdateDirectionInputState
+0x0049EC00 Toy2::Platform::StepTiltPhysics
+0x0049EE50 Toy2::Lighting::SpawnLight
+0x0049EEE0 Toy2::Lighting::UpdateBuzzLight
+0x0049F350 Toy2::Lighting::InitBuzzLight
+0x0049F3C0 Nu3D::Math::IsWithinDistanceXZ
+0x0049F400 Nu3D::Vector3I::IsWithinDistance
+0x0049F460 Toy2::Actor::IsInsideBounds
+0x0049F490 Toy2::UnusedVarUpdate
+0x0049F4B0 Toy2::Game::MenuLoop
+0x0049FAB0 Toy2::Levels::Method3
+0x0049FB40 Toy2::Level::UpdateAmbientEmitters
+0x0049FC60 Toy2::HUD::TickSlide
+0x0049FD40 Toy2::RenderHUD
+0x004A0C80 Toy2::Collectables::Init
+0x004A0DB0 Toy2::Collectables::Activate
+0x004A0E60 Toy2::Collectables::Deactivate
+0x004A0F80 Toy2::Collectibles::Interactions
+0x004A1A50 Toy2::InitialiseLevelVariables
+0x004A1B00 Toy2::HandleLevelInteractions
+0x004A1BB0 Nu3D::Camera::SetTint
+0x004A1BE0 Nu3D::Camera::FadeToTargetTint
+0x004A1CE0 Toy2::Actor::CollectQuestReward
+0x004A1E60 Toy2::Actor::RotatingHint
+0x004A2080 Toy2::Gadget::InitLevelUnlockGeometry
+0x004A2480 Toy2::Actor::ItemReturnReward
+0x004A26F0 Toy2::Actor::PlayPeriodicHintSound
+0x004A27A0 Toy2::Gadget::ApplyUnlockToGeometry
+0x004A28B0 Toy2::Actor::PopulateActiveActors
+0x004A28F0 Toy2::Buzz::UpdateRespawnAnchor
+0x004A2960 Toy2::UpdateFrameTimers
+0x004A2C20 SaveManager::InitProgressData
+0x004A2C80 SaveManager::TransferProgressData
+0x004A2CC0 SaveManager::LoadProgressData
+0x004A2D80 Toy2::Buzz::UpdateContactEffects
+0x004A3770 Toy2::Path::LoadBin
+0x004A37E0 AudioManager::PlayOneShotSoundGlobal
+0x004A3810 AudioManager::PlayOneShotSound3D
+0x004A3980 AudioManager::PlayLoopingSound3D
+0x004A3B90 AudioManager::PlayLoopingSound3DPositional
+0x004A3BC0 AudioManager::ResetChannelsTable
+0x004A3BE0 AudioManager::UpdateChannels
+0x004A3C80 AudioManager::PlayOneShotSound3DActor
+0x004A3E60 AudioManager::IsActorSoundPlaying
+0x004A3ED0 AudioManager::SetVolumes
+0x004A3EF0 AudioManager::FlushSoundVoices
+0x004A3F10 AudioManager::Wave::OpenFile
+0x004A40F0 AudioManager::Wave::SeekToChunk
+0x004A4130 AudioManager::WaveReadFile
+0x004A4200 AudioManager::Wave::CloseFile
+0x004A4680 AudioManager::WaveLoadFile
+0x004A48B0 Toy2::ResetGadgets
+0x004A4910 Toy2::Buzz::RefreshDiscAmm
+0x004A4960 Toy2::Buzz::FireDiscLauncher
+0x004A4B70 Toy2::ActivateGravityBoots
+0x004A4B90 Toy2::Buzz::ResetGravityBoots
+0x004A4BB0 Toy2::Camera::UpdateGravityBoots
+0x004A4D60 Toy2::Buzz::ActivateRocketBoots
+0x004A4E60 Toy2::Buzz::DeactivateRocketBoots
+0x004A4F80 Toy2::Camera::UpdateRocketBoots
+0x004A5070 Toy2::RespawnCosmicShield
+0x004A50D0 Toy2::Collectables::CosmicShield
+0x004A5170 Toy2::Buzz::TickCosmicShield
+0x004A5340 Toy2::Buzz::CancelGrapple
+0x004A5370 Toy2::Buzz::FireGrapple
+0x004A5540 Toy2::Buzz::TickGrapple
+0x004A5870 Toy2::Combat::SweepSegmentVsActors
+0x004A5C40 Toy2::Buzz::TickBeamShots
+0x004A5D30 Toy2::SpawnBeamShot
+0x004A62A0 Toy2::Buzz::TickGadgets
+0x004A6390 Toy2::ValidateInstall
+0x004A65A0 FileUtils::GetPathValue
+0x004A65E0 FileUtils::AppendCDPath
+0x004A66A0 Logger::Log
+0x004A6730 Logger::LogLn
+0x004A6790 Toy2::AppendRegPathToFilenameBuffer
+0x004A67D0 FileUtils::GetFileSize
+0x004A6940 FileUtils::LoadFile
+0x004A6B10 D3DApp::SysParmsOnExit
+0x004A6B30 D3DApp::BuildWindow
+0x004A6CC0 D3DApp::ProcessWndEvents
+0x004A6D30 D3DApp::PostQuitMessage
+0x004A6D40 D3DApp::WndProc
+0x004A8710 Logger::ThrowError
+0x004A87C0 Logger::GetErrorHandler
+0x004A8870 Logger::DebugLog
+0x004A88B0 Nu3D::Math::InitTrigLut
+0x004A8B30 Nu3D::Math::Abs
+0x004A8BF0 Nu3D::Math::TransformPointByMatrix
+0x004A8C60 Nu3D::Math::ProjectPoint
+0x004A8D20 Nu3D::Math::TransformVectorByMatrix
+0x004A8D80 Nu3D::Math::TransformPointPerspective
+0x004A91B0 Nu3D::Math::VertexAdd
+0x004A91E0 Nu3D::Math::VertexSubtract
+0x004A9210 Nu3D::Math::ScaleVector
+0x004A9270 Nu3D::Math::VertexCrossProduct
+0x004A92C0 Nu3D::Vector3F::DotProduct
+0x004A92E0 Nu3D::Vector3F::Length
+0x004A9340 Nu3D::Math::VectorNormalize
+0x004A9400 Nu3D::Math::BuildIdentityMatrix
+0x004A94C0 Nu3D::Math::ApplyRotateXFromLut
+0x004A9530 Nu3D::Math::SetRotationYFromU16AngleLUT
+0x004A9750 Nu3D::Math::AddWorldSpaceTransform
+0x004A97E0 Nu3D::Math::GetPositionVector
+0x004A9800 Nu3D::Math::GetRightVector
+0x004A9820 Nu3D::Math::GetUpVector
+0x004A9840 Nu3D::Math::GetForwardVector
+0x004A9860 Nu3D::Math::ScaleMatrixByVector
+0x004A98D0 Nu3D::Math::MatrixApplyScale
+0x004A9930 Nu3D::Math::PostRotateXFromLut
+0x004A9AA0 Nu3D::Math::MatrixRotatePitch
+0x004A9B40 Nu3D::Math::RotateYFromLut
+0x004A9CB0 Nu3D::Math::MatrixRotateYaw
+0x004A9D50 Nu3D::Math::RotateZFromLut
+0x004A9EC0 Nu3D::Math::MatrixRotateRoll
+0x004A9F60 Nu3D::Math::MultiplyMatrix3x4
+0x004AA100 Math::FullMatrixMultiply
+0x004AA520 Nu3D::Camera::CreateInverseMatrix
+0x004AA620 Nu3D::Math::InvertAffineMatrix
+0x004AAC40 Nu3D::Math::BuildMatrixFromDirection
+0x004AB7D0 Nu3D::GetCPUFeatures
+0x004AB850 Nu3D::GetHighResolutionTime
+0x004AB8C0 Nu3D::GetCPUTimestamp
+0x004AB8E0 Nu3D::CalibrateTimestampCounter
+0x004AB950 Nu3D::PrecisionSleep
+0x004ABA40 DrawingDevice::GetDDraw4
+0x004ABA70 DrawingDevice::GetD3D
+0x004ABA80 DrawingDevice::GetD3DDevice
+0x004ABA90 DrawingDevice::BeginScene
+0x004ABAD0 DrawingDevice::EndScene
+0x004ABAE0 DrawingDevice::GetViewport
+0x004ABAF0 DrawingDevice::ClearScreen
+0x004ABB30 DrawingDevice::SetViewport
+0x004ABB80 DrawingDevice::BuildFreshViewport
+0x004ABBC0 DrawingDevice::GetWidth
+0x004ABBD0 DrawingDevice::GetHeight
+0x004ABBF0 DrawingDevice::GetBackBuffer
+0x004ABC40 DrawingDevice::LockPrimarySurface
+0x004ABC60 DrawingDevice::UnlockPrimarySurface
+0x004ABCA0 DrawingDevice::CopySurfaceDesc
+0x004ABD40 DrawingDevice::PresentFrame
+0x004ABD50 DrawingDevice::RestoreToGDISurface_T
+0x004ABD80 DrawingDevice::GetDestRect
+0x004ABD90 DrawingDevice::GetDestWidth
+0x004ABDA0 DrawingDevice::GetDestHeight
+0x004ABE30 DrawingDevice::GetSlotSurfaceByIndex_T
+0x004ABE90 Nu3D::DrawSurface::GetDC
+0x004ABEA0 Nu3D::DrawSurface::ReleaseDC
+0x004ABEB0 DrawingDevice::Build
+0x004ABF00 DrawingDevice::Destroy
+0x004ABF30 DrawingDevice::CreateLight
+0x004ABF50 DrawingDevice::SetLight
+0x004ABF60 DrawingDevice::AddLight
+0x004ABF80 DrawingDevice::DeleteLight
+0x004ABFA0 DrawingDevice::SetLightState
+0x004ABFC0 DrawingDevice::ReleaseLight
+0x004ABFD0 DrawingDevice::SetWorldTransform
+0x004ABFF0 DrawingDevice::SetViewTransform
+0x004AC010 DrawingDevice::SetProjectionTransform
+0x004AC030 HardwareDevice::ProcessVerticesOnBuffer
+0x004AC070 HardwareDevice::ReleaseVertexBuffer
+0x004AC080 HardwareDevice::CreateVertexBuffer
+0x004AC0A0 HardwareDevice::LockVertexBuffer
+0x004AC0C0 HardwareDevice::UnlockVertexBuffer
+0x004AC0D0 HardwareDevice::OptimizeVertexBuffer
+0x004AC0F0 Nu3D::Material::Release
+0x004AC100 DrawingDevice::CreateMaterial
+0x004AC120 Nu3D::Material::GetHandle
+0x004AC140 Nu3D::Material::SetMaterial
+0x004AC150 DrawingDevice::SetTextureStageState
+0x004AC180 DrawingDevice::SetTexture
+0x004AC1A0 Nu3D::SetTexture
+0x004AC1F0 SoftwareRenderer::UnkFunc20
+0x004AC220 NGNLoader::LoadTextureContents
+0x004AC240 Nu3D::LoadLocalBmpTexture_T
+0x004AC260 Nu3D::ReleaseBmpDataNode_T
+0x004AC2A0 DrawingDevice::DrawPrimitive
+0x004AC300 HardwareDevice::DrawIndexedPrimitive
+0x004AC340 HardwareDevice::DrawIndexedPrimitiveVB
+0x004AC370 DrawingDevice::SetRenderState
+0x004AC390 ModeSelect::SetForceFullscreen_T
+0x004AC3A0 D3DApp::EnumerateDrivers_T
+0x004AC420 ModeSelect::GetChosenDevice_T
+0x004AC4D0 D3DApp::EnumerateDrivers
+0x004AC540 ModeSelect::DDrawEnumCallback
+0x004AC760 ModeSelect::D3DDeviceEnumCallback
+0x004AC9C0 ModeSelect::EnumDisplayModes
+0x004ACBC0 ModeSelect::DDrawEnumCallback_T
+0x004ACBE0 D3DApp::SelectPrimaryDevice
+0x004ACD90 D3DApp::MarkCompatibleBitDepthDevices
+0x004ACFB0 ModeSelect::SetForceFullscreen
+0x004ACFC0 ModeSelect::GetChosenDevice
+0x004AD000 D3DApp::GetListHead
+0x004AD060 Nu3D::BuildBmpNode
+0x004AD090 Nu3D::BuildBmpNodeWithAlpha
+0x004AD0C0 Nu3D::GetBmpDataNodeByName_T
+0x004AD130 Nu3D::BmpDataNode::GetTexture
+0x004AD1C0 Nu3D::InitBmpNodeSurface
+0x004AD610 DrawingDevice::InitSurfaceDesc
+0x004AD640 DrawingDevice::BuildViewport
+0x004ADFD0 Helper::LogD3DError
+0x004ADFF0 Helper::MapD3DErrorToStr
+0x004AEC80 DrawingDevice::DrawingDevice
+0x004AECE0 DrawingDevice::Cleanup
+0x004AEDA0 DrawingDevice::InitalizeForWindow
+0x004AEE10 DrawingDevice::InitializeDeviceAndSurfaces
+0x004AEEE0 DrawingDevice::CreateDirectDraw
+0x004AEF80 DrawingDevice::SelectD3DDeviceAndZFormat
+0x004AF0D0 DrawingDevice::EnumZBufferFormats
+0x004AF110 DrawingDevice::CreatePrimaryChainAndRects
+0x004AF420 DrawingDevice::CreateZBuffer
+0x004AF4E0 DrawingDevice::CreateD3DDevice
+0x004AF550 DrawingDevice::CreateAndSetViewport
+0x004AF640 DrawingDevice::RestoreToGDISurface
+0x004AFA20 DrawingDevice::GetSlotSurfaceByIndex
+0x004AFAF0 Nu3D::SetMinTexSize
+0x004AFB20 Nu3D::ReleaseBmpDataNode
+0x004AFBA0 Nu3D::DestroyBmpDataNode
+0x004AFBE0 Nu3D::BmpDataNode::FreeTexData
+0x004AFC10 Nu3D::AllocateBmpDataNode
+0x004AFC70 Nu3D::GetBmpDataNodeByName
+0x004AFCB0 Nu3D::CalculatePixelFormatShifts
+0x004AFD30 Renderer::BlitBitmapWithWrapping
+0x004AFF80 Nu3D::CopyTextureToSurface
+0x004B0200 Nu3D::InitialiseTextureSurface
+0x004B0380 Nu3D::FindSuitablePixelFormat
+0x004B0400 Nu3D::CountAlphaBits
+0x004B0620 Nu3D::BuildRawBmpNode
+0x004B06D0 Nu3D::CalculateTexSize
+0x004B0740 Nu3D::Math::RoundToPowerOf2
+0x004B0760 Nu3D::GetBitmapWidth
+0x004B0780 Nu3D::GetBitmapHeight
+0x004B07A0 Nu3D::ProcessBmpPixelData
+0x004B0870 Nu3D::SampleBitmapPixel
+0x004B0A30 Nu3D::LoadTextureByStream
+0x004B0B60 Nu3D::ProcessBmpInfoFromStream
+0x004B0C90 Nu3D::LoadLocalBmpTexture
+0x004B0CF0 Nu3D::BmpDataNode::AddRef
+0x004B0D90 Nu3D::BmpDataNode::GetDIBPixelColor
+0x004B0E00 Nu3D::BmpDataNode::CopyToDDSurface
+0x004B1150 Nu3D::FreeAllBmpDataNodes
+0x004B1880 Nu3D::SetIsSoftwareRendering
+0x004B2B20 SoftwareDevice::ReleaseVertexBuffer
+0x004B2B30 SoftwareDevice::CreateVertexBuffer
+0x004B2B80 SoftwareRenderer::GetStrideFromFVF
+0x004B2BB0 SoftwareDevice::LockVertexBuffer
+0x004B2BD0 SoftwareDevice::UnlockVertexBuffer
+0x004B2BE0 SoftwareDevice::OptimizeVertexBuffer
+0x004B2BF0 DrawingAPI::SetVertexAPIs
+0x004B2C80 Renderer::ClearScreen
+0x004B2CC0 Renderer::GetBlendShadeCaps
+0x004B2CE0 Nu3D::DisableFog
+0x004B2CF0 Renderer::ConfigureFog
+0x004B2D20 Renderer::SetFogEnable
+0x004B2D50 Renderer::BeginScene
+0x004B2D80 Renderer::ApplyFogSettings
+0x004B2DE0 Renderer::EndScene
+0x004B2E30 Nu3D::PrimitiveHeader::Destroy
+0x004B2E60 Nu3D::PrimitiveHeader::Init
+0x004B2EB0 Nu3D::PatchVertices::ReleaseBuffer
+0x004B2ED0 Nu3D::PatchVertices::CreateVertexBuffer
+0x004B3110 Nu3D::Primitive::Destroy
+0x004B3170 Nu3D::PatchVertices::FreeVertices
+0x004B3190 Nu3D::Primitive::Remove
+0x004B31D0 Nu3D::Primitive::Build
+0x004B3210 Nu3D::PatchVertices::Resize
+0x004B3240 Nu3D::PrimitiveHeader::Build
+0x004B3280 Nu3D::Primitive::Alloc
+0x004B32E0 Nu3D::Primitive::CreateAllVertexBuffers
+0x004B3350 NGNLoader::AllocPortalVertices
+0x004B33A0 NGNImage::DestroyPortal
+0x004B33B0 Nu3D::AreaPortal::CalculateBoundingSphere
+0x004B34F0 Nu3D::PatchVertices::Destroy
+0x004B3530 Nu3D::Patch::Remove
+0x004B3570 Nu3D::Patch::AllocAndResize
+0x004B35A0 Nu3D::Patch::Alloc
+0x004B3600 Nu3D::Patch::CreateAllVertexBuffers
+0x004B3630 Renderer::Init
+0x004B3740 Renderer::BuildGammaCorrectionLUT
+0x004B37B0 Renderer::ApplyGammaCorrection
+0x004B37F0 Renderer::Cleanup
+0x004B3860 Renderer::SetIsSoftwareRendering
+0x004B3870 Renderer::GetIsSoftwareRendering
+0x004B38C0 Nu3D::Font::SetRenderFlags
+0x004B38E0 Nu3D::Font::SetFontScale
+0x004B3980 Nu3D::Font::SetTextClipRect
+0x004B39D0 Nu3D::Font::Destroy
+0x004B3A20 Nu3D::Font::BuildObject
+0x004B3A90 Nu3D::Font::ClearList
+0x004B3AD0 Nu3D::Font::Init
+0x004B3C20 Nu3D::Font::BuildFontTextures
+0x004B3C60 Nu3D::Font::SetFont
+0x004B3CC0 Nu3D::Font::BuildTexResource
+0x004B3FD0 Nu3D::Font::ResetContext
+0x004B4010 Nu3D::Font::CreateDC
+0x004B4080 Nu3D::Font::CreateAtlasBmp
+0x004B4110 Nu3D::Font::Build
+0x004B4450 Nu3D::Font::SetTextCursor
+0x004B44D0 Nu3D::Font::SetTextColor
+0x004B45A0 Nu3D::Font::DrawScaledTextString
+0x004B46B0 Nu3D::Font::DrawScaledGlyph
+0x004B4880 Nu3D::Font::DrawClippedScaledGlyph
+0x004B4C10 Nu3D::Font::ComputeScaledCharClip
+0x004B4CD0 Nu3D::Font::DrawTextString
+0x004B4DE0 Nu3D::Font::DrawUnscaledGlyph
+0x004B4FA0 Nu3D::Font::DrawClippedUnscaledGlyph
+0x004B5310 Nu3D::Font::ComputeUnscaledCharClip
+0x004B53D0 Nu3D::Font::CalculateScaledTextSize
+0x004B5480 Nu3D::Font::CalculateUnscaledTextSize
+0x004B5590 Nu3D::GetViewportRect
+0x004B55D0 DrawingDevice::InitViewport
+0x004B5630 DrawingDevice::ResetViewport
+0x004B5700 Nu3D::Viewport::SetClipRect
+0x004B5AA0 Nu3D::Viewport::GetClipNormMatrix
+0x004B5AD0 Nu3D::Viewport::BuildClipNormMatrix
+0x004B5BD0 Nu3D::Viewport::GetScreenSpaceMatrix
+0x004B5C00 Nu3D::Viewport::BuildScreenSpaceMatrix
+0x004B5CE0 Renderer::Set508718
+0x004B5CF0 Renderer::FlushPrimitives
+0x004B5E20 Renderer::DrawPrimitive
+0x004B5E40 SoftwareRenderer::SubmitSortedTriangle
+0x004B5FB0 SoftwareRenderer::SubmitTriangleList
+0x004B6040 SoftwareRenderer::SubmitTriangleStrip
+0x004B6140 SoftwareRenderer::SubmitTriangleStripRaw
+0x004B6220 SoftwareRenderer::SubmitQuad
+0x004B62C0 Renderer::ResetRenderPools
+0x004B6300 Renderer::Reset2DSpriteQueue
+0x004B6320 Renderer::SetRenderState
+0x004B6660 Renderer::SetTextureStageState
+0x004B6760 Renderer::SetupMaterialRenderState
+0x004B6850 Renderer::InitRenderState
+0x004B68A0 Nu3D::Camera::SetbillboardYaw
+0x004B68B0 Renderer::Sprite::Render2DSprite
+0x004B6A50 Renderer::FlushRenderQueues
+0x004B6A90 Renderer::FlushTransparentBuckets
+0x004B6AD0 Renderer::Command::Dispatch
+0x004B6C10 Renderer::Sprite::RenderType8
+0x004B6ED0 Renderer::Vertices::ApplyOffset
+0x004B6F50 Renderer::Vertices::ProjectToScreen
+0x004B70E0 Renderer::Sprite::RenderType9
+0x004B75E0 Renderer::Vertices::ApplyMetadata100
+0x004B7710 Renderer::Vertices::ProjectForTex14
+0x004B7830 Renderer::Vertices::ModuleColor
+0x004B7920 Renderer::Sprite::RenderGroundAlignedSprite
+0x004B7B30 Renderer::Sprite::RenderQuadSprite
+0x004B7D60 Renderer::Sprite::RenderBillboardSprite
+0x004B7FC0 Renderer::Sprite::RenderTriangleSprite
+0x004B8160 Renderer::Sprite::RenderQuadSpriteFromVerts
+0x004B8330 Renderer::Sprite::RenderType10
+0x004B8400 Renderer::FlushMaterialBuckets
+0x004B8450 Renderer::UnbindMaterial
+0x004B8460 Renderer::DrawQueuedSprite
+0x004B8490 Renderer::RenderPrimitive
+0x004B84E0 Renderer::InstanceData::AllocFromMatrix
+0x004B85E0 Renderer::ProcessPrimitive
+0x004B8670 Renderer::RenderEntry::AllocObj
+0x004B86F0 Renderer::RenderEntry::InsertIntoBucket
+0x004B87F0 Renderer::RenderPatchList
+0x004B8840 Renderer::InstanceData::AllocFromNodeMatrices
+0x004B8940 Renderer::ProcessPatch
+0x004B89B0 Renderer::RenderEntry::AllocPatch
+0x004B8A30 Renderer::Sprite::QueueGroundAlignedSprite
+0x004B8B10 Nu3D::Sprite::InsertIntoBucket
+0x004B8BF0 Renderer::ModulateColorByAlpha
+0x004B8CC0 Renderer::Sprite::Queue2DSprite
+0x004B8DD0 Renderer::Sprite::UpdateQueued2DRender
+0x004B8E60 Renderer::Sprite::QueueQuadSprite
+0x004B8F40 Renderer::Sprite::QueueBillboardSprite
+0x004B9100 Renderer::Sprite::QueueQuadSpriteFromVerts
+0x004B9210 Renderer::Sprite::QueueType10
+0x004B92B0 Renderer::SetAdditionalRenderFlags
+0x004B92E0 Renderer::SetVertexColorModulation
+0x004B9300 Renderer::EnableVertexColorModulation
+0x004B9600 Renderer::DrawSingleTexturedTriangle
+0x004B9630 NGNLoader::BuildTex14
+0x004B9710 Renderer::InitResources
+0x004B9950 SoftwareDevice::DrawIndexedPrimitiveVB
+0x004B99F0 SoftwareDevice::DrawIndexedPrimitive
+0x004B9A60 Renderer::Set9F5FF8
+0x004B9B90 Nu3D::DrawDebugPortalOutlines
+0x004BA1F0 Nu3D::Frustum::TestSphereAllPlanes
+0x004BA270 Nu3D::Frustum::TestSphereAllPlanesAlt
+0x004BA2F0 Nu3D::Frustum::TestSphereDepthPlanes
+0x004BA3A0 Nu3D::SetViewClipRect
+0x004BA420 Camera::CalculateFrustumPlanes
+0x004BABE0 Nu3D::Viewport::CacheViewport
+0x004BAC40 Nu3D::Viewport::GetViewClipRect
+0x004BAC70 Nu3D::Viewport::RestoreViewportCache
+0x004BACF0 Nu3D::Camera::ClipViewToPortal
+0x004BB0E0 NGNLoader::GetTextureDataByIndex
+0x004BB150 NGNLoader::ReleaseTextureData
+0x004BB1B0 NGNLoader::AllocateTextureData
+0x004BB270 Nu3D::CreateTextureResource
+0x004BB2F0 NGNLoader::GetTextureDataIndexByName
+0x004BB320 NGNLoader::GetTextureData
+0x004BB3C0 NGNLoader::GetOrAllocateTexture
+0x004BB4C0 NGNLoader::AllocateTextureCache
+0x004BB540 Nu3D::BindTexToStage0
+0x004BB590 Nu3D::BindTexWithStage
+0x004BB5E0 NGNLoader::RetrieveTextureData
+0x004BB690 Nu3D::BmpDataNode::CopyToDDSurfaceByIndex
+0x004BB6C0 NGNLoader::Texture::GetBmpHandle
+0x004BB720 NGNLoader::Init
+0x004BB7D0 NGNLoader::ReleaseAllTextures
+0x004BB810 NGNLoader::ReleaseTextureCache
+0x004BB850 Nu3D::Camera::GetProjectionMatrix
+0x004BB890 Nu3D::Camera::Build
+0x004BB920 Nu3D::Math::ScaleMatrix
+0x004BB9C0 Nu3D::Camera::ScaleMatrix
+0x004BB9D0 Nu3D::Camera::SetMatrixScaleVector
+0x004BBA10 Nu3D::Camera::RebuildTransformPipeline
+0x004BBAB0 Nu3D::Camera::ApplyCameraTransforms
+0x004BBC00 Nu3D::Camera::BuildPerspectiveProjectionLH
+0x004BBC50 Camera::CreateInverseMatrix_T
+0x004BBE10 Nu3D::TransformPointProjective
+0x004BC080 Nu3D::Camera::UnprojectPointsFromCamera
+0x004BC120 Nu3D::Portal::ClearVisibleAreaFlags
+0x004BC140 Nu3D::Portal::MarkAllAreasVisible
+0x004BC160 Nu3D::Portal::IsAreaVisible
+0x004BC170 Nu3D::Area::ResetPortalStates
+0x004BC1B0 NGNImage::DestroyPools
+0x004BC230 Nu3D::AreaPortal::AllocPools
+0x004BC2C0 Nu3D::AreaPortal::InsertPortal
+0x004BC320 Nu3D::AreaPortal::AllocEntry
+0x004BC360 Nu3D::AreaPortal::BuildScalerEntry
+0x004BC3A0 Nu3D::AreaPortal::AllocScalerEntry
+0x004BC410 Renderer::SetRenderDistance
+0x004BC430 SoftwareRenderer::UnkFunc18
+0x004BC460 Nu3D::Area::RenderBucketThroughPortals
+0x004BC720 Nu3D::Scene::RenderCellsInRadius
+0x004BC900 SoftwareRenderer::UnkFunc27
+0x004BC980 SoftwareRenderer::UnkFunc30
+0x004BCAD0 SoftwareRenderer::UnkFunc29
+0x004BCB60 SoftwareRenderer::UnkFunc33
+0x004BCBE0 SoftwareRenderer::UnkFunc31
+0x004BCC40 SoftwareRenderer::UnkFunc32
+0x004BCC70 SoftwareRenderer::UnkFunc17
+0x004BCE00 SoftwareRenderer::InitialisePrimarySurface
+0x004BCF60 SoftwareRenderer::UnkFunc28
+0x004BCFA0 SoftwareRenderer::UnkFunc26
+0x004BD040 SoftwareRenderer::UnkFunc24
+0x004BE0B0 SoftwareRenderer::UnkFunc25
+0x004C0100 SoftwareRenderer::UnkFunc23
+0x004C0320 SoftwareRenderer::UnkFunc22
+0x004C14A0 SoftwareRenderer::UnkFunc19
+0x004C1540 SoftwareRenderer::UnkFunc21
+0x004C1720 SoftwareRenderer::UnkFunc16
+0x004C17B0 SoftwareRenderer::UnkFunc60
+0x004C19E0 SoftwareDevice::ProcessVerticesOnBuffer
+0x004C1C20 SoftwareRenderer::SetCameraNearFarZ
+0x004C1C40 SoftwareRenderer::InitialiseColourScaleTables
+0x004C1E70 SoftwareRenderer::CommitZoom
+0x004C1F00 SoftwareRenderer::ZoomIn
+0x004C1FC0 SoftwareRenderer::ZoomOut
+0x004C2080 Renderer::ConvertRGBATo16Bit
+0x004C20E0 SoftwareRenderer::SetLevelFileIndex
+0x004C20F0 Nu3D::MaterialList::Release
+0x004C2150 Nu3D::MaterialList::Allocate
+0x004C22E0 Nu3D::Material::CreateFromColor
+0x004C23B0 Nu3D::Material::ConvertFileToMaterial
+0x004C2450 Nu3D::MaterialList::TryCache
+0x004C24D0 Nu3D::Material::CreateFromFile
+0x004C2630 Nu3D::Material::SetOpacity
+0x004C26D0 Nu3D::Material::AttachTexture
+0x004C2720 Nu3D::MaterialList::Unlink
+0x004C2750 Nu3D::MaterialList::InsertSorted
+0x004C27D0 Renderer::BindMaterial
+0x004C2870 Renderer::BindTexture
+0x004C28E0 Nu3D::MaterialList::GetHead
+0x004C28F0 Nu3D::MaterialList::GetFreeByIndex
+0x004C2910 Nu3D::MaterialList::Init
+0x004C29A0 Nu3D::Light::Destroy
+0x004C29D0 Nu3D::Light::Free
+0x004C2A20 Nu3D::Light::BuildAmbient
+0x004C2A70 Nu3D::Light::Alloc
+0x004C2BE0 Nu3D::Light::BuildLight
+0x004C2E70 Nu3D::Light::Update
+0x004C2FF0 Nu3D::Light::InitPool
+0x004C3090 Nu3D::Light::DestroyAllLights
+0x004C30D0 Nu3D::Spatial::ComputeCellFromXZ
+0x004C3130 Nu3D::Spatial::GetCellByPos
+0x004C3170 Nu3D::Spatial::UnlinkScalerThenReinsert
+0x004C31C0 Nu3D::Spatial::InsertScalerAtComputedCell
+0x004C3240 NGNLoader::BuildScalerEntries
+0x004C32B0 NGNImage::Destroy
+0x004C33F0 NGNLoader::BuildImage
+0x004C35C0 NGNLoader::ParseGeometry
+0x004C36A0 NGNLoader::BuildGrid
+0x004C3740 NGNLoader::ParseGscale
+0x004C3BE0 NGNLoader::ParseAreaPortalPos
+0x004C3CA0 NGNLoader::Parse266
+0x004C3DF0 NGNLoader::ParseAreaPortalRot
+0x004C3EB0 NGNLoader::ParseLinker
+0x004C4080 NGNLoader::ParseTextures
+0x004C4220 NGNLoader::ParseCreatures
+0x004C4340 SoftwareRenderer::UnkFunc59
+0x004C4370 SoftwareRenderer::UnkFunc48
+0x004C4640 SoftwareRenderer::UnkFunc47
+0x004C48E0 SoftwareRenderer::UnkFunc55
+0x004C4A60 SoftwareRenderer::UnkFunc40
+0x004C4BE0 SoftwareRenderer::UnkFunc49
+0x004C4E00 SoftwareRenderer::UnkFunc52
+0x004C4F30 SoftwareRenderer::UnkFunc36
+0x004C5060 SoftwareRenderer::UnkFunc41
+0x004C5280 SoftwareRenderer::UnkFunc50
+0x004C5490 SoftwareRenderer::UnkFunc53
+0x004C55B0 SoftwareRenderer::UnkFunc37
+0x004C56D0 SoftwareRenderer::UnkFunc42
+0x004C58E0 SoftwareRenderer::UnkFunc43
+0x004C5AC0 SoftwareRenderer::UnkFunc51
+0x004C5D80 SoftwareRenderer::UnkFunc56
+0x004C5F00 SoftwareRenderer::UnkFunc38
+0x004C6080 SoftwareRenderer::UnkFunc44
+0x004C6340 SoftwareRenderer::UnkFunc57
+0x004C6B80 SoftwareRenderer::UnkFunc46
+0x004C7630 SoftwareRenderer::UnkFunc45
+0x004C80D0 SoftwareRenderer::UnkFunc54
+0x004C8930 SoftwareRenderer::UnkFunc39
+0x004C9190 SoftwareRenderer::UnkFunc58
+0x004C9A50 SoftwareRenderer::UnkFunc34
+0x004C9D00 SoftwareRenderer::UnkFunc35
+0x004C9F50 Nu3D::Creature::Destroy
+0x004CA040 NGNLoader::ExtractAnimations
+0x004CA0C0 Nu3D::CopyNormalsFromNearestVertex
+0x004CA1D0 NGNLoader::ExtractShapePatch
+0x004CA420 NGNLoader::ExtractCreatureData
+0x004CAA60 Nu3D::Scene::RenderActor
+0x004CAB80 Nu3D::Creature::SetNodeVisible
+0x004CB270 NGNLoader::PrepareGlobals
+0x004CB2A0 Nu3D::SetDefaultPrimFlags
+0x004CB2C0 Nu3D::SetUseAsDiffuseModulation
+0x004CB300 NGNLoader::GetScaleVector
+0x004CB320 NGNLoader::ExtractShapeTextures
+0x004CB4E0 NGNLoader::ExtractShapeMaterials
+0x004CB940 Nu3D::Material::GetCurrentMatByIndex
+0x004CB970 NGNLoader::ExtractShapeVertices
+0x004CBC40 Nu3D::CopyShapeVertex
+0x004CBC90 NGNLoader::ExtractShapePrimitives
+0x004CC430 NGNLoader::ExtractShapeName
+0x004CC480 Nu3D::Primitive::ComputeBounds
+0x004CC970 NGNLoader::ExtractShapeData
+0x004CCB20 Nu3D::Link::SetScaleFromFixedOffsets
+0x004CCBE0 Nu3D::Link::RebuildMatrixAndCommit
+0x004CCC70 Nu3D::Link::SetRotationRelative8bit
+0x004CCCE0 Nu3D::Link::SetRotationAbsolute8bit
+0x004CCD40 Nu3D::Link::GetRotation8Bit
+0x004CCDA0 Nu3D::Link::TransformVectorInt3x3
+0x004CCE30 Nu3D::Link::SetPositionRawAndCommit
+0x004CCEF0 Nu3D::Link::GetCurrentPosFixed
+0x004CCF70 Nu3D::Link::GetTargetPosFixed
+0x004CCFF0 Nu3D::Link::SnapToOtherLinkUsingScale
+0x004CD0C0 Nu3D::Link::CopyShapeId
+0x004CD110 Toy2::ShowTokenSparkle
+0x004CD120 Nu3D::Animation::ResetNodeAngles
+0x004CD140 Nu3D::Bones::GetRootWorldPos
+0x004CD170 Toy2::Animation::ParseHeader
+0x004CD1B0 Toy2::Animation::SampleNodeTransform
+0x004CD7B0 Toy2::Animation::EvaluateClipToMatrices
+0x004CD880 Toy2::Animation::AnimateActors
+0x004CDBB0 Toy2::Actor::SetNodeAngle
+0x004CDBF0 Toy2::Actor::FindInActorList
+0x004CDC20 Nu3D::Scene::RenderActors
+0x004CDD10 Renderer::SetViewportPresetByDetail
+0x004CDD80 Renderer::SetViewportPreset
+0x004CDD90 Toy2::Graphics::AddDetailLevel
+0x004CDDB0 Toy2::Graphics::RemoveDetailLevel
+0x004CDDD0 Nu3D::Scene::RenderWorldGeometry
+0x004CE020 Nu3D::Camera::ToggleCameraSkew
+0x004CE030 Nu3D::Camera::SetSkewPhase
+0x004CE050 Nu3D::Camera::ApplyTransformToCamera
+0x004CE2C0 NGNLoader::GetTextureDataIndex
+0x004CE340 Glue::ReleaseBackdrop
+0x004CE380 Glue::SetBackdrop
+0x004CE4D0 Glue::BackdropBltFast
+0x004CE510 Renderer::BlitTextureByIndex
+0x004CE570 Nu3D::Creature::SetNodeVisibleByIndex
+0x004CE5B0 Renderer::ShowBlackFrames
+0x004CE5F0 Nu3D_FMV_PlayMovie
+0x004CE6C0 Nu3D::Light::SetDirectionalLight
+0x004CE760 Toy2::InitCfg
+0x004CE810 Toy2::ReadCfg
+0x004CE8B0 Toy2::InitLevelDefaults
+0x004CE910 Nu3D::Light::BuildGlobalLights
+0x004CEA20 Toy2::FlushRenderer
+0x004CEA50 Nu3D::Light::Cleanup
+0x004CEAE0 NGNLoader::SetNewImage
+0x004DA850 Nu3D::Math::CalculatePlaneFromTriangle
+0x004DB040 Nu3D::Math::GetSignedDistanceToPlane
+0x004DB600 Nu3D_FMV_CreateFMVInstance
+0x004DB8C0 Nu3D_FMV_Destroy
+0x004DB910 Nu3D_FMV_SetDimensions
+0x004DB940 Nu3D_FMV_IsPlaying
+0x004DB950 Nu3D_FMV_UpdateAndRenderFMV
+0x004DBB00 Nu3D_FMV_SetPaused
+0x004DBB80 Nu3D_FMV_Seek

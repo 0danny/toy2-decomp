@@ -3,21 +3,24 @@
 #include <cstdarg>
 #include <cstdio>
 
+namespace NGNLoader
+{
+	extern void ParseAreaPortalPos(FILE* stream, NGNImage* ngnImage);
+}
+
 namespace GamePatches
 {
 	void InjectHooks()
 	{
 		printf("[GAME_PATCHES]: Injecting hooks...\n");
 
-		if (MH_CreateHook(Nu3DLogAddress, (LPVOID)&Nu3DLogHook, NULL) != MH_OK)
-			printf("[CONSTRUCTOR HOOK]: Could not hook Nu3DLogHook constructor.\n");
+		if (MH_CreateHook(TestAddress, (LPVOID)&TestMethodHook, NULL) != MH_OK)
+			printf("[CONSTRUCTOR HOOK]: Could not hook test method.\n");
 	}
 
-	void __cdecl Nu3DLogHook(char* p_format, ...)
+	void __cdecl TestMethodHook(FILE* stream, NGNLoader::NGNImage* ngnImage)
 	{
-		va_list args;
-		va_start(args, p_format);
-		vprintf(p_format, args);
-		va_end(args);
+		printf("using our ParseAreaPortalRot!\n");
+		NGNLoader::ParseAreaPortalPos(stream, ngnImage);
 	}
 }
