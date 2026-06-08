@@ -27,3 +27,8 @@ struct Vector2I
 	int32_t x;
 	int32_t y;
 };
+
+namespace Numerics
+{
+	void VertexSubtract(Vector3F *result, Vector3F *v1, Vector3F *v2);
+}

@@ -1,5 +1,6 @@
 #include "NGNLoader.h"
 #include "Nu3D/Portal.h"
+#include "Toy2/Toy2.h"
 
 #include <windows.h>
 #include <iostream>
@@ -21,27 +22,89 @@ namespace NGNLoader
 	// $FUNC 004CB300 [IMPLEMENTED]
 	void GetScaleVector(Vector3F* output) { *output = g_vertexScaleVector; }
 
+	// $FUNC 004BC320 [IMPLEMENTED]
+	Nu3D::Portal::PortalState* AllocAreaPortal(NGNImage* ngnImage)
+	{
+		int32_t entryCount = ngnImage->portalEntryCount;
+
+		if (entryCount >= ngnImage->areaPortalCount)
+			return 0;
+
+		Nu3D::Portal::PortalState* pool = ngnImage->portalStatePool;
+
+		if (! pool)
+			return 0;
+
+		Nu3D::Portal::PortalState* newAlloc = &pool[entryCount];
+		ngnImage->portalEntryCount = entryCount + 1;
+
+		return newAlloc;
+	}
+
+	// $FUNC 004BC2C0 [IMPLEMENTED]
+	int32_t InsertPortal(NGNImage* ngnImage, int32_t sourceAreaIdx, int32_t targetAreaIdx, Nu3D::Portal::AreaPortal* portal)
+	{
+		if (Toy2::g_isElevatorHopLevel && targetAreaIdx == 15)
+			targetAreaIdx = -1;
+
+		Nu3D::Portal::PortalState* head = AllocAreaPortal(ngnImage);
+
+		if (! head)
+			return 0;
+
+		head->targetAreaIdx = targetAreaIdx;
+		head->portal = portal;
+		head->sourceAreaIdx = sourceAreaIdx;
+
+		head->next = ngnImage->portalHashTable->buckets[sourceAreaIdx].portalStateHead;
+		ngnImage->portalHashTable->buckets[sourceAreaIdx].portalStateHead = head;
+
+		return 1;
+	}
+
+	// $FUNC 004BC230 [IMPLEMENTED]
+	void AllocPools(NGNImage* ngnImage, int32_t portalCount, int32_t maxScalerEntries)
+	{
+		ngnImage->portalEntryCount = 0;
+		ngnImage->scalerEntryCount = 0;
+
+		ngnImage->maxScalerEntries = maxScalerEntries;
+		ngnImage->scalerEntryPool = (Nu3D::Portal::ScalerEntry*)malloc(sizeof(Nu3D::Portal::ScalerEntry) * maxScalerEntries);
+
+		ngnImage->scalerEntryCount = 0;
+		ngnImage->portalStatePool = (Nu3D::Portal::PortalState*)malloc(sizeof(Nu3D::Portal::PortalState) * portalCount);
+		ngnImage->portalEntryCount = 0;
+		ngnImage->areaPortalCount = portalCount;
+
+		Nu3D::Portal::PortalHashTable* rotLookup = (Nu3D::Portal::PortalHashTable*)malloc(sizeof(Nu3D::Portal::PortalHashTable));
+
+		ngnImage->portalHashTable = rotLookup;
+		ngnImage->bucketCount = 64;
+
+		memset(rotLookup, 0, sizeof(Nu3D::Portal::PortalHashTable));
+	}
+
 	// $FUNC 004B3350 [IMPLEMENTED]
 	Nu3D::Portal::AreaPortal* AllocPortalVertices(int32_t vertexCount)
 	{
 		int32_t size = sizeof(Vector3F) * vertexCount * sizeof(Nu3D::Portal::AreaPortal);
 
-		Nu3D::Portal::AreaPortal* alloc = (Nu3D::Portal::AreaPortal*)malloc(size);
+		Nu3D::Portal::AreaPortal* portal = (Nu3D::Portal::AreaPortal*)malloc(size);
 
-		if (alloc)
+		if (portal)
 		{
-			memset(alloc, 0, size);
+			memset(portal, 0, size);
 
 			if (vertexCount)
 			{
-				alloc->vertexCount = vertexCount;
+				portal->vertexCount = vertexCount;
 
 				// Points to space after struct, is the vertex space.
-				alloc->vertices = reinterpret_cast<Vector3F*>(&alloc[1]);
+				portal->vertices = reinterpret_cast<Vector3F*>(&portal[1]);
 			}
 		}
 
-		return alloc;
+		return portal;
 	}
 
 	// $FUNC 004C4080 [UNFINISHED]
@@ -173,8 +236,32 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C3DF0 [UNFINISHED]
-	void ParseAreaPortalRot(FILE* stream, NGNImage* ngnImage) {}
+	// $FUNC 004C3DF0 [IMPLEMENTED]
+	void ParseAreaPortalIdx(FILE* stream, NGNImage* ngnImage)
+	{
+		int32_t portalCount;
+		fread(&portalCount, sizeof(int32_t), 1, stream);
+
+		if (portalCount)
+		{
+			AllocPools(ngnImage, portalCount, 4000);
+
+			for (int32_t index = 0; index < portalCount; ++index)
+			{
+				int32_t portalId;
+				int32_t targetAreaIdx;
+				int32_t sourceAreaIdx;
+
+				fread(&portalId, sizeof(int32_t), 1, stream);
+				fread(&sourceAreaIdx, sizeof(int32_t), 1, stream);
+				fread(&targetAreaIdx, sizeof(int32_t), 1, stream);
+
+				Nu3D::Portal::AreaPortal::CalculateBoundingSphere(ngnImage->areaPortals[portalId]);
+
+				InsertPortal(ngnImage, sourceAreaIdx, targetAreaIdx, ngnImage->areaPortals[portalId]);
+			}
+		}
+	}
 
 	// $FUNC 004C3BE0 [IMPLEMENTED]
 	void ParseAreaPortalPos(FILE* stream, NGNImage* ngnImage)
@@ -285,7 +372,7 @@ namespace NGNLoader
 						}
 						else if (chunkHeaderId == 259)
 						{
-							ParseAreaPortalRot(fileHandle, ngnImage);
+							ParseAreaPortalIdx(fileHandle, ngnImage);
 						}
 						else if (chunkHeaderId > 257)
 						{

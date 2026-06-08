@@ -19,6 +19,7 @@ namespace Toy2
 	extern char g_cdPathRegValue[512];
 	extern int32_t g_registryKeysRead;
 	extern int32_t g_levelFileIndex;
+	extern int32_t g_isElevatorHopLevel;
 
 	void OneInit();
 	void CheckForQuit();

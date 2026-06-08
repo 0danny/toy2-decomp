@@ -923,9 +923,9 @@
 0x004BC160 Nu3D::Portal::IsAreaVisible
 0x004BC170 Nu3D::Area::ResetPortalStates
 0x004BC1B0 NGNImage::DestroyPools
-0x004BC230 Nu3D::AreaPortal::AllocPools
-0x004BC2C0 Nu3D::AreaPortal::InsertPortal
-0x004BC320 Nu3D::AreaPortal::AllocEntry
+0x004BC230 NGNLoader::AllocPools
+0x004BC2C0 NGNLoader::InsertPortal
+0x004BC320 NGNLoader::AllocAreaPortal
 0x004BC360 Nu3D::AreaPortal::BuildScalerEntry
 0x004BC3A0 Nu3D::AreaPortal::AllocScalerEntry
 0x004BC410 Renderer::SetRenderDistance
@@ -993,7 +993,7 @@
 0x004C3740 NGNLoader::ParseGscale
 0x004C3BE0 NGNLoader::ParseAreaPortalPos
 0x004C3CA0 NGNLoader::Parse266
-0x004C3DF0 NGNLoader::ParseAreaPortalRot
+0x004C3DF0 NGNLoader::ParseAreaPortalIdx
 0x004C3EB0 NGNLoader::ParseLinker
 0x004C4080 NGNLoader::ParseTextures
 0x004C4220 NGNLoader::ParseCreatures

@@ -39,6 +39,7 @@ set(TOY2_SOURCES
 
     src/Common.h
     src/Numerics.h
+    src/Numerics.cpp
 
     src/Toy2/D3DApp.cpp
     src/Toy2/D3DApp.h

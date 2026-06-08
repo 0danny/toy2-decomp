@@ -15,6 +15,8 @@ namespace Nu3D
 			float radiusSquared;
 			float radius;
 			Vector3F* vertices;
+
+			static void CalculateBoundingSphere(Nu3D::Portal::AreaPortal *portal);
 		};
 
 		struct PortalState

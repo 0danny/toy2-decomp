@@ -34,6 +34,9 @@ namespace Toy2
 
 	// $GLOBAL 0052ADA0
 	int32_t g_attractModeTimer;
+
+	// $GLOBAL 00A4C454
+	int32_t g_isElevatorHopLevel;
 }
 
 namespace Toy2
