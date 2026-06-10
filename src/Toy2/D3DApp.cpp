@@ -4,13 +4,13 @@
 namespace D3DApp
 {
 	// $GLOBAL 0050AF64
-	static int32_t g_changingCoopLevel = 0;
+	int32_t g_changingCoopLevel = 0;
 
 	// $GLOBAL 004E0690
-	static int32_t g_checkAvailableMem = 1;
+	int32_t g_checkAvailableMem = 1;
 
 	// $GLOBAL 00882C20
-	static int32_t g_sysParamsInfo;
+	int32_t g_sysParamsInfo;
 
 	// $GLOBAL 00884038
 	int32_t g_allow32BitColors = 0;

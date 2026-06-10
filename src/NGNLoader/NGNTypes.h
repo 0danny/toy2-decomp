@@ -30,6 +30,17 @@ namespace NGNLoader
 		Vector3F* points;
 	};
 
+	struct NGNTextureParams
+	{
+		char* rawTexStr;
+		uint32_t isTex14;
+		RGBA color;
+		uint32_t unkVar4;
+		uint32_t unkVar5;
+		uint32_t unkVar6;
+		uint32_t unkVar7;
+	};
+
 	struct NGNImage
 	{
 		Nu3D::Primitive** primitives;

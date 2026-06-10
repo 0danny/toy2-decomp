@@ -30,5 +30,9 @@ struct Vector2I
 
 namespace Numerics
 {
+	extern float* g_trigLUT;
+
 	void VertexSubtract(Vector3F *result, Vector3F *v1, Vector3F *v2);
+	int32_t RoundUpToPowerOf2(int32_t number);
+	void InitTrigLut();
 }

@@ -34,12 +34,24 @@ set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
 # Toy2 Sources
 set(TOY2_SOURCES
+    src/Toy2/Toy2.cpp
+    src/Toy2/Toy2.h
+
     src/Logger.cpp
     src/Logger.h
+
+    src/FileUtils.h
+    src/FileUtils.cpp
 
     src/Common.h
     src/Numerics.h
     src/Numerics.cpp
+
+    src/DrawingDevice.h
+    src/DrawingDevice.cpp
+
+    src/InputManager.h
+    src/InputManager.cpp
 
     src/Toy2/D3DApp.cpp
     src/Toy2/D3DApp.h
@@ -51,15 +63,21 @@ set(TOY2_SOURCES
     src/Nu3D/Link.cpp
     src/Nu3D/Material.h
     src/Nu3D/Nu3D.h
+    src/Nu3D/Nu3D.cpp
+    src/Nu3D/BmpDataNode.h
+    src/Nu3D/BmpDataNode.cpp
     src/Nu3D/Patch.h
     src/Nu3D/Portal.h
     src/Nu3D/Portal.cpp
     src/Nu3D/Primitive.h
     src/Nu3D/Sprite.h
     src/Nu3D/Viewport.h
+    src/Nu3D/Font.h
+    src/Nu3D/Font.cpp
 
     # Renderer
     src/Renderer/Renderer.h
+    src/Renderer/Renderer.cpp
     src/Renderer/RenderType.h
     src/Renderer/SpriteRenderer.h
 
@@ -67,14 +85,15 @@ set(TOY2_SOURCES
     src/NGNLoader/NGNLoader.cpp
     src/NGNLoader/NGNLoader.h
     src/NGNLoader/NGNTypes.h
+
+    # AudioManager
+    src/AudioManager/AudioManager.cpp
+    src/AudioManager/AudioManager.h
 )
 
 # Build the game
 add_executable(toy2decomp WIN32 
     ${TOY2_SOURCES}
-
-    src/Toy2/Toy2.cpp
-    src/Toy2/Toy2.h
 )
 
 # Build the testing dll(s)

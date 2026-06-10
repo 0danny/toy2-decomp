@@ -1,9 +1,17 @@
 #include "Toy2.h"
 #include "D3DApp.h"
 #include "Logger.h"
+#include "FileUtils.h"
+#include "InputManager.h"
+#include "DrawingDevice.h"
+
+#include "Nu3D/Font.h"
+#include "Renderer/Renderer.h"
+#include "AudioManager/AudioManager.h"
 
 #include <windows.h>
 #include <fstream>
+#include <Numerics.h>
 
 namespace Toy2
 {
@@ -17,15 +25,6 @@ namespace Toy2
 		-1, /* display mode index */
 	};
 
-	// $GLOBAL 00882F40
-	char g_pathRegValue[512];
-
-	// $GLOBAL 00883144
-	char g_cdPathRegValue[512];
-
-	// $GLOBAL 00882F3C
-	int32_t g_registryKeysRead;
-
 	// $GLOBAL 0088278C
 	int32_t g_levelFileIndex;
 
@@ -37,6 +36,9 @@ namespace Toy2
 
 	// $GLOBAL 00A4C454
 	int32_t g_isElevatorHopLevel;
+
+	// $GLOBAL 004FCDB4
+	int32_t g_cdBaseTrack = 2;
 }
 
 namespace Toy2
@@ -79,8 +81,63 @@ namespace Toy2
 		g_toyCfgData.gammaCorrection = 2.0;
 	}
 
+	// $FUNC 00412B50 [IMPLEMENTED]
+	void RunModeSelect() {}
+
+	// $FUNC 0047D8D0 [IMPLEMENTED]
+	void UnusedInit()
+	{
+		// $GLOBAL 00725F20
+		static int32_t g_unusedInit;
+
+		g_unusedInit = 2;
+	}
+
 	// $FUNC 00412D70 [UNFINISHED]
-	int32_t ShowModeSelect() { return 0; }
+	int32_t ShowModeSelect()
+	{
+		char cdFileName[8];
+		char cdTrackBuffer[1024];
+
+		strcpy(cdFileName, "cd.txt");
+		memset(cdTrackBuffer, 0, sizeof(cdTrackBuffer));
+
+		int32_t baseCDTrack;
+
+		if (FileUtils::LoadFile(cdFileName, cdTrackBuffer))
+			baseCDTrack = atoi(cdTrackBuffer);
+		else
+			baseCDTrack = 2;
+
+		g_cdBaseTrack = baseCDTrack;
+		Logger::Log("CONFIG : Base CD track is %d.\n", baseCDTrack);
+
+		AudioManager::Init();
+		UnusedInit();
+		Numerics::InitTrigLut();
+
+		RunModeSelect();
+
+		InputManager::Init();
+		Renderer::Init();
+		DrawingDevice::InitViewport();
+
+		RECT* destRect = DrawingDevice::GetDestRect();
+
+		Nu3D::Font::Init();
+		Nu3D::Font* font = Nu3D::Font::Build("ariel", 20, 0);
+
+		if (font)
+		{
+			Nu3D::Font::SetFont(font);
+			Nu3D::Font::SetTextColor(0xFFFFFFFF);
+			Nu3D::Font::SetTextClipRect(destRect->left, destRect->top, destRect->right - 1, destRect->bottom - 1);
+		}
+
+		while (ShowCursor(0) >= 0) {};
+
+		return 1;
+	}
 
 	// $FUNC 0049D910 [UNFINISHED]
 	int32_t Run(int32_t argCount, char** argList) { return 0; }
@@ -100,67 +157,6 @@ namespace Toy2
 	void InitDirect3DRenderer()
 	{
 		// Weird method, a good portion of these variables are never even used in the game
-	}
-
-	// $FUNC 004A6390 [IMPLEMENTED]
-	void ValidateInstall()
-	{
-		HKEY keyHandle;
-		HKEY phkResult;
-		int32_t allow32B;
-		char fileNameBuffer[1024];
-
-		g_cdPathRegValue[0] = 0;
-		g_pathRegValue[0] = 0;
-
-		if (! RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software", 0, KEY_ALL_ACCESS, &phkResult))
-		{
-			if (! RegOpenKeyExA(phkResult, "TravellersTalesToyStory2", 0, KEY_ALL_ACCESS, &keyHandle))
-			{
-				DWORD dataSize = 512;
-
-				if (! RegQueryValueExA(keyHandle, "path", 0, 0, (LPBYTE)g_pathRegValue, &dataSize))
-					g_pathRegValue[dataSize] = 0;
-
-				dataSize = 512;
-
-				if (RegQueryValueExA(keyHandle, "cdpath", 0, 0, (LPBYTE)g_cdPathRegValue, &dataSize))
-					strcpy(g_cdPathRegValue, g_pathRegValue);
-				else
-					g_cdPathRegValue[dataSize] = 0;
-
-				dataSize = 4;
-
-				if (! RegQueryValueExA(keyHandle, "allow32bit", 0, 0, (LPBYTE)&allow32B, &dataSize) && allow32B)
-					D3DApp::g_allow32BitColors = 0;
-
-				RegCloseKey(keyHandle);
-			}
-
-			RegCloseKey(phkResult);
-		}
-
-		g_registryKeysRead = 1;
-
-		if (! g_pathRegValue[0] || ! g_cdPathRegValue[0])
-			Logger::GetErrorHandler("C:\\projects\\toy2\\Win95.cpp", 217)("Toy Story 2 is not correctly installed,\r\nplease re-install.");
-
-		strcpy(fileNameBuffer, g_cdPathRegValue);
-		strcat(fileNameBuffer, "validate.tta");
-
-		FILE* validateFile = fopen(fileNameBuffer, "rb");
-
-		if (validateFile)
-		{
-			fclose(validateFile);
-		}
-		else
-		{
-			Logger::GetErrorHandler("C:\\projects\\toy2\\Win95.cpp", 227)(
-				"Unable to find file \r\n\"%s\".\r\nPlease ensure your Toy Story 2 "
-				"CD\r\nis in the specified drive.",
-				fileNameBuffer);
-		}
 	}
 }
 
@@ -199,7 +195,7 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 
 	D3DApp::g_allow32BitColors = 1;
 
-	Toy2::ValidateInstall();
+	FileUtils::ValidateInstall();
 	Toy2::g_levelFileIndex = 1;
 
 	memset(&D3DApp::g_windowData, 0, sizeof(D3DApp::g_windowData));

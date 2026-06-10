@@ -1,6 +1,8 @@
 #include "NGNLoader.h"
 #include "Nu3D/Portal.h"
 #include "Toy2/Toy2.h"
+#include "Logger.h"
+#include "Nu3D/BmpDataNode.h"
 
 #include <windows.h>
 #include <iostream>
@@ -21,6 +23,12 @@ namespace NGNLoader
 
 	// $FUNC 004CB300 [IMPLEMENTED]
 	void GetScaleVector(Vector3F* output) { *output = g_vertexScaleVector; }
+
+	// $FUNC 004BB3C0 [UNFINISHED]
+	int32_t GetOrAllocateTexture(NGNTextureParams* texParams) { return 0; }
+
+	// $FUNC 004AC220 [IMPLEMENTED]
+	Nu3D::BmpDataNode* LoadTextureContents(FILE* stream, const char* rawTexStr, int32_t flags) { return Nu3D::LoadTextureByStream(stream, rawTexStr, flags); }
 
 	// $FUNC 004BC320 [IMPLEMENTED]
 	Nu3D::Portal::PortalState* AllocAreaPortal(NGNImage* ngnImage)
@@ -108,7 +116,66 @@ namespace NGNLoader
 	}
 
 	// $FUNC 004C4080 [UNFINISHED]
-	void ParseTextures(FILE* stream, NGNImage* ngnImage) {}
+	void ParseTextures(FILE* stream, NGNImage* ngnImage)
+	{
+		NGNTextureParams texParams;
+		char rawTexStr[256];
+
+		memset(&texParams, 0, sizeof(texParams));
+		texParams.rawTexStr = rawTexStr;
+
+		int32_t textureCount;
+		fread(&textureCount, sizeof(int32_t), 1, stream);
+
+		for (int32_t textureIndex = textureCount; textureIndex > 0; --textureIndex)
+		{
+			uint32_t dataOffset;
+			uint32_t rawTexStrLen;
+
+			fread(&dataOffset, sizeof(uint32_t), 1, stream);
+			fread(&rawTexStrLen, sizeof(uint32_t), 1, stream);
+			fread(rawTexStr, sizeof(char), rawTexStrLen, stream);
+
+			rawTexStr[rawTexStrLen] = '\0';
+
+			strlwr(rawTexStr);
+			int32_t textureId = atoi(&rawTexStr[3]);
+
+			int32_t flags = 0;
+			int32_t isBGR = 0;
+
+			if (textureId != 14 && textureId != 36 && textureId != 37)
+				flags = 8;
+
+			if (textureId > 31)
+				flags |= 32;
+
+			if (strstr(rawTexStr, "bgr"))
+			{
+				memcpy(rawTexStr, "tex", 3);
+				isBGR = 1;
+			}
+
+			int32_t beforeOffset = ftell(stream);
+
+			LoadTextureContents(stream, rawTexStr, flags);
+
+			int32_t afterOffset = ftell(stream);
+
+			if (afterOffset - beforeOffset != dataOffset)
+				Logger::GetErrorHandler("C:\\projects\\nu3d\\world.c", 573)("bitmap parsed incorrectly in file %s", g_curFileName);
+
+			texParams.isTex14 = strcmpi("tex14", rawTexStr) == 0;
+
+			int32_t index = GetOrAllocateTexture(&texParams);
+
+			if (textureId < 64)
+			{
+				ngnImage->textureEntries[textureId].isBGR = isBGR;
+				ngnImage->textureEntries[textureId].textureDataIndex = index;
+			}
+		}
+	}
 
 	// $FUNC 004C3EB0 [IMPLEMENTED]
 	void ParseLinker(FILE* stream, NGNImage* ngnImage)
@@ -287,7 +354,7 @@ namespace NGNLoader
 				int32_t vertexCount;
 				fread(&vertexCount, sizeof(int32_t), 1, stream);
 
-				ngnImage->areaPortals[portalId] = NGNLoader::AllocPortalVertices(vertexCount);
+				ngnImage->areaPortals[portalId] = AllocPortalVertices(vertexCount);
 
 				Nu3D::Portal::AreaPortal* portal = ngnImage->areaPortals[portalId];
 
@@ -319,7 +386,7 @@ namespace NGNLoader
 	void BuildGrid(int32_t gridWidth, int32_t gridHeight, int32_t type, NGNImage* ngnImage) {}
 
 	// $FUNC 004C3240 [UNFINISHED]
-	void BuildScalerEntries(NGNImage* p_ngnImage) {}
+	void BuildScalerEntries(NGNImage* ngnImage) {}
 
 	// $FUNC 004C33F0 [IMPLEMENTED]
 	NGNImage* BuildImage(char* fileName)
