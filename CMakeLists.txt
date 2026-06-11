@@ -50,6 +50,9 @@ set(TOY2_SOURCES
     src/DrawingDevice.h
     src/DrawingDevice.cpp
 
+    src/ModeSelect.cpp
+    src/ModeSelect.h
+
     src/InputManager.h
     src/InputManager.cpp
 
@@ -94,6 +97,8 @@ set(TOY2_SOURCES
 # Build the game
 add_executable(toy2decomp WIN32 
     ${TOY2_SOURCES}
+
+    resources/toy2.rc
 )
 
 # Build the testing dll(s)

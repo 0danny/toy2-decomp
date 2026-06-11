@@ -23,7 +23,10 @@ namespace Renderer
 		Nu3D::Material* material;
 	};
 
+	extern int32_t g_isSoftwareRendering;
+
 	void Init();
+	void SetIsSoftwareRendering(int32_t value);
 
 	STATIC_ASSERT(sizeof(RenderEntry) == 0x18);
 }

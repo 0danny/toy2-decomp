@@ -38,14 +38,64 @@ namespace DrawingDevice
 		DrawingDeviceSlot slots[8];
 	};
 
+	struct DDAppDevice
+	{
+		struct DisplayMode
+		{
+			DDSURFACEDESC2 surfaceDesc;
+			char modeText[40];
+			DisplayMode* nextDisplayMode;
+		};
+
+		struct App
+		{
+			GUID guid;
+			App* ref;
+			char driverName[40];
+			char driverDesc[40];
+			DDCAPS ddCaps1;
+			DDCAPS ddCaps2;
+			HMONITOR hMonitor;
+			int32_t vidMemFree;
+			int32_t vidMemTotal;
+			DWORD freeTextureMem;
+			DWORD totalTextureMem;
+			DWORD freeVideoMem;
+			DWORD totalVideoMem;
+			DDAppDevice* primaryDevice;
+			DDAppDevice* deviceListHead;
+			App* chainDDApp;
+		};
+
+		GUID guid;
+		DDAppDevice* ref;
+		char deviceName[40];
+		D3DDEVICEDESC deviceDesc;
+		int32_t isHardwareAccelerated;
+		int32_t supportsCurrentMode;
+		int32_t canRenderWindowedOnPrimary;
+		DisplayMode* primaryDisplayMode;
+		DisplayMode* displayModeListHead;
+		DDAppDevice* nextDevice;
+		App* ddAppParent;
+	};
+
 	extern CD3DFramework* g_drawingDevice;
+	extern DDAppDevice::App *g_ddAppListHead;
+	extern DDAppDevice::App *g_primaryDDApp;
 
 	LPDIRECTDRAW4 GetDDraw4();
 	LPDIRECT3D3 GetD3D();
 	LPDIRECT3DDEVICE3 GetD3DDevice();
 	void InitViewport();
-	RECT *GetDestRect();
+	RECT* GetDestRect();
+	void Quit();
+	HRESULT Build(HWND hWnd, GUID* guid, DDAppDevice* device, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
+	HRESULT GetChosenDevice_T(DDAppDevice::App** outApp, DDAppDevice** outDevice);
 
 	STATIC_ASSERT(sizeof(DrawingDeviceSlot) == 0x18);
 	STATIC_ASSERT(sizeof(CD3DFramework) == 0x234);
+	STATIC_ASSERT(sizeof(DDAppDevice::DisplayMode) == 0xA8);
+	STATIC_ASSERT(sizeof(DDAppDevice::App) == 0x384);
+	STATIC_ASSERT(sizeof(DDAppDevice) == 0x154);
 }

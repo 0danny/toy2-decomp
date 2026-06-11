@@ -4,6 +4,7 @@
 #include "FileUtils.h"
 #include "InputManager.h"
 #include "DrawingDevice.h"
+#include "ModeSelect.h"
 
 #include "Nu3D/Font.h"
 #include "Renderer/Renderer.h"
@@ -39,10 +40,38 @@ namespace Toy2
 
 	// $GLOBAL 004FCDB4
 	int32_t g_cdBaseTrack = 2;
+
+	// $GLOBAL 005281C8
+	int32_t g_modeSelectFinished;
 }
 
 namespace Toy2
 {
+	namespace Graphics
+	{
+		// $FUNC 004CDD90 [IMPLEMENTED]
+		uint32_t AddDetailLevel()
+		{
+			uint32_t detail = g_toyCfgData.detail + 1;
+
+			if ((g_toyCfgData.detail + 1) >= 2)
+				detail = 2;
+
+			g_toyCfgData.detail = detail;
+
+			return detail;
+		}
+
+		// $FUNC 004CDDB0 [IMPLEMENTED]
+		uint32_t RemoveDetailLevel()
+		{
+			uint32_t detail = (g_toyCfgData.detail - 1) <= 0 ? 0 : g_toyCfgData.detail - 1;
+			g_toyCfgData.detail = detail;
+
+			return detail;
+		}
+	}
+
 	// $FUNC 0048E730 [UNFINISHED]
 	void OneInit() {}
 
@@ -82,7 +111,58 @@ namespace Toy2
 	}
 
 	// $FUNC 00412B50 [IMPLEMENTED]
-	void RunModeSelect() {}
+	void RunModeSelect()
+	{
+		if (! g_modeSelectFinished)
+		{
+			atexit(DrawingDevice::Quit);
+			ModeSelect::SetForceFullscreen_T(0);
+
+			if (ModeSelect::EnumerateDrivers_T(ModeSelect::DeviceFilterCallback) < 0)
+				Logger::GetErrorHandler("C:\\projects\\toy2\\direct6.cpp", 103)("Unable to enumerate a suitable device");
+
+			ModeSelect::Show();
+
+			DrawingDevice::DDAppDevice* primaryDevice;
+			DrawingDevice::DDAppDevice::App* ddApp;
+
+			if (DrawingDevice::GetChosenDevice_T(&ddApp, &primaryDevice))
+				Logger::GetErrorHandler("C:\\projects\\toy2\\direct6.cpp", 111)("Unable to create D3D device\r\n try a lower resolution or screen depth");
+
+			int32_t canDoWindowed = primaryDevice->canRenderWindowedOnPrimary;
+			int32_t fullscreenExclusive = (ModeSelect::g_unusedFlag1 != 0 ? 2 : 0) | (canDoWindowed == 0) | (ModeSelect::g_unusedFlag2 != 0 ? 4 : 0);
+
+			if (! canDoWindowed)
+				Logger::g_showMsgBoxOnThrow = 1;
+
+			if (primaryDevice->isHardwareAccelerated)
+			{
+				Renderer::SetIsSoftwareRendering(0);
+			}
+			else
+			{
+				Renderer::SetIsSoftwareRendering(1);
+				while (Toy2::Graphics::RemoveDetailLevel()) {};
+			}
+
+			if (! primaryDevice->isHardwareAccelerated && primaryDevice->canRenderWindowedOnPrimary)
+			{
+				RECT adjustedRect;
+				adjustedRect.top = 0;
+				adjustedRect.left = 0;
+				adjustedRect.right = 320;
+				adjustedRect.bottom = 240;
+
+				AdjustWindowRect(&adjustedRect, 0, 0);
+				SetWindowPos(D3DApp::g_windowData.mainHwnd, 0, 0, 0, adjustedRect.right, adjustedRect.bottom, 2);
+			}
+
+			ShowWindow(D3DApp::g_windowData.mainHwnd, 3);
+
+			if (DrawingDevice::Build(D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive) >= 0)
+				g_modeSelectFinished = 1;
+		}
+	}
 
 	// $FUNC 0047D8D0 [IMPLEMENTED]
 	void UnusedInit()
@@ -93,7 +173,7 @@ namespace Toy2
 		g_unusedInit = 2;
 	}
 
-	// $FUNC 00412D70 [UNFINISHED]
+	// $FUNC 00412D70 [IMPLEMENTED]
 	int32_t ShowModeSelect()
 	{
 		char cdFileName[8];

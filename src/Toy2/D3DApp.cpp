@@ -1,5 +1,6 @@
 #include "D3DApp.h"
 #include "Logger.h"
+#include <cstdio>
 
 namespace D3DApp
 {
@@ -26,10 +27,25 @@ namespace D3DApp
 
 	// $GLOBAL 00534554
 	RenderMode g_renderMode;
+
+	// $GLOBAL 0050A770
+	int32_t g_readyForRender = 0;
+
+	// $GLOBAL 0051ABD4
+	int32_t g_usesPalette;
+
+	// $GLOBAL 0051AAC8
+	int32_t g_backBufferSupportsAlpha;
+
+	// $GLOBAL 0050AA58
+	LPDIRECTDRAWPALETTE g_lpPalette = 0;
 }
 
 namespace D3DApp
 {
+	// $FUNC 004318F0 [UNFINISHED]
+	void LogErrorNotSet() {}
+
 	// $FUNC 004093A0 [IMPLEMENTED]
 	int32_t BuildProfileMachine()
 	{
@@ -390,11 +406,14 @@ namespace D3DApp
 		memset(&g_windowData.wndClass, 0, sizeof(g_windowData.wndClass));
 
 		// $GLOBAL 00882E30
-		static int32_t g_unused1 = 0;
+		static int32_t g_unused1;
 		// $GLOBAL 00882C28
-		static int32_t g_unused2 = 0;
+		static int32_t g_unused2;
 		// $GLOBAL 00504E58
 		static int32_t g_windowCreationError = 1;
+
+		g_unused1 = 0;
+		g_unused2 = 0;
 
 		g_windowData.wndClass.cbSize = 48;
 
@@ -775,8 +794,148 @@ namespace D3DApp
 		return DefWindowProcA(hWnd, msg, wParam, lParam);
 	}
 
-	// $FUNC 004A6D40 [UNFINISHED]
-	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return LRESULT(); }
+	// $FUNC 0040CAC0 [IMPLEMENTED]
+	int32_t ProcessWndProc(WPARAM* wParamPtr, LPARAM* lParamPtr, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		int32_t result;
+		PAINTSTRUCT paintStruct;
+
+		*wParamPtr = 0;
+
+		if (! g_readyForRender)
+			return 1;
+
+		if (msg > WM_ACTIVATEAPP)
+		{
+			if (msg > WM_NCPAINT)
+			{
+				if (msg == WM_MOVING && g_pcStruct.fullscreenMode)
+				{
+					GetWindowRect(hWnd, reinterpret_cast<RECT*>(lParam));
+
+					*lParamPtr = 1;
+					*wParamPtr = 1;
+				}
+			}
+			else
+			{
+				switch (msg)
+				{
+					case WM_NCPAINT:
+						if (g_pcStruct.fullscreenMode && ! g_d3dAppI.bPaused)
+						{
+							result = 1;
+							*lParamPtr = 0;
+							*wParamPtr = 1;
+							return result;
+						}
+						break;
+					case WM_SETCURSOR:
+						if (g_pcStruct.fullscreenMode && ! g_d3dAppI.bPaused)
+						{
+							result = 1;
+							*lParamPtr = 1;
+							*wParamPtr = 1;
+							return result;
+						}
+						break;
+					case WM_GETMINMAXINFO:
+
+						MINMAXINFO* minMaxInfo = reinterpret_cast<MINMAXINFO*>(lParam);
+
+						if (g_pcStruct.fullscreenMode)
+						{
+							minMaxInfo->ptMaxTrackSize.x = g_pcStruct.mode->width;
+							minMaxInfo->ptMaxTrackSize.y = g_pcStruct.mode->height;
+							minMaxInfo->ptMinTrackSize.x = g_pcStruct.mode->width;
+							minMaxInfo->ptMinTrackSize.y = g_pcStruct.mode->height;
+						}
+						else
+						{
+							minMaxInfo->ptMaxTrackSize.x = g_d3dAppI.windowsDisplay.w;
+							minMaxInfo->ptMaxTrackSize.y = g_d3dAppI.windowsDisplay.h;
+						}
+
+						*lParamPtr = 0;
+						*wParamPtr = 1;
+						return 1;
+				}
+			}
+			return 1;
+		}
+
+		if (msg == WM_ACTIVATEAPP)
+		{
+			g_d3dAppI.bAppActive = 1;
+			*wParamPtr = 1;
+			return 1;
+		}
+		else
+		{
+			switch (msg)
+			{
+				case WM_MOVE:
+					g_d3dAppI.pClientOnPrimary.y = 0;
+					g_d3dAppI.pClientOnPrimary.x = 0;
+
+					ClientToScreen(hWnd, &g_d3dAppI.pClientOnPrimary);
+
+					result = 1;
+					break;
+
+				case WM_SIZE:
+					if (g_changingCoopLevel)
+						return 1;
+
+					*wParamPtr = 1;
+					result = 1;
+					break;
+
+				case WM_ACTIVATE:
+					if (! g_usesPalette || ! g_backBufferSupportsAlpha || ! g_d3dAppI.lpFrontBuffer)
+						return 1;
+
+					g_d3dAppI.lpFrontBuffer->SetPalette(g_lpPalette);
+
+					result = 1;
+					break;
+
+				case WM_PAINT:
+					BeginPaint(hWnd, &paintStruct);
+					EndPaint(hWnd, &paintStruct);
+
+					result = 1;
+
+					*lParamPtr = 1;
+					*wParamPtr = 1;
+					break;
+
+				default:
+					return 1;
+			}
+		}
+		return result;
+	}
+
+	// $FUNC 004A6D40 [IMPLEMENTED]
+	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		WPARAM copyWParam = wParam;
+		LPARAM copyLParam = lParam;
+
+		if (ProcessWndProc(&wParam, &lParam, hWnd, msg, wParam, lParam))
+		{
+			if (msg == WM_DESTROY || msg == WM_NCDESTROY)
+				g_windowData.wndIsExiting = 1;
+
+			return DefWindowProcA(hWnd, msg, copyWParam, copyLParam);
+		}
+		else
+		{
+			LogErrorNotSet();
+			return 0;
+		}
+	}
 
 	// $FUNC 004A6B10 [IMPLEMENTED]
 	void SysParmsOnExit() { SystemParametersInfoA(SPI_SETSCREENSAVERRUNNING, g_sysParamsInfo, &g_sysParamsInfo, 0); }
