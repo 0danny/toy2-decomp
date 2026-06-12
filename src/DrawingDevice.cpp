@@ -6,10 +6,10 @@ namespace DrawingDevice
 	CD3DFramework* g_drawingDevice;
 
 	// $GLOBAL 00884028
-	DDAppDevice::App *g_ddAppListHead;
+	DDAppDevice::App* g_ddAppListHead;
 
 	// $GLOBAL 00884030
-	DDAppDevice::App *g_primaryDDApp;
+	DDAppDevice::App* g_primaryDDApp;
 
 	// $FUNC 004ABA40 [IMPLEMENTED]
 	LPDIRECTDRAW4 GetDDraw4() { return g_drawingDevice->pDD; }
@@ -37,4 +37,7 @@ namespace DrawingDevice
 
 	// $FUNC 004AC420 [IMPLEMENTED]
 	HRESULT GetChosenDevice_T(DDAppDevice::App** outApp, DDAppDevice** outDevice) { return GetChosenDevice(outApp, outDevice); }
+
+	// $FUNC 004AD000 [IMPLEMENTED]
+	DDAppDevice::App* GetListHead() { return g_ddAppListHead; }
 }

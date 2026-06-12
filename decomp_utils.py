@@ -15,7 +15,8 @@ import build as build_script
 #
 # Functions: $FUNC 004CE810 [IMPLEMENTED] || $FUNC 004CE810 [UNFINISHED]
 # Global Vars: $GLOBAL 004CE810
-
+# Bugs: $BUG
+# TODO: $TODO
 
 def count_lines():
     build_script.track_process(["cloc", "src_main"], "CountLines")
