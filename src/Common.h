@@ -14,6 +14,12 @@ typedef unsigned __int64 uint64_t;
 typedef float float32_t;
 typedef double float64_t;
 
+// theres some parts of the game that will literally not let it boot, if they aren't fixed
+// this macro lets me patch them out in the decomp without modifying the code for the actual function parity build
+#if 1
+	#define APPLY_FIXES
+#endif
+
 // The MSVC 6 way of declaring static asserts
 #define STATIC_ASSERT_GLUE(a, b) a##b
 #define STATIC_ASSERT_JOIN(a, b) STATIC_ASSERT_GLUE(a, b)

@@ -11,7 +11,7 @@ project(${PROJECT_NAME} C CXX RC)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Tests/Patcher)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/patcher)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/include)
 
 set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
@@ -116,8 +116,13 @@ add_library(patcher SHARED
     ${TOY2_SOURCES}
 )
 
-target_link_directories(patcher PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
+target_link_directories(patcher PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/libs
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/libs/directx7
+)
 target_link_libraries(patcher PRIVATE minhook_x86 ddraw dxguid)
 
-target_link_directories(toy2decomp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/libs)
+target_link_directories(toy2decomp PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/libs/directx7
+)
 target_link_libraries(toy2decomp PRIVATE ddraw dxguid)

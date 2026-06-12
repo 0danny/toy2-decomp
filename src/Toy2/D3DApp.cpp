@@ -14,7 +14,7 @@ namespace D3DApp
 	int32_t g_sysParamsInfo;
 
 	// $GLOBAL 00884038
-	int32_t g_allow32BitColors = 0;
+	int32_t g_no32bitColors = 0;
 
 	// $GLOBAL 0051B0B8
 	D3DAppInfo g_d3dAppI;

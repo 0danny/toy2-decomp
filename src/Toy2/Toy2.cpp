@@ -99,14 +99,9 @@ namespace Toy2
 	{
 		memset(&g_toyCfgData, 0, sizeof(g_toyCfgData));
 
-		uint32_t flags = g_toyCfgData.flags;
-
 		g_toyCfgData.driverIndex = -1;
-
-		flags = g_toyCfgData.flags | 7;
-
 		g_toyCfgData.detail = 1;
-		g_toyCfgData.flags = flags;
+		g_toyCfgData.flags |= 7;
 		g_toyCfgData.gammaCorrection = 2.0;
 	}
 
@@ -130,6 +125,7 @@ namespace Toy2
 				Logger::GetErrorHandler("C:\\projects\\toy2\\direct6.cpp", 111)("Unable to create D3D device\r\n try a lower resolution or screen depth");
 
 			int32_t canDoWindowed = primaryDevice->canRenderWindowedOnPrimary;
+
 			int32_t fullscreenExclusive = (ModeSelect::g_unusedFlag1 != 0 ? 2 : 0) | (canDoWindowed == 0) | (ModeSelect::g_unusedFlag2 != 0 ? 4 : 0);
 
 			if (! canDoWindowed)
@@ -273,7 +269,9 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 
 	memset(&D3DApp::g_d3dAppI, 0, sizeof(D3DApp::g_d3dAppI));
 
-	D3DApp::g_allow32BitColors = 1;
+#ifndef APPLY_FIXES
+		D3DApp::g_no32bitColors = 1;
+#endif
 
 	FileUtils::ValidateInstall();
 	Toy2::g_levelFileIndex = 1;

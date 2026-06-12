@@ -145,7 +145,7 @@ namespace FileUtils
 				dataSize = 4;
 
 				if (! RegQueryValueExA(keyHandle, "allow32bit", 0, 0, (LPBYTE)&allow32B, &dataSize) && allow32B)
-					D3DApp::g_allow32BitColors = 0;
+					D3DApp::g_no32bitColors = 0;
 
 				RegCloseKey(keyHandle);
 			}

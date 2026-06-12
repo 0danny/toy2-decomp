@@ -7,7 +7,7 @@
 
 namespace D3DApp
 {
-	extern int32_t g_allow32BitColors;
+	extern int32_t g_no32bitColors;
 	extern int32_t g_nShowCmd;
 
 	extern HINSTANCE g_hInstance;

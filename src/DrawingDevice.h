@@ -56,8 +56,8 @@ namespace DrawingDevice
 			DDCAPS ddCaps1;
 			DDCAPS ddCaps2;
 			HMONITOR hMonitor;
-			int32_t vidMemFree;
-			int32_t vidMemTotal;
+			DWORD vidMemFree;
+			DWORD vidMemTotal;
 			DWORD freeTextureMem;
 			DWORD totalTextureMem;
 			DWORD freeVideoMem;
