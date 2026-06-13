@@ -154,7 +154,7 @@ namespace Toy2
 
 			ShowWindow(D3DApp::g_windowData.mainHwnd, SW_SHOWMAXIMIZED);
 
-			if (DrawingDevice::CD3DFramework::Build(D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive) >= 0)
+			if ( DrawingDevice::CD3DFramework::Build(D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive) >= 0)
 				g_modeSelectFinished = 1;
 		}
 	}

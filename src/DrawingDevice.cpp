@@ -18,27 +18,33 @@ namespace DrawingDevice
 	// $GLOBAL 005281D0
 	LPDIRECT3DDEVICE3 g_unusedD3D;
 
+	// $GLOBAL 0088403C
+	int32_t g_viewportTopOffset;
+
+	// $GLOBAL 00884040
+	int32_t g_viewportBottomOffset;
+
 	/* ------ CD3DFramework ------- */
 
 	// $FUNC 004AEC80 [IMPLEMENTED]
 	CD3DFramework::CD3DFramework()
 	{
-		hWnd = 0;
-		bIsFullscreen = 0;
-		dwRenderWidth = 0;
-		dwRenderHeight = 0;
-		pddsFrontBuffer = 0;
-		pddsBackBuffer = 0;
-		pddsRenderTarget = 0;
-		pddsZBuffer = 0;
-		pd3dDevice = 0;
-		pvViewport = 0;
-		pDD = 0;
-		pD3D = 0;
-		dwDeviceMemType = 0;
-		initialized = 0;
+		m_hWnd = 0;
+		m_bIsFullscreen = 0;
+		m_dwRenderWidth = 0;
+		m_dwRenderHeight = 0;
+		m_pddsFrontBuffer = 0;
+		m_pddsBackBuffer = 0;
+		m_pddsRenderTarget = 0;
+		m_pddsZBuffer = 0;
+		m_pd3dDevice = 0;
+		m_pvViewport = 0;
+		m_pDD = 0;
+		m_pD3D = 0;
+		m_dwDeviceMemType = 0;
+		m_initialized = 0;
 
-		memset(slots, 0, sizeof(slots));
+		memset(m_slots, 0, sizeof(m_slots));
 	}
 
 	// $FUNC 004AECD0 [IMPLEMENTED]
@@ -50,57 +56,57 @@ namespace DrawingDevice
 		ULONG drawReleaseResult = 0;
 		ULONG deviceReleaseResult = 0;
 
-		if (pvViewport)
+		if (m_pvViewport)
 		{
-			pvViewport->Release();
-			pvViewport = 0;
+			m_pvViewport->Release();
+			m_pvViewport = 0;
 		}
 
-		if (pd3dDevice)
-			deviceReleaseResult = pd3dDevice->Release();
+		if (m_pd3dDevice)
+			deviceReleaseResult = m_pd3dDevice->Release();
 
-		pd3dDevice = 0;
+		m_pd3dDevice = 0;
 
-		if (! bIsFullscreen)
+		if (! m_bIsFullscreen)
 		{
-			if (pddsBackBuffer)
+			if (m_pddsBackBuffer)
 			{
-				pddsBackBuffer->Release();
-				pddsBackBuffer = 0;
+				m_pddsBackBuffer->Release();
+				m_pddsBackBuffer = 0;
 			}
 		}
 
-		if (pddsRenderTarget)
+		if (m_pddsRenderTarget)
 		{
-			pddsRenderTarget->Release();
-			pddsRenderTarget = 0;
+			m_pddsRenderTarget->Release();
+			m_pddsRenderTarget = 0;
 		}
 
-		if (pddsZBuffer)
+		if (m_pddsZBuffer)
 		{
-			pddsZBuffer->Release();
-			pddsZBuffer = 0;
+			m_pddsZBuffer->Release();
+			m_pddsZBuffer = 0;
 		}
 
-		if (pddsFrontBuffer)
+		if (m_pddsFrontBuffer)
 		{
-			pddsFrontBuffer->Release();
-			pddsFrontBuffer = 0;
+			m_pddsFrontBuffer->Release();
+			m_pddsFrontBuffer = 0;
 		}
 
-		if (pD3D)
+		if (m_pD3D)
 		{
-			pD3D->Release();
-			pD3D = 0;
+			m_pD3D->Release();
+			m_pD3D = 0;
 		}
 
-		if (pDD)
+		if (m_pDD)
 		{
-			pDD->SetCooperativeLevel(hWnd, 8);
-			drawReleaseResult = pDD->Release();
+			m_pDD->SetCooperativeLevel(m_hWnd, 8);
+			drawReleaseResult = m_pDD->Release();
 		}
 
-		pDD = 0;
+		m_pDD = 0;
 
 		if (drawReleaseResult || deviceReleaseResult)
 			return 0x8200000B;
@@ -114,7 +120,8 @@ namespace DrawingDevice
 		if (! hWnd || ! displayMode && (flags & 1) != 0)
 			return DDERR_INVALIDPARAMS;
 
-		bIsFullscreen = flags & 1;
+		m_hWnd = hWnd;
+		m_bIsFullscreen = flags & 1;
 
 		HRESULT result = InitalizeDeviceAndSurfaces(ddAppGuid, &device->guid, displayMode, flags);
 
@@ -156,16 +163,16 @@ namespace DrawingDevice
 
 						if (SUCCEEDED(result))
 						{
-							if (initialized)
+							if (m_initialized)
 								return 0x82000000;
 
-							slots[0].width = dwRenderWidth;
-							slots[0].height = dwRenderHeight;
-							slots[0].surface1 = pddsBackBuffer;
-							slots[0].valid = 1;
-							slots[0].surface2 = pddsZBuffer;
+							m_slots[0].width = m_dwRenderWidth;
+							m_slots[0].height = m_dwRenderHeight;
+							m_slots[0].surface1 = m_pddsBackBuffer;
+							m_slots[0].valid = 1;
+							m_slots[0].surface2 = m_pddsZBuffer;
 
-							initialized = 1;
+							m_initialized = 1;
 
 							return 0;
 						}
@@ -177,23 +184,314 @@ namespace DrawingDevice
 		return result;
 	}
 
-	// $FUNC 004AEEE0 [UNFINISHED]
-	HRESULT CD3DFramework::CreateDirectDraw(LPGUID lpGUID, uint8_t flags) { return 0; }
+	// $FUNC 004AEEE0 [IMPLEMENTED]
+	HRESULT CD3DFramework::CreateDirectDraw(LPGUID lpGUID, uint8_t flags)
+	{
+		LPDIRECTDRAW lpDD;
+		if (DirectDrawCreate(lpGUID, &lpDD, 0) < 0)
+			return 0x82000001;
 
-	// $FUNC 004AEF80 [UNFINISHED]
-	HRESULT CD3DFramework::SelectD3DDeviceAndZFormat(GUID* deviceGuid, uint8_t flags) { return 0; }
+		if (lpDD->QueryInterface(IID_IDirectDraw4, (LPVOID*)&m_pDD) >= 0)
+		{
+			lpDD->Release();
 
-	// $FUNC 004AF110 [UNFINISHED]
-	HRESULT CD3DFramework::CreatePrimaryChainAndRects(DDAppDevice::DisplayMode* displayMode, uint8_t flags) { return 0; }
+			DWORD coopLevel = DDSCL_NORMAL;
 
-	// $FUNC 004AF420 [UNFINISHED]
-	HRESULT CD3DFramework::CreateZBuffer() { return 0; }
+			if (m_bIsFullscreen)
+				coopLevel = DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWREBOOT;
 
-	// $FUNC 004AF4E0 [UNFINISHED]
-	HRESULT CD3DFramework::CreateD3DDevice(const CLSID* guid) { return 0; }
+			if ((flags & 16) == 0)
+				coopLevel |= DDSCL_FPUSETUP;
 
-	// $FUNC 004AF4E0 [UNFINISHED]
-	HRESULT CD3DFramework::CreateAndSetViewport() { return 0; }
+			return m_pDD->SetCooperativeLevel(m_hWnd, coopLevel) >= 0 ? 0 : 0x82000002;
+		}
+		else
+		{
+			lpDD->Release();
+			return 0x82000001;
+		}
+	}
+
+	// $FUNC 004AEF80 [IMPLEMENTED]
+	HRESULT CD3DFramework::SelectD3DDeviceAndZFormat(GUID* deviceGuid, uint8_t flags)
+	{
+		if (m_pDD->QueryInterface(IID_IDirect3D3, (LPVOID*)&m_pD3D) < 0)
+			return 0x82000003;
+
+		D3DFINDDEVICESEARCH findDevSearch;
+		D3DFINDDEVICERESULT findDevResult;
+
+		memset(&findDevResult, 0, sizeof(findDevResult));
+		memset(&findDevSearch, 0, sizeof(findDevSearch));
+
+		findDevResult.dwSize = sizeof(D3DFINDDEVICERESULT);
+
+		findDevSearch.guid = *deviceGuid;
+		findDevSearch.dwSize = sizeof(D3DFINDDEVICESEARCH);
+		findDevSearch.dwFlags = D3DFDS_GUID;
+
+		if (m_pD3D->FindDevice(&findDevSearch, &findDevResult) < 0)
+			return 0x82000003;
+
+		D3DDEVICEDESC* ddHwDesc;
+		D3DDEVICEDESC* d3dDesc;
+
+		if (findDevResult.ddHwDesc.dwFlags)
+		{
+			m_dwDeviceMemType = DDSCAPS_VIDEOMEMORY;
+
+			d3dDesc = &m_ddDeviceDesc;
+			ddHwDesc = &findDevResult.ddHwDesc;
+		}
+		else
+		{
+			m_dwDeviceMemType = DDSCAPS_SYSTEMMEMORY;
+
+			d3dDesc = &m_ddDeviceDesc;
+			ddHwDesc = &findDevResult.ddSwDesc;
+		}
+
+		memcpy(d3dDesc, ddHwDesc, sizeof(D3DDEVICEDESC));
+		memset(&m_ddpfZBuffer, 0, sizeof(m_ddpfZBuffer));
+
+		if ((flags & 8) != 0)
+			m_ddpfZBuffer.dwFlags = DDPF_ZBUFFER | DDPF_STENCILBUFFER;
+		else
+			m_ddpfZBuffer.dwFlags = DDPF_ZBUFFER;
+
+		m_pD3D->EnumZBufferFormats(*deviceGuid, EnumZBufferFormats, &m_ddpfZBuffer);
+
+		return m_ddpfZBuffer.dwSize != sizeof(DDPIXELFORMAT) ? 0x82000005 : 0;
+	}
+
+	// $FUNC 004AF110 [IMPLEMENTED]
+	HRESULT CD3DFramework::CreatePrimaryChainAndRects(DDAppDevice::DisplayMode* displayMode, uint8_t flags)
+	{
+		DDSURFACEDESC2 d3dDesc;
+		HRESULT surfaceResult;
+
+		if ((flags & 1) != 0)
+		{
+			SetRect(&m_rcViewportRect, 0, 0, displayMode->surfaceDesc.dwWidth, displayMode->surfaceDesc.dwHeight);
+
+			m_rcScreenRect.left = m_rcViewportRect.left;
+			m_rcScreenRect.top = m_rcViewportRect.top;
+
+			DWORD dmFlags = 0;
+
+			m_rcScreenRect.right = m_rcViewportRect.right;
+			m_dwRenderWidth = m_rcViewportRect.right;
+
+			m_rcScreenRect.bottom = m_rcViewportRect.bottom;
+			m_dwRenderHeight = m_rcViewportRect.bottom;
+
+			if (m_rcViewportRect.right == 320 && m_rcViewportRect.bottom == 200)
+				dmFlags = displayMode->surfaceDesc.ddpfPixelFormat.dwRGBBitCount == 8;
+
+			if (m_pDD->SetDisplayMode(m_rcViewportRect.right,
+					m_rcViewportRect.bottom,
+					displayMode->surfaceDesc.ddpfPixelFormat.dwRGBBitCount,
+					displayMode->surfaceDesc.dwRefreshRate,
+					dmFlags)
+				< 0)
+				return 0x82000009;
+
+			InitSurfaceDesc(&d3dDesc, DDSD_CAPS, 0);
+
+			d3dDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
+
+			if ((flags & 2) != 0)
+			{
+				d3dDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE | DDSCAPS_FLIP | DDSCAPS_COMPLEX;
+				d3dDesc.dwBackBufferCount = 1;
+				d3dDesc.dwFlags |= D3DDD_LINECAPS;
+			}
+
+			HRESULT frontBufferResult = m_pDD->CreateSurface(&d3dDesc, &m_pddsFrontBuffer, 0);
+
+			if (frontBufferResult < 0)
+				return frontBufferResult != DDERR_OUTOFVIDEOMEMORY ? 0x82000007 : DDERR_OUTOFVIDEOMEMORY;
+
+			if ((flags & 2) == 0)
+			{
+				m_pddsRenderTarget = m_pddsFrontBuffer;
+				m_pddsRenderTarget->AddRef();
+				return 0;
+			}
+
+			DDSCAPS2 ddsCaps;
+			ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
+
+			surfaceResult = m_pddsFrontBuffer->GetAttachedSurface(&ddsCaps, &m_pddsBackBuffer);
+		}
+		else
+		{
+			GetClientRect(m_hWnd, &m_rcViewportRect);
+
+			m_rcViewportRect.top += DrawingDevice::g_viewportTopOffset;
+			m_rcViewportRect.bottom = m_rcViewportRect.bottom - DrawingDevice::g_viewportBottomOffset;
+
+			GetClientRect(m_hWnd, &m_rcScreenRect);
+
+			m_rcScreenRect.bottom = m_rcScreenRect.bottom - DrawingDevice::g_viewportTopOffset;
+			m_rcScreenRect.bottom = m_rcScreenRect.bottom - DrawingDevice::g_viewportTopOffset - DrawingDevice::g_viewportBottomOffset;
+
+			ClientToScreen(m_hWnd, (LPPOINT)&m_rcScreenRect);
+			ClientToScreen(m_hWnd, (LPPOINT)&m_rcScreenRect.right);
+
+			m_dwRenderWidth = m_rcViewportRect.right;
+			m_dwRenderHeight = m_rcViewportRect.bottom;
+
+			InitSurfaceDesc(&d3dDesc, DDSD_CAPS, 0);
+			d3dDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+
+			if ((flags & 2) == 0)
+				d3dDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
+
+			HRESULT frontBufferResult = m_pDD->CreateSurface(&d3dDesc, &m_pddsFrontBuffer, 0);
+
+			if (frontBufferResult < 0)
+				return frontBufferResult != DDERR_OUTOFVIDEOMEMORY ? 0x82000007 : DDERR_OUTOFVIDEOMEMORY;
+
+			LPDIRECTDRAWCLIPPER clipper;
+			if (m_pDD->CreateClipper(0, &clipper, 0) < 0)
+				return 0x82000008;
+
+			clipper->SetHWnd(0, m_hWnd);
+			m_pddsFrontBuffer->SetClipper(clipper);
+
+			if (clipper)
+			{
+				clipper->Release();
+				clipper = 0;
+			}
+
+			if ((flags & 2) == 0)
+			{
+				ClientToScreen(m_hWnd, (LPPOINT)&m_rcViewportRect);
+				ClientToScreen(m_hWnd, (LPPOINT)&m_rcViewportRect.right);
+				goto LBL_ASSIGN_RT;
+			}
+
+			d3dDesc.dwHeight = m_dwRenderHeight;
+			d3dDesc.dwWidth = m_dwRenderWidth;
+
+			d3dDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+			d3dDesc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
+
+			surfaceResult = m_pDD->CreateSurface(&d3dDesc, &m_pddsBackBuffer, 0);
+		}
+
+		if (surfaceResult < 0)
+			return surfaceResult != DDERR_OUTOFVIDEOMEMORY ? 0x8200000A : DDERR_OUTOFVIDEOMEMORY;
+
+	LBL_ASSIGN_RT:
+
+		if ((flags & 2) == 0)
+		{
+			m_pddsRenderTarget = m_pddsFrontBuffer;
+			m_pddsRenderTarget->AddRef();
+			return 0;
+		}
+
+		m_pddsRenderTarget = m_pddsBackBuffer;
+		m_pddsRenderTarget->AddRef();
+
+		return 0;
+	}
+
+	// $FUNC 004AF420 [IMPLEMENTED]
+	HRESULT CD3DFramework::CreateZBuffer()
+	{
+		if ((m_ddDeviceDesc.dpcTriCaps.dwRasterCaps & D3DPRASTERCAPS_FOGVERTEX) != 0)
+			return 0;
+
+		DDSURFACEDESC2 surfaceDesc;
+		InitSurfaceDesc(&surfaceDesc, DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT, 0);
+
+		surfaceDesc.ddsCaps.dwCaps = m_dwDeviceMemType | DDSCAPS_ZBUFFER;
+		surfaceDesc.dwWidth = m_dwRenderWidth;
+		surfaceDesc.dwHeight = m_dwRenderHeight;
+
+		memcpy(&surfaceDesc.ddpfPixelFormat, &m_ddpfZBuffer, sizeof(surfaceDesc.ddpfPixelFormat));
+
+		HRESULT result = m_pDD->CreateSurface(&surfaceDesc, &m_pddsZBuffer, 0);
+
+		if (result >= 0)
+			return m_pddsRenderTarget->AddAttachedSurface(m_pddsZBuffer) >= 0 ? 0 : 0x82000005;
+		else
+			return result != DDERR_OUTOFVIDEOMEMORY ? 0x82000005 : DDERR_OUTOFVIDEOMEMORY;
+	}
+
+	// $FUNC 004AF4E0 [IMPLEMENTED]
+	HRESULT CD3DFramework::CreateD3DDevice(const CLSID* guid)
+	{
+		DDSURFACEDESC2 surfaceDesc;
+		surfaceDesc.dwSize = sizeof(DDSURFACEDESC2);
+
+		m_pDD->GetDisplayMode(&surfaceDesc);
+
+		if (surfaceDesc.ddpfPixelFormat.dwRGBBitCount > 8)
+			return m_pD3D->CreateDevice(*guid, m_pddsRenderTarget, &m_pd3dDevice, 0) >= 0 ? 0 : 0x82000004;
+		else
+			return 0x8200000D;
+	}
+
+	// $FUNC 004AF550 [IMPLEMENTED]
+	HRESULT CD3DFramework::CreateAndSetViewport()
+	{
+		D3DVIEWPORT2 viewport2;
+		CD3DFramework::BuildViewport(&viewport2, m_dwRenderWidth, m_dwRenderHeight);
+
+		if (m_pD3D->CreateViewport(&m_pvViewport, 0) < 0)
+			return 0x82000006;
+
+		if (m_pd3dDevice->AddViewport(m_pvViewport) < 0)
+			return 0x82000006;
+
+		if (m_pvViewport->SetViewport2(&viewport2) >= 0)
+			return m_pd3dDevice->SetCurrentViewport(m_pvViewport) >= 0 ? 0 : 0x82000006;
+
+		return 0x82000006;
+	}
+
+	// $FUNC 004AF640 [IMPLEMENTED]
+	int32_t CD3DFramework::RestoreToGDISurface(int32_t refreshWindow)
+	{
+		if (m_pDD)
+		{
+			if (m_bIsFullscreen)
+			{
+				m_pDD->FlipToGDISurface();
+
+				if (refreshWindow)
+				{
+					DrawMenuBar(m_hWnd);
+					RedrawWindow(m_hWnd, 0, 0, RDW_FRAME);
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	// $FUNC 004AFA20 [IMPLEMENTED]
+	int32_t CD3DFramework::GetSlotSurfaceByIndex(int32_t index, LPDIRECTDRAWSURFACE4* surfaceOut)
+	{
+		if (index > 8)
+			return 0x8200000F;
+
+		DrawingDeviceSlot* slot = &m_slots[index];
+
+		if (! slot->valid)
+			return 0x8200000F;
+
+		int32_t result = 0;
+
+		*surfaceOut = slot->surface1;
+
+		return result;
+	}
 
 	// $FUNC 004ABEB0 [IMPLEMENTED]
 	HRESULT CD3DFramework::Build(HWND hWnd, GUID* guid, DDAppDevice* device, DDAppDevice::DisplayMode* displayMode, uint8_t flags)
@@ -203,22 +501,72 @@ namespace DrawingDevice
 		return g_drawingDevice->InitalizeForWindow(hWnd, guid, device, displayMode, flags);
 	}
 
+	// $FUNC 004AD610 [IMPLEMENTED]
+	void CD3DFramework::InitSurfaceDesc(LPDDSURFACEDESC2 ddSurfaceDesc, DWORD flags, DWORD caps)
+	{
+		memset(ddSurfaceDesc, 0, sizeof(DDSURFACEDESC2));
+
+		ddSurfaceDesc->dwSize = sizeof(DDSURFACEDESC2);
+		ddSurfaceDesc->dwFlags = flags;
+		ddSurfaceDesc->ddsCaps.dwCaps = caps;
+		ddSurfaceDesc->ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
+	}
+
+	// $FUNC 004AD640 [IMPLEMENTED]
+	void CD3DFramework::BuildViewport(D3DVIEWPORT2* viewport, DWORD width, DWORD height)
+	{
+		memset(viewport, 0, sizeof(D3DVIEWPORT2));
+
+		viewport->dwWidth = width;
+		viewport->dwHeight = height;
+		viewport->dwSize = sizeof(D3DVIEWPORT2);
+
+		viewport->dvMaxZ = 1.0;
+		viewport->dvClipX = -1.0;
+		viewport->dvClipWidth = 2.0;
+		viewport->dvClipY = 1.0;
+		viewport->dvClipHeight = 2.0;
+	}
+
+	// $FUNC 004AF0D0 [IMPLEMENTED]
+	HRESULT WINAPI CD3DFramework::EnumZBufferFormats(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext)
+	{
+		LPDDPIXELFORMAT pixelFormat = reinterpret_cast<LPDDPIXELFORMAT>(lpContext);
+		HRESULT result = 0;
+
+		if (lpDDPixFmt)
+		{
+			if (pixelFormat)
+			{
+				if (lpDDPixFmt->dwFlags != pixelFormat->dwFlags)
+					return 1;
+
+				memcpy(pixelFormat, lpDDPixFmt, sizeof(DDPIXELFORMAT));
+
+				if (lpDDPixFmt->dwRGBBitCount != 16)
+					return 1;
+			}
+		}
+
+		return result;
+	}
+
 	/* ------ DrawingDevice ------- */
 
 	// $FUNC 004ABA40 [IMPLEMENTED]
-	LPDIRECTDRAW4 GetDDraw4() { return g_drawingDevice->pDD; }
+	LPDIRECTDRAW4 GetDDraw4() { return g_drawingDevice->m_pDD; }
 
 	// $FUNC 004ABA70 [IMPLEMENTED]
-	LPDIRECT3D3 GetD3D() { return g_drawingDevice->pD3D; }
+	LPDIRECT3D3 GetD3D() { return g_drawingDevice->m_pD3D; }
 
 	// $FUNC 004ABA80 [IMPLEMENTED]
-	LPDIRECT3DDEVICE3 GetD3DDevice() { return g_drawingDevice->pd3dDevice; }
+	LPDIRECT3DDEVICE3 GetD3DDevice() { return g_drawingDevice->m_pd3dDevice; }
 
 	// $FUNC 004B55D0 [UNFINISHED]
 	void InitViewport() {}
 
 	// $FUNC 004ABD80 [IMPLEMENTED]
-	RECT* GetDestRect() { return &g_drawingDevice->rcViewportRect; }
+	RECT* GetDestRect() { return &g_drawingDevice->m_rcViewportRect; }
 
 	// $FUNC 004ABF00 [IMPLEMENTED]
 	void Destroy()

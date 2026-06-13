@@ -59,31 +59,31 @@ namespace DrawingDevice
 
 	struct CD3DFramework
 	{
-		HWND hWnd;
-		int32_t bIsFullscreen;
-		int32_t dwRenderWidth;
-		int32_t dwRenderHeight;
-		RECT rcScreenRect;
-		RECT rcViewportRect;
-		LPDIRECTDRAWSURFACE4 pddsFrontBuffer;
-		LPDIRECTDRAWSURFACE4 pddsBackBuffer;
-		LPDIRECTDRAWSURFACE4 pddsRenderTarget;
-		LPDIRECTDRAWSURFACE4 pddsZBuffer;
-		LPDIRECT3DDEVICE3 pd3dDevice;
-		LPDIRECT3DVIEWPORT3 pvViewport;
-		LPDIRECTDRAW4 pDD;
-		LPDIRECT3D3 pD3D;
-		D3DDEVICEDESC ddDeviceDesc;
-		int32_t dwDeviceMemType;
-		DDPIXELFORMAT ddpfZBuffer;
-		int32_t initialized;
-		DrawingDeviceSlot slots[8];
+		HWND m_hWnd;
+		int32_t m_bIsFullscreen;
+		int32_t m_dwRenderWidth;
+		int32_t m_dwRenderHeight;
+		RECT m_rcScreenRect;
+		RECT m_rcViewportRect;
+		LPDIRECTDRAWSURFACE4 m_pddsFrontBuffer;
+		LPDIRECTDRAWSURFACE4 m_pddsBackBuffer;
+		LPDIRECTDRAWSURFACE4 m_pddsRenderTarget;
+		LPDIRECTDRAWSURFACE4 m_pddsZBuffer;
+		LPDIRECT3DDEVICE3 m_pd3dDevice;
+		LPDIRECT3DVIEWPORT3 m_pvViewport;
+		LPDIRECTDRAW4 m_pDD;
+		LPDIRECT3D3 m_pD3D;
+		D3DDEVICEDESC m_ddDeviceDesc;
+		int32_t m_dwDeviceMemType;
+		DDPIXELFORMAT m_ddpfZBuffer;
+		int32_t m_initialized;
+		DrawingDeviceSlot m_slots[8];
 
 		CD3DFramework();
 
 		void Release();
 		int32_t Cleanup();
-		
+
 		HRESULT InitalizeForWindow(HWND hWnd, GUID* ddAppGuid, DDAppDevice* device, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
 		HRESULT InitalizeDeviceAndSurfaces(GUID* ddAppGuid, GUID* deviceGuid, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
 		HRESULT CreateDirectDraw(LPGUID lpGUID, uint8_t flags);
@@ -92,8 +92,13 @@ namespace DrawingDevice
 		HRESULT CreateZBuffer();
 		HRESULT CreateD3DDevice(const CLSID* guid);
 		HRESULT CreateAndSetViewport();
+		int32_t RestoreToGDISurface(int32_t refreshWindow);
+		int32_t GetSlotSurfaceByIndex(int32_t index, LPDIRECTDRAWSURFACE4* surfaceOut);
 
 		static HRESULT Build(HWND hWnd, GUID* guid, DDAppDevice* device, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
+		static void InitSurfaceDesc(LPDDSURFACEDESC2 ddSurfaceDesc, DWORD flags, DWORD caps);
+		static void BuildViewport(D3DVIEWPORT2* viewport, DWORD width, DWORD height);
+		static HRESULT WINAPI EnumZBufferFormats(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext);
 	};
 
 	extern CD3DFramework* g_drawingDevice;

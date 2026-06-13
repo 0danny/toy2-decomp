@@ -86,7 +86,7 @@ namespace D3DApp
 			g_windowData.hInstance,
 			0);
 
-		ShowWindow(g_windowData.mainHwnd, 1);
+		ShowWindow(g_windowData.mainHwnd, SW_SHOWNORMAL);
 		UpdateWindow(g_windowData.mainHwnd);
 		SetFocus(g_windowData.mainHwnd);
 
@@ -340,7 +340,7 @@ namespace D3DApp
 
 			if (g_pcStruct.defaultDriver->displayModeCount > 0)
 			{
-				while (1)
+				while (true)
 				{
 					int32_t defaultWidth = defaultDriver->displayModes[deviceLoopIndex].width;
 
@@ -516,7 +516,7 @@ namespace D3DApp
 		DDSCAPS ddsCaps;
 		ddsCaps.dwCaps = 4096;
 
-		// TODO: Honestly who knows whats going on here (compiler artifact?)
+		// $TODO: Honestly who knows whats going on here (compiler artifact?)
 		if (guid && guid != (GUID*)2 && g_checkAvailableMem != 1)
 		{
 			HRESULT availMemResult = curDevice->dd2->GetAvailableVidMem(&ddsCaps, (LPDWORD)&curDevice->texVidMemTot, (LPDWORD)&curDevice->texVidMemFree);
@@ -558,8 +558,8 @@ namespace D3DApp
 			curDevice->svbFxCaps = dwSVBFXCaps;
 		}
 
-		strncpy(curDevice->driverName, driverName, 64u);
-		strncpy(curDevice->driverDesc, driverDesc, 64u);
+		strncpy(curDevice->driverName, driverName, sizeof(curDevice->driverName));
+		strncpy(curDevice->driverDesc, driverDesc, sizeof(curDevice->driverDesc));
 
 		if (! guid || guid == (GUID*)2)
 		{
@@ -576,7 +576,7 @@ namespace D3DApp
 		if (enumModesResult < 0)
 			Logger::LogDDError("ddinfo->DDDevice->EnumDisplayModes(0, 0, (LPVOID)ddinfo, ExamineDDModesEnumCallback)", enumModesResult);
 
-		qsort(curDevice->displayModes, curDevice->displayModeCount, 12, SortDisplayModes);
+		qsort(curDevice->displayModes, curDevice->displayModeCount, sizeof(DisplayMode), SortDisplayModes);
 
 		Logger::Log("DIRECT DRAW DEVICE BASE NAME : %s.\n", curDevice->driverName);
 		Logger::Log("DIRECT DRAW DEVICE DESCRIPTION : %s.\n", curDevice->driverDesc);
