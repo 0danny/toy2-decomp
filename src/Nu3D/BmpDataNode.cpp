@@ -18,6 +18,9 @@ namespace Nu3D
 	// $GLOBAL 00884444
 	BmpDataNode* g_bmpDataHead;
 
+	// $GLOBAL 0088400C
+	BmpDataNode *g_currentBmpDataNode;
+
 	// $FUNC 004AFF80 [UNFINISHED]
 	void CopyTextureToSurface(BmpDataNode* bitmapDataNode) {}
 

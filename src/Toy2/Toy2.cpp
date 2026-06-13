@@ -125,7 +125,6 @@ namespace Toy2
 				Logger::GetErrorHandler("C:\\projects\\toy2\\direct6.cpp", 111)("Unable to create D3D device\r\n try a lower resolution or screen depth");
 
 			int32_t canDoWindowed = primaryDevice->canRenderWindowedOnPrimary;
-
 			int32_t fullscreenExclusive = (ModeSelect::g_unusedFlag1 != 0 ? 2 : 0) | (canDoWindowed == 0) | (ModeSelect::g_unusedFlag2 != 0 ? 4 : 0);
 
 			if (! canDoWindowed)
@@ -153,9 +152,9 @@ namespace Toy2
 				SetWindowPos(D3DApp::g_windowData.mainHwnd, 0, 0, 0, adjustedRect.right, adjustedRect.bottom, 2);
 			}
 
-			ShowWindow(D3DApp::g_windowData.mainHwnd, 3);
+			ShowWindow(D3DApp::g_windowData.mainHwnd, SW_SHOWMAXIMIZED);
 
-			if (DrawingDevice::Build(D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive) >= 0)
+			if (DrawingDevice::CD3DFramework::Build(D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive) >= 0)
 				g_modeSelectFinished = 1;
 		}
 	}
@@ -270,7 +269,7 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 	memset(&D3DApp::g_d3dAppI, 0, sizeof(D3DApp::g_d3dAppI));
 
 #ifndef APPLY_FIXES
-		D3DApp::g_no32bitColors = 1;
+	D3DApp::g_no32bitColors = 1;
 #endif
 
 	FileUtils::ValidateInstall();

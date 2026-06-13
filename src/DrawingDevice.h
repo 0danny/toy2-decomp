@@ -15,29 +15,6 @@ namespace DrawingDevice
 		LPDIRECTDRAWSURFACE4 surface2;
 	};
 
-	struct CD3DFramework
-	{
-		int32_t hWnd;
-		int32_t bIsFullscreen;
-		int32_t dwRenderWidth;
-		int32_t dwRenderHeight;
-		RECT rcScreenRect;
-		RECT rcViewportRect;
-		LPDIRECTDRAWSURFACE4 pddsFrontBuffer;
-		LPDIRECTDRAWSURFACE4 pddsBackBuffer;
-		LPDIRECTDRAWSURFACE4 pddsRenderTarget;
-		LPDIRECTDRAWSURFACE4 pddsZBuffer;
-		LPDIRECT3DDEVICE3 pd3dDevice;
-		LPDIRECT3DVIEWPORT3 pvViewport;
-		LPDIRECTDRAW4 pDD;
-		LPDIRECT3D3 pD3D;
-		D3DDEVICEDESC ddDeviceDesc;
-		int32_t dwDeviceMemType;
-		DDPIXELFORMAT ddpfZBuffer;
-		int32_t initialized;
-		DrawingDeviceSlot slots[8];
-	};
-
 	struct DDAppDevice
 	{
 		struct DisplayMode
@@ -80,9 +57,48 @@ namespace DrawingDevice
 		App* ddAppParent;
 	};
 
+	struct CD3DFramework
+	{
+		HWND hWnd;
+		int32_t bIsFullscreen;
+		int32_t dwRenderWidth;
+		int32_t dwRenderHeight;
+		RECT rcScreenRect;
+		RECT rcViewportRect;
+		LPDIRECTDRAWSURFACE4 pddsFrontBuffer;
+		LPDIRECTDRAWSURFACE4 pddsBackBuffer;
+		LPDIRECTDRAWSURFACE4 pddsRenderTarget;
+		LPDIRECTDRAWSURFACE4 pddsZBuffer;
+		LPDIRECT3DDEVICE3 pd3dDevice;
+		LPDIRECT3DVIEWPORT3 pvViewport;
+		LPDIRECTDRAW4 pDD;
+		LPDIRECT3D3 pD3D;
+		D3DDEVICEDESC ddDeviceDesc;
+		int32_t dwDeviceMemType;
+		DDPIXELFORMAT ddpfZBuffer;
+		int32_t initialized;
+		DrawingDeviceSlot slots[8];
+
+		CD3DFramework();
+
+		void Release();
+		int32_t Cleanup();
+		
+		HRESULT InitalizeForWindow(HWND hWnd, GUID* ddAppGuid, DDAppDevice* device, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
+		HRESULT InitalizeDeviceAndSurfaces(GUID* ddAppGuid, GUID* deviceGuid, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
+		HRESULT CreateDirectDraw(LPGUID lpGUID, uint8_t flags);
+		HRESULT SelectD3DDeviceAndZFormat(GUID* deviceGuid, uint8_t flags);
+		HRESULT CreatePrimaryChainAndRects(DDAppDevice::DisplayMode* displayMode, uint8_t flags);
+		HRESULT CreateZBuffer();
+		HRESULT CreateD3DDevice(const CLSID* guid);
+		HRESULT CreateAndSetViewport();
+
+		static HRESULT Build(HWND hWnd, GUID* guid, DDAppDevice* device, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
+	};
+
 	extern CD3DFramework* g_drawingDevice;
-	extern DDAppDevice::App *g_ddAppListHead;
-	extern DDAppDevice::App *g_primaryDDApp;
+	extern DDAppDevice::App* g_ddAppListHead;
+	extern DDAppDevice::App* g_primaryDDApp;
 
 	LPDIRECTDRAW4 GetDDraw4();
 	LPDIRECT3D3 GetD3D();
@@ -90,9 +106,8 @@ namespace DrawingDevice
 	void InitViewport();
 	RECT* GetDestRect();
 	void Quit();
-	HRESULT Build(HWND hWnd, GUID* guid, DDAppDevice* device, DDAppDevice::DisplayMode* displayMode, uint8_t flags);
 	HRESULT GetChosenDevice_T(DDAppDevice::App** outApp, DDAppDevice** outDevice);
-	DDAppDevice::App *GetListHead();
+	DDAppDevice::App* GetListHead();
 
 	STATIC_ASSERT(sizeof(DrawingDeviceSlot) == 0x18);
 	STATIC_ASSERT(sizeof(CD3DFramework) == 0x234);

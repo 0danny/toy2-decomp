@@ -40,6 +40,8 @@ namespace Nu3D
 		DDPIXELFORMAT* out;
 	};
 
+	extern BmpDataNode *g_currentBmpDataNode;
+
 	BmpDataNode* LoadTextureByStream(FILE* handle, const char* rawTexStr, int32_t flags);
 
 	STATIC_ASSERT(sizeof(BmpDataNode) == 0x110);

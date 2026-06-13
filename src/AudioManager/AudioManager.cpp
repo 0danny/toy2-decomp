@@ -6,5 +6,8 @@ namespace AudioManager
 	void StopAndFlush() {}
 
 	// $FUNC 0047EDE0 [UNFINISHED]
-	void Init() {}
+	void Init() 
+	{
+		
+	}
 }
