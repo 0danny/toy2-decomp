@@ -1,4 +1,4 @@
-#include "D3DApp.h"
+#include "Toy2/D3DApp.h"
 #include "Logger.h"
 #include <cstdio>
 
@@ -373,7 +373,7 @@ namespace D3DApp
 		g_renderMode = (RenderMode)(2 - (softwareRenderMode != 0));
 		const char* renderMode = "native software render";
 
-		if (g_renderMode != SoftwareRenderer)
+		if (g_renderMode != RENDERMODE_SOFTWARE)
 			renderMode = "Direct3d render";
 
 		Logger::Log("INFO RenderMode set to %s mode.\n", renderMode);
@@ -655,7 +655,7 @@ namespace D3DApp
 		return 1;
 	}
 
-	// $FUNC 00408D30 [IMPLEMENTED]
+	// $FUNC 004092F0 [IMPLEMENTED]
 	HRESULT WINAPI EnumDisplayModes(LPDDSURFACEDESC surfaceDesc, LPVOID context)
 	{
 		ExamineDevice* examineContext = (ExamineDevice*)context;

@@ -34,14 +34,14 @@ set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
 # Toy2 Sources
 set(TOY2_SOURCES
-    src/Toy2/Toy2.cpp
-    src/Toy2/Toy2.h
-
     src/Logger.cpp
     src/Logger.h
 
     src/FileUtils.h
     src/FileUtils.cpp
+
+    src/Nullsub.cpp
+    src/Nullsub.h
 
     src/Common.h
     src/Numerics.h
@@ -53,30 +53,51 @@ set(TOY2_SOURCES
     src/ModeSelect.cpp
     src/ModeSelect.h
 
+    src/SoftwareRenderer.cpp
+    src/SoftwareRenderer.h
+
+    src/SaveManager.cpp
+    src/SaveManager.h
+
     src/InputManager.h
     src/InputManager.cpp
 
+    # Toy2
+    src/Toy2/LevelSelect.cpp
+    src/Toy2/LevelSelect.h
+    src/Toy2/Toy2.cpp
+    src/Toy2/Toy2.h
     src/Toy2/D3DApp.cpp
     src/Toy2/D3DApp.h
     src/Toy2/D3DAppTypes.h
+    src/Toy2/Buzz.cpp
+    src/Toy2/Buzz.h
 
     # Nu3D
     src/Nu3D/Creature.h
     src/Nu3D/Link.h
     src/Nu3D/Link.cpp
     src/Nu3D/Material.h
+    src/Nu3D/Material.cpp
     src/Nu3D/Nu3D.h
     src/Nu3D/Nu3D.cpp
     src/Nu3D/BmpDataNode.h
     src/Nu3D/BmpDataNode.cpp
     src/Nu3D/Patch.h
+    src/Nu3D/Patch.cpp
     src/Nu3D/Portal.h
     src/Nu3D/Portal.cpp
     src/Nu3D/Primitive.h
+    src/Nu3D/Primitive.cpp
     src/Nu3D/Sprite.h
     src/Nu3D/Viewport.h
+    src/Nu3D/Viewport.cpp
     src/Nu3D/Font.h
     src/Nu3D/Font.cpp
+    src/Nu3D/Light.cpp
+    src/Nu3D/Light.h
+    src/Nu3D/Camera.cpp
+    src/Nu3D/Camera.h
 
     # Renderer
     src/Renderer/Renderer.h

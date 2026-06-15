@@ -154,8 +154,8 @@ struct PC
 
 enum RenderMode
 {
-	SoftwareRenderer = 1,
-	D3DRenderer = 2,
+	RENDERMODE_SOFTWARE = 1,
+	RENDERMODE_D3D = 2,
 };
 
 // Size Assertions

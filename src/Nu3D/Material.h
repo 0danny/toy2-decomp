@@ -26,6 +26,8 @@ namespace Nu3D
 		int32_t originalMetadata;
 		float horzOffset;
 		float vertOffset;
+
+		static void Init();
 	};
 
 	STATIC_ASSERT(sizeof(Material) == 0x84);

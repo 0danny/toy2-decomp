@@ -1,12 +1,19 @@
-#include "Toy2.h"
-#include "D3DApp.h"
+#include "Toy2/Toy2.h"
+#include "Toy2/D3DApp.h"
 #include "Logger.h"
 #include "FileUtils.h"
 #include "InputManager.h"
 #include "DrawingDevice.h"
 #include "ModeSelect.h"
+#include "Nullsub.h"
+#include "SoftwareRenderer.h"
+#include "SaveManager.h"
+#include "LevelSelect.h"
+#include "Buzz.h"
 
 #include "Nu3D/Font.h"
+#include "Nu3D/Viewport.h"
+#include "Nu3D/Camera.h"
 #include "Renderer/Renderer.h"
 #include "AudioManager/AudioManager.h"
 
@@ -43,6 +50,66 @@ namespace Toy2
 
 	// $GLOBAL 005281C8
 	int32_t g_modeSelectFinished;
+
+	// $GLOBAL 0052ADA4
+	int32_t g_unused1;
+
+	// $GLOBAL 0052ADA8
+	int32_t g_unused2;
+
+	// $GLOBAL 0072EFD8
+	int32_t g_pastInitialBoot;
+
+	// $GLOBAL 0052ADB4
+	int32_t g_attractModeInputTimer;
+
+	// $GLOBAL 0052C83C
+	int32_t g_curDemoLevel;
+
+	// $GLOBAL 0052B7DC
+	int32_t g_levelTransition;
+
+	// $GLOBAL 0052AD94
+	int32_t g_demoMode;
+
+	// $GLOBAL 00830C88
+	int32_t g_mainMenuState;
+
+	// $GLOBAL 0055A114
+	int32_t g_levelLoadConfig;
+
+	// $GLOBAL 00830D58
+	int32_t g_saveLoaded;
+
+	// $GLOBAL 0052AD8A
+	int16_t g_levelIndex;
+
+	// $GLOBAL 0050268C
+	int32_t g_levelFileConversion[15] = { 1, 2, 6, 4, 5, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+
+	// $GLOBAL 0052AD7C
+	int32_t g_demoPathWriteIdx;
+
+	// $GLOBAL 0052EF40
+	int32_t g_demoInputRunLength;
+
+	// $GLOBAL 0052F2D4
+	uint32_t g_frameDelta;
+
+	// $GLOBAL 0052B818
+	int16_t g_isPaused;
+
+	// $GLOBAL 00529E48
+	int16_t g_pauseMenuBlinkTimer;
+
+	// $GLOBAL 0052F2DC
+	int16_t g_levelTransitionTimer;
+
+	// $GLOBAL 00830D50
+	int32_t g_quitToTitleFlag;
+
+	// $GLOBAL 0052F300
+	Buzz::Toy2BuzzActor g_buzzActor;
 }
 
 namespace Toy2
@@ -71,6 +138,51 @@ namespace Toy2
 			return detail;
 		}
 	}
+
+	namespace Game
+	{
+		// $FUNC 0049E330 [UNFINISHED]
+		void PauseLoop() {}
+
+		// $FUNC 0049DFE0 [UNFINISHED]
+		void MainLoop() {}
+	}
+
+	// $FUNC 00454020 [UNFINISHED]
+	void ShowPostGameSaveMenu() {}
+
+	// $FUNC 00453D90 [UNFINISHED]
+	void ShowActClearScreen() {}
+
+	// $FUNC 0049EB50 [UNFINISHED]
+	int32_t ComputeTokenProgress() { return 1; }
+
+	// $FUNC 00414720 [UNFINISHED]
+	int32_t EnterLevel(int32_t levelIndex) { return 0; }
+
+	// $FUNC 004A3770 [UNFINISHED]
+	void LoadPathBin() {}
+
+	// $FUNC 00453CF0 [UNFINISHED]
+	int32_t ShowLevelSelect() { return 0; }
+
+	// $FUNC 00453FA0 [UNFINISHED]
+	void ShowMovieViewer() {}
+
+	// $FUNC 00453F20 [UNFINISHED]
+	int32_t ShowSaveScreen() { return 0; }
+
+	// $FUNC 0049EB20 [UNFINISHED]
+	void UnlockAndPlayMovie(int32_t movieId, int32_t backgroundId, int32_t forcePlay) {}
+
+	// $FUNC 0049AB90 [UNFINISHED]
+	int32_t PlayMovieWithTransition(int32_t movieId, int32_t backgroundId) { return 1; }
+
+	// $FUNC 004381F0 [UNFINISHED]
+	int32_t ScreenDispatcher(int32_t index) { return 1; }
+
+	// $FUNC 00452FC0 [UNFINISHED]
+	void InitLevelPlay(int32_t levelId) {}
 
 	// $FUNC 0048E730 [UNFINISHED]
 	void OneInit() {}
@@ -154,7 +266,9 @@ namespace Toy2
 
 			ShowWindow(D3DApp::g_windowData.mainHwnd, SW_SHOWMAXIMIZED);
 
-			if ( DrawingDevice::CD3DFramework::Build(D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive) >= 0)
+			if (DrawingDevice::CD3DFramework::Build(
+					D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive)
+				>= 0)
 				g_modeSelectFinished = 1;
 		}
 	}
@@ -195,7 +309,7 @@ namespace Toy2
 
 		InputManager::Init();
 		Renderer::Init();
-		DrawingDevice::InitViewport();
+		Nu3D::Viewport::Init();
 
 		RECT* destRect = DrawingDevice::GetDestRect();
 
@@ -209,13 +323,381 @@ namespace Toy2
 			Nu3D::Font::SetTextClipRect(destRect->left, destRect->top, destRect->right - 1, destRect->bottom - 1);
 		}
 
-		while (ShowCursor(0) >= 0) {};
+		while (ShowCursor(FALSE) >= 0) {};
 
 		return 1;
 	}
 
 	// $FUNC 0049D910 [UNFINISHED]
-	int32_t Run(int32_t argCount, char** argList) { return 0; }
+	int32_t Run(int32_t argCount, char** argList)
+	{
+		int32_t l_levelIndex;
+		int16_t l_levelIndex2;
+		int32_t l_levelIndex4;
+
+		g_returnedToTitle = 0;
+
+		g_unused1 = 2;
+		g_unused2 = 0;
+
+		g_attractModeTimer = -25;
+		g_attractModeInputTimer = -50;
+
+		SoftwareRenderer::SwapRenderBuffer();
+
+		g_pastInitialBoot = 0;
+		g_curDemoLevel = 0;
+		g_levelTransition = 0;
+
+		SaveManager::g_save0Data.unkData1 = 1;
+		SaveManager::g_save0Data.unkData2 = 23;
+		SaveManager::g_save0Data.cameraType = SaveManager::CAMERA_PASSIVE | SaveManager::CAMERA_ACTIVE;
+		SaveManager::g_save0Data.musicVolume = 8;
+		SaveManager::g_save0Data.soundVolume = 8;
+
+		AudioManager::SetVolumesProcessed(8, 8);
+
+		int32_t levelIdxCache;
+
+	LABEL_2:
+		levelIdxCache = g_levelFileIndex;
+	LABEL_3:
+
+		g_demoMode = 0;
+		g_mainMenuState = 0;
+		g_levelFileIndex = 0;
+
+		g_levelLoadConfig = 1084;
+
+		Renderer::SetVirtualRatioTo54();
+		InitLevelPlay(0);
+		ScreenDispatcher(10);
+
+		g_levelFileIndex = levelIdxCache;
+
+		if (! PlayMovieWithTransition(2, 0) && ! PlayMovieWithTransition(0, 0) && ! PlayMovieWithTransition(1, 0))
+			UnlockAndPlayMovie(0, 0, 1);
+
+		g_pastInitialBoot = 1;
+
+	LABEL_8:
+
+		SaveManager::InitProgressData(&SaveManager::g_save0Data);
+		SaveManager::LoadProgressData(&SaveManager::g_save0Data);
+
+		g_mainMenuState = 0;
+		g_saveLoaded = 0;
+
+		LevelSelect::ResetCursor();
+
+	LABEL_9:
+
+		while (true)
+		{
+			l_levelIndex = g_levelFileIndex;
+			g_levelFileIndex = 0;
+			g_levelLoadConfig = 1084;
+
+			Renderer::SetVirtualRatioTo54();
+			InitLevelPlay(0);
+			ScreenDispatcher(2);
+
+			g_levelFileIndex = l_levelIndex;
+
+			switch (g_mainMenuState)
+			{
+				case 0:
+					g_demoMode = 1;
+					goto DEFAULT_MENU_CASE;
+				case 1:
+					g_demoMode = 0;
+					goto DEFAULT_MENU_CASE;
+				case 2: // Options Screen
+					g_levelFileIndex = 0;
+					g_levelLoadConfig = 1212;
+
+					Renderer::SetVirtualRatioTo54();
+					InitLevelPlay(0);
+					ScreenDispatcher(9);
+
+					g_levelFileIndex = l_levelIndex;
+					g_mainMenuState = -1;
+					continue;
+				case 3: // Save Screen
+					if (ShowSaveScreen())
+						g_saveLoaded = 1;
+
+					g_mainMenuState = -1;
+					continue;
+				case 4: // Movie Viewer
+					ShowMovieViewer();
+					g_mainMenuState = -1;
+					continue;
+				case 8:
+					g_levelFileIndex = 0;
+					g_levelLoadConfig = 1084;
+
+					Renderer::SetVirtualRatioTo54();
+					InitLevelPlay(0);
+					ScreenDispatcher(8);
+
+					g_levelFileIndex = l_levelIndex;
+					g_mainMenuState = 0;
+					goto LABEL_8;
+				case 9:
+					Nullsub5();
+					return 0;
+				default:
+				DEFAULT_MENU_CASE:
+					g_mainMenuState = 0;
+
+					if (g_demoMode == 1)
+					{
+						switch (g_curDemoLevel)
+						{
+							case 0:
+								g_levelIndex = 0;
+								break;
+							case 1:
+								g_levelIndex = 3;
+								break;
+							case 2:
+								g_levelIndex = 7;
+								break;
+							case 3:
+								g_levelIndex = 10;
+								break;
+							case 4:
+								g_levelIndex = 13;
+								break;
+							default:
+								break;
+						}
+
+						if (++g_curDemoLevel > 4)
+							g_curDemoLevel = 0;
+
+						g_levelFileIndex = g_levelFileConversion[g_levelIndex];
+
+						LoadPathBin();
+
+						int32_t levelIdxCache = g_levelIndex;
+
+						g_demoPathWriteIdx = -2;
+						g_demoInputRunLength = 0;
+
+						SaveManager::InitProgressData(&SaveManager::g_save0Data);
+						SaveManager::LoadProgressData(&SaveManager::g_save0Data);
+
+						g_levelIndex = levelIdxCache;
+					}
+
+					if (! g_demoMode && g_attractModeTimer < 0)
+						goto LABEL_75;
+
+					break;
+			}
+			break;
+		}
+
+		while (true)
+		{
+			g_levelFileIndex = g_levelFileConversion[g_levelIndex];
+
+			if (EnterLevel(g_levelFileIndex))
+				break;
+
+			while (true)
+			{
+				g_attractModeInputTimer = 2 * g_attractModeTimer;
+
+				InputManager::g_curButtonsPressed = 0;
+				InputManager::g_prevButtonsPressed = 0;
+
+				g_isPaused = 0;
+				g_pauseMenuBlinkTimer = 0;
+
+				InputManager::g_directionInputState = 0;
+				InputManager::g_prevDirectionInputState = 0;
+				InputManager::g_directionInputState2Frames = 0;
+				InputManager::g_directionInputState3Frames = 0;
+
+				g_frameDelta = 1;
+				g_levelTransition = 0;
+				g_levelTransitionTimer = 90;
+
+				Nu3D::Camera::SetTint(128, 128, 128, 6);
+
+				while (! g_levelTransition || g_levelTransitionTimer)
+				{
+					if (g_demoMode)
+						g_frameDelta = 2; // Half frame rate in demo mode
+
+					if (g_isPaused)
+						Game::PauseLoop();
+					else
+						Game::MainLoop();
+				}
+
+				AudioManager::FlushSoundVoices();
+
+				if (g_levelTransition != 2)
+					AudioManager::StopAndWait();
+
+				if (g_quitToTitleFlag)
+				{
+					if (g_levelTransition == 2)
+						AudioManager::StopAndWait();
+
+					goto LABEL_8;
+				}
+
+				if (g_levelTransition != 2)
+					break;
+
+				if (! g_buzzActor.lives)
+				{
+					AudioManager::StopAndWait();
+					goto LABEL_51;
+				}
+
+				Buzz::Respawn();
+			}
+
+			if (g_levelTransition == 3 || g_levelTransition == 4)
+			{
+				if (g_attractModeTimer >= 0)
+					break;
+
+				if (g_levelTransition != 3)
+					goto LABEL_8;
+
+				goto LABEL_2;
+			}
+
+			l_levelIndex4 = g_levelFileIndex;
+			if (g_levelTransition != 5)
+			{
+				if (g_levelTransition != 1)
+					goto LABEL_66;
+
+				goto LABEL_58;
+			}
+
+			if (g_buzzActor.health < 0)
+			{
+				if (! g_buzzActor.lives)
+				{
+				LABEL_51:
+					levelIdxCache = g_levelFileIndex;
+					g_levelFileIndex = 0;
+					g_levelLoadConfig = 1148;
+					Renderer::SetVirtualRatioTo54();
+					InitLevelPlay(0);
+					ScreenDispatcher(5);
+					g_levelFileIndex = levelIdxCache;
+
+					if (g_attractModeTimer >= 0)
+						break;
+
+					goto LABEL_3;
+				}
+
+				--g_buzzActor.lives;
+			}
+
+			if (g_attractModeTimer >= 0)
+				break;
+
+			if (g_levelFileIndex % 3)
+			{
+				g_levelTransition = 1;
+			LABEL_58:
+
+				if (g_levelFileIndex % 3)
+				{
+					g_levelFileIndex = 0;
+					g_levelLoadConfig = 1148;
+
+					Renderer::SetVirtualRatioTo54();
+					InitLevelPlay(0);
+					ScreenDispatcher(4);
+					g_levelFileIndex = l_levelIndex4;
+
+					if (g_attractModeTimer >= 0)
+						break;
+
+					int32_t movie17Status = SaveManager::g_save0Data.moviesUnlocked[17];
+
+					if (SaveManager::g_curLevelTokenData != SaveManager::g_save0Data.tokens[g_levelFileConversion[g_levelIndex]]
+						&& (ComputeTokenProgress() & 0xFF0000) == 0x320000)
+					{
+						SaveManager::g_save0Data.moviesUnlocked[17] = 1;
+					}
+
+					ShowPostGameSaveMenu();
+
+					if (! movie17Status && SaveManager::g_save0Data.moviesUnlocked[17])
+						UnlockAndPlayMovie(17, 16, 1);
+				}
+				else
+				{
+					ShowActClearScreen();
+
+					int32_t levelMovieStatus = SaveManager::g_save0Data.moviesUnlocked[g_levelIndex + 1];
+
+					SaveManager::g_save0Data.moviesUnlocked[g_levelIndex + 1] = 1;
+
+					if (g_levelFileIndex == 15)
+						SaveManager::g_save0Data.moviesUnlocked[18] = 1;
+
+					ShowPostGameSaveMenu();
+
+					if (! levelMovieStatus)
+						UnlockAndPlayMovie(g_levelIndex + 1, 30, 1);
+
+					if (g_levelFileIndex == 15)
+					{
+						UnlockAndPlayMovie(18, 31, 1);
+						levelIdxCache = g_levelFileIndex;
+						g_levelFileIndex = 0;
+						g_levelLoadConfig = 1276;
+						Renderer::SetVirtualRatioTo54();
+						InitLevelPlay(0);
+						ScreenDispatcher(11); // Show credits
+						goto LABEL_3;
+					}
+				}
+			}
+		LABEL_66:
+
+			if (g_attractModeTimer >= 0)
+				break;
+		LABEL_75:
+
+			g_mainMenuState = 0;
+			g_saveLoaded = 1;
+
+			if (ShowLevelSelect())
+			{
+				g_mainMenuState = -1;
+				goto LABEL_9;
+			}
+
+			if ((g_levelIndex + 1) % 3)
+			{
+				UnlockAndPlayMovie(g_levelIndex + 1, 0, 0);
+			}
+			else if (g_levelIndex == 11)
+			{
+				UnlockAndPlayMovie(16, 0, 0);
+			}
+		}
+
+		Nullsub5();
+
+		return 0;
+	}
 
 	// $FUNC 0047CC90 [UNFINISHED]
 	void InitSoftwareRenderer()
@@ -257,10 +739,6 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 {
 	// $GLOBAL 00534550
 	static int32_t g_unused0;
-	// $GLOBAL 0052ADA4
-	static int32_t g_unused1;
-	// $GLOBAL 0052ADA8
-	static int32_t g_unused2;
 
 	AllocateConsole();
 
@@ -294,19 +772,19 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 	Toy2::g_returnedToTitle = 0;
 	Toy2::g_attractModeTimer = -1;
 
-	g_unused1 = 2;
-	g_unused2 = 0;
+	Toy2::g_unused1 = 2;
+	Toy2::g_unused2 = 0;
 
 	Toy2::ReadCfg();
 	D3DApp::BuildProfileMachine();
 	D3DApp::BuildWindow();
 	Toy2::ShowModeSelect();
 
-	if (D3DApp::g_renderMode == SoftwareRenderer)
+	if (D3DApp::g_renderMode == RENDERMODE_SOFTWARE)
 	{
 		Toy2::InitSoftwareRenderer();
 	}
-	else if (D3DApp::g_renderMode == D3DRenderer)
+	else if (D3DApp::g_renderMode == RENDERMODE_D3D)
 	{
 		Toy2::InitDirect3DRenderer();
 	}

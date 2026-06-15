@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Numerics.h"
-#include "Primitive.h"
-#include "Patch.h"
+#include "Nu3D/Primitive.h"
+#include "Nu3D/Patch.h"
 #include <directx7/d3d.h>
 
 namespace Nu3D

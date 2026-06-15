@@ -1,8 +1,8 @@
-#include "NGNLoader.h"
+#include "NGNLoader/NGNLoader.h"
 #include "Nu3D/Portal.h"
 #include "Toy2/Toy2.h"
-#include "Logger.h"
 #include "Nu3D/BmpDataNode.h"
+#include "Logger.h"
 
 #include <windows.h>
 #include <iostream>
@@ -491,4 +491,7 @@ namespace NGNLoader
 
 		Nu3D::Portal::ClearVisibleAreaFlags();
 	}
+
+	// $FUNC 004BB720 [UNFINISHED]
+	void Init() {}
 }

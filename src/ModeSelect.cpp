@@ -44,7 +44,7 @@ namespace ModeSelect
 	// $GLOBAL 0053C5B8
 	int32_t g_textStartY;
 
-	// $GLOBAL 0053C5B8
+	// $GLOBAL 0053C5B4
 	int32_t g_textStartX;
 
 	// $GLOBAL 0053C5C0

@@ -2,7 +2,7 @@
 
 #include "Common.h"
 #include "Numerics.h"
-#include "Viewport.h"
+#include "Nu3D/Viewport.h"
 #include "Renderer/RenderType.h"
 #include <directx7/d3d.h>
 

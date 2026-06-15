@@ -3,7 +3,6 @@
 #include "Common.h"
 #include "Numerics.h"
 
-
 namespace Nu3D
 {
 	struct Vertex
@@ -13,6 +12,8 @@ namespace Nu3D
 		RGBA diffuse;
 		Vector2F coords;
 	};
+
+	void SetIsSoftwareRendering(int32_t value);
 
 	STATIC_ASSERT(sizeof(Vertex) == 0x24);
 }

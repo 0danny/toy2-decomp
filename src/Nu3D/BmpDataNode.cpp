@@ -1,4 +1,4 @@
-#include "BmpDataNode.h"
+#include "Nu3D/BmpDataNode.h"
 #include "DrawingDevice.h"
 
 namespace Nu3D
@@ -407,6 +407,9 @@ namespace Nu3D
 
 		return buffer;
 	}
+
+	// $FUNC 004AFAF0 [IMPLEMENTED]
+	void SetMinTexSize(int32_t minTexSize) { g_minTextureSize = minTexSize; }
 
 	// $FUNC 004B0A30 [IMPLEMENTED]
 	BmpDataNode* LoadTextureByStream(FILE* handle, const char* rawTexStr, int32_t flags)

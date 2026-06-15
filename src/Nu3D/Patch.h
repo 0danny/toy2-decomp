@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Nu3D.h"
+#include "Nu3D/Nu3D.h"
 #include <directx7/d3d.h>
 
 namespace Nu3D
@@ -27,6 +27,8 @@ namespace Nu3D
 		int32_t unkVar14;
 		int32_t unkVar15;
 	};
+
+	extern Patch *g_patchListHead;;
 
 	STATIC_ASSERT(sizeof(Patch) == 0x3C);
 	STATIC_ASSERT(sizeof(Patch::PatchVertices) == 0x14);

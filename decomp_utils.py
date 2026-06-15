@@ -25,7 +25,12 @@ def parse_source_files():
     src_main_path = Path("src")
     implemented_functions = {}
 
+    # Track every occurrence so we can report duplicate addresses.
+    func_occurrences = {}
+    global_occurrences = {}
+
     func_pattern = re.compile(r'//\s*\$FUNC\s+([0-9A-Fa-f]+)\s+\[(\w+)\]')
+    global_pattern = re.compile(r'//\s*\$GLOBAL\s+([0-9A-Fa-f]+)')
 
     source_files = list(src_main_path.glob("**/*.h")) + list(src_main_path.glob("**/*.cpp"))
 
@@ -34,19 +39,62 @@ def parse_source_files():
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
 
+            rel_path = str(file_path.relative_to(src_main_path))
+
             matches = func_pattern.findall(content)
 
             for address, status in matches:
                 address = address.upper().zfill(8)
                 implemented_functions[address] = {
                     "status": status.upper(),
-                    "file": str(file_path.relative_to(src_main_path)),
+                    "file": rel_path,
                 }
+                func_occurrences.setdefault(address, []).append(rel_path)
+
+            for address in global_pattern.findall(content):
+                address = address.upper().zfill(8)
+                global_occurrences.setdefault(address, []).append(rel_path)
 
         except Exception as e:
             print(f"Warning: Could not read file {file_path}: {e}")
 
-    return implemented_functions
+    duplicate_funcs = {
+        address: files
+        for address, files in func_occurrences.items()
+        if len(files) > 1
+    }
+    duplicate_globals = {
+        address: files
+        for address, files in global_occurrences.items()
+        if len(files) > 1
+    }
+
+    return implemented_functions, duplicate_funcs, duplicate_globals
+
+
+def report_duplicates(duplicate_funcs, duplicate_globals):
+    if not duplicate_funcs and not duplicate_globals:
+        return
+
+    print("\n" + "=" * 60)
+    print(f"{Fore.RED}DUPLICATE ADDRESS WARNINGS{Style.RESET_ALL}")
+    print("=" * 60)
+
+    if duplicate_funcs:
+        print(f"{Fore.RED}Duplicate $FUNC addresses:{Style.RESET_ALL}")
+        for address in sorted(duplicate_funcs):
+            files = duplicate_funcs[address]
+            print(f"  {address} ({len(files)}x): {', '.join(files)}")
+
+    if duplicate_globals:
+        if duplicate_funcs:
+            print("-" * 60)
+        print(f"{Fore.RED}Duplicate $GLOBAL addresses:{Style.RESET_ALL}")
+        for address in sorted(duplicate_globals):
+            files = duplicate_globals[address]
+            print(f"  {address} ({len(files)}x): {', '.join(files)}")
+
+    print("=" * 60)
 
 
 def parse_functions_map(functions_map_path):
@@ -87,7 +135,9 @@ def count_progress(namespace_filter=None):
         return
 
     print("Parsing source files...")
-    source_functions = parse_source_files()
+    source_functions, duplicate_funcs, duplicate_globals = parse_source_files()
+
+    report_duplicates(duplicate_funcs, duplicate_globals)
 
     ida_addresses = set(ida_functions.keys())
 

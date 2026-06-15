@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-#include "RenderType.h"
+#include "Renderer/RenderType.h"
 #include <directx7/d3d.h>
 
 namespace Nu3D
@@ -25,8 +25,10 @@ namespace Renderer
 
 	extern int32_t g_isSoftwareRendering;
 
+	void Cleanup();
 	void Init();
 	void SetIsSoftwareRendering(int32_t value);
+	void SetVirtualRatioTo54();
 
 	STATIC_ASSERT(sizeof(RenderEntry) == 0x18);
 }

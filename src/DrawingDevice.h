@@ -108,11 +108,15 @@ namespace DrawingDevice
 	LPDIRECTDRAW4 GetDDraw4();
 	LPDIRECT3D3 GetD3D();
 	LPDIRECT3DDEVICE3 GetD3DDevice();
-	void InitViewport();
+	int32_t GetWidth();
+	int32_t GetHeight();
+	int32_t SetViewport(LPD3DVIEWPORT2 viewport);
+	int32_t BuildFreshViewport(LPD3DVIEWPORT2 viewport);
 	RECT* GetDestRect();
 	void Quit();
 	HRESULT GetChosenDevice_T(DDAppDevice::App** outApp, DDAppDevice** outDevice);
 	DDAppDevice::App* GetListHead();
+	LPD3DDEVICEDESC CopySurfaceDesc(LPD3DDEVICEDESC outSurfaceDesc);
 
 	STATIC_ASSERT(sizeof(DrawingDeviceSlot) == 0x18);
 	STATIC_ASSERT(sizeof(CD3DFramework) == 0x234);

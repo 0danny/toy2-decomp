@@ -9,7 +9,6 @@
 #include "Nu3D/Link.h"
 #include "Nu3D/Portal.h"
 #include "Nu3D/Creature.h"
-#include "Renderer/Renderer.h"
 
 #include <directx7/d3d.h>
 

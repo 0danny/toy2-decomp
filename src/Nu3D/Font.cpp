@@ -1,4 +1,4 @@
-#include "Font.h"
+#include "Nu3D/Font.h"
 
 namespace Nu3D
 {
@@ -18,4 +18,7 @@ namespace Nu3D
 
 	// $FUNC 004B3980 [UNFINISHED]
 	void Font::SetTextClipRect(int32_t x1, int32_t y1, int32_t x2, int32_t y2) {}
+	
+	// $FUNC 004B3C20 [UNFINISHED]
+	void Font::BuildFontTextures() {}
 }

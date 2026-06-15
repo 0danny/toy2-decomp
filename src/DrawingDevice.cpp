@@ -562,8 +562,31 @@ namespace DrawingDevice
 	// $FUNC 004ABA80 [IMPLEMENTED]
 	LPDIRECT3DDEVICE3 GetD3DDevice() { return g_drawingDevice->m_pd3dDevice; }
 
-	// $FUNC 004B55D0 [UNFINISHED]
-	void InitViewport() {}
+	// $FUNC 004ABBC0 [IMPLEMENTED]
+	int32_t GetWidth() { return g_drawingDevice->m_dwRenderWidth; }
+
+	// $FUNC 004ABBD0 [IMPLEMENTED]
+	int32_t GetHeight() { return g_drawingDevice->m_dwRenderHeight; }
+
+	// $FUNC 004ABB30 [IMPLEMENTED]
+	int32_t SetViewport(LPD3DVIEWPORT2 viewport)
+	{
+		if (g_drawingDevice->m_pvViewport)
+			g_drawingDevice->m_pvViewport->SetViewport2(viewport);
+
+		return -1;
+	}
+
+	// $FUNC 004ABB80 [IMPLEMENTED]
+	int32_t BuildFreshViewport(LPD3DVIEWPORT2 viewport)
+	{
+		D3DVIEWPORT2 freshViewport;
+
+		CD3DFramework::BuildViewport(&freshViewport, g_drawingDevice->m_dwRenderWidth, g_drawingDevice->m_dwRenderHeight);
+		memcpy(viewport, &freshViewport, sizeof(D3DVIEWPORT2));
+
+		return 0;
+	}
 
 	// $FUNC 004ABD80 [IMPLEMENTED]
 	RECT* GetDestRect() { return &g_drawingDevice->m_rcViewportRect; }
@@ -622,4 +645,15 @@ namespace DrawingDevice
 
 	// $FUNC 004AD000 [IMPLEMENTED]
 	DDAppDevice::App* GetListHead() { return g_ddAppListHead; }
+
+	// $FUNC 004ABCA0 [IMPLEMENTED]
+	LPD3DDEVICEDESC CopySurfaceDesc(LPD3DDEVICEDESC outSurfaceDesc)
+	{
+		D3DDEVICEDESC l_surfaceDesc; 
+
+		memcpy(&l_surfaceDesc, &g_drawingDevice->m_ddDeviceDesc, sizeof(outSurfaceDesc));
+		memcpy(outSurfaceDesc, &l_surfaceDesc, sizeof(D3DDEVICEDESC));
+
+		return outSurfaceDesc;
+	}
 }

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Common.h"
-#include "Material.h"
-#include "Patch.h"
+#include "Nu3D/Material.h"
+#include "Nu3D/Patch.h"
 
 namespace Nu3D
 {
@@ -30,6 +30,8 @@ namespace Nu3D
 		float boundSphereRadius;
 		float boundSphereRadiusSq;
 	};
+
+	extern Primitive *g_primListHead;
 
 	STATIC_ASSERT(sizeof(Primitive) == 0x4C);
 	STATIC_ASSERT(sizeof(Primitive::Header) == 0x10);

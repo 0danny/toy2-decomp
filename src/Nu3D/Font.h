@@ -41,6 +41,7 @@ namespace Nu3D
 		static void SetFont(Font* font);
 		static void SetTextColor(int32_t color);
 		static void SetTextClipRect(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
+		static void BuildFontTextures();
 	};
 
 	STATIC_ASSERT(sizeof(Font) == 0x130);

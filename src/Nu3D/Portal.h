@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Nu3D.h"
-#include "Link.h"
+#include "Nu3D/Nu3D.h"
+#include "Nu3D/Link.h"
 
 namespace Nu3D
 {

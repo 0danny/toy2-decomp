@@ -13,6 +13,9 @@ namespace Nu3D
             float left;
             float right;
         };
+
+        void Init();
+        void Reset();
     }
 
 	STATIC_ASSERT(sizeof(Viewport::ViewportRect) == 0x10);

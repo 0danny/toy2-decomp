@@ -26,6 +26,6 @@ namespace Toy2
 
 	int32_t ShowModeSelect();
 	int32_t Run(int32_t argCount, char** argList);
-}
 
-STATIC_ASSERT(sizeof(Toy2::ToyCfg) == 0x18);
+	STATIC_ASSERT(sizeof(ToyCfg) == 0x18);
+}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "D3DAppTypes.h"
+#include "Toy2/D3DAppTypes.h"
 #include "Common.h"
 
 #include <windows.h>
