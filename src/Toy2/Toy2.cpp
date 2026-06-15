@@ -328,7 +328,7 @@ namespace Toy2
 		return 1;
 	}
 
-	// $FUNC 0049D910 [UNFINISHED]
+	// $FUNC 0049D910 [IMPLEMENTED]
 	int32_t Run(int32_t argCount, char** argList)
 	{
 		g_returnedToTitle = 0;

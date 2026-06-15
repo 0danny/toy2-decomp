@@ -25,6 +25,7 @@ namespace SaveManager
 		SaveControlMapping unusedStructs[10];
 	};
 
+#pragma pack(push, 1)
 	struct Save0Data
 	{
 		uint32_t farDraw;
@@ -44,8 +45,10 @@ namespace SaveManager
 		uint8_t tokens[15];
 		uint8_t padByte3;
 		uint8_t moviesUnlocked[19];
-		uint8_t padBytes[30];
+		uint32_t padInt;
+		uint8_t padBytes[26];
 	};
+#pragma pack(pop)
 
 	void InitProgressData(Save0Data* save);
 	void LoadProgressData(Save0Data* save);
