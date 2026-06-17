@@ -190,7 +190,18 @@ namespace Toy2
 	// $FUNC 00490730 [UNFINISHED]
 	void CheckForQuit() {}
 
-	// $FUNC 004CE810 [IMPLEMENTED]
+	// $FUNC 004CE760 [IMPLEMENTED]
+	void InitCfg()
+	{
+		memset(&g_toyCfgData, 0, sizeof(g_toyCfgData));
+
+		g_toyCfgData.driverIndex = -1;
+		g_toyCfgData.detail = 1;
+		g_toyCfgData.flags |= 7;
+		g_toyCfgData.gammaCorrection = 2.0;
+	}
+
+	// FUNCTION: TOY2 0x004CE810
 	int32_t ReadCfg()
 	{
 		InitCfg();
@@ -204,17 +215,6 @@ namespace Toy2
 		fclose(fileHandle);
 
 		return 1;
-	}
-
-	// $FUNC 004CE760 [IMPLEMENTED]
-	void InitCfg()
-	{
-		memset(&g_toyCfgData, 0, sizeof(g_toyCfgData));
-
-		g_toyCfgData.driverIndex = -1;
-		g_toyCfgData.detail = 1;
-		g_toyCfgData.flags |= 7;
-		g_toyCfgData.gammaCorrection = 2.0;
 	}
 
 	// $FUNC 00412B50 [IMPLEMENTED]
@@ -354,8 +354,7 @@ namespace Toy2
 		AudioManager::SetVolumesProcessed(8, 8);
 
 		int32_t enteredLevelIdx;
-		int32_t levelIdxCache;
-		levelIdxCache = g_levelFileIndex;
+		int32_t levelIdxCache = g_levelFileIndex;
 
 	LBL_RESTART_GAME:
 

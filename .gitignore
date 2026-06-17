@@ -2,3 +2,7 @@ build
 .vscode
 external/include/directx7
 external/libs/directx7
+external/include/directx6
+external/libs/directx6
+reccmp-user.yml
+reccmp-build.yml
