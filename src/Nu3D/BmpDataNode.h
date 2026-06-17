@@ -34,7 +34,7 @@ namespace Nu3D
 	struct FindPixelFormat
 	{
 		uint32_t bpp;
-		uint32_t minAlphaBits;
+		int32_t minAlphaBits;
 		uint32_t needAlpha;
 		uint32_t valid;
 		DDPIXELFORMAT* out;

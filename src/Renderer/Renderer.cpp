@@ -80,6 +80,6 @@ namespace Renderer
 	// FUNCTION: TOY2 0x004B3860
 	void SetIsSoftwareRendering(int32_t value) { g_isSoftwareRendering = value; }
 
-	// FUNCTION: TOY2 0x00453CD0
+	// STUB: TOY2 0x00453CD0
 	void SetVirtualRatioTo54() {}
 }

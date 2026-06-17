@@ -25,11 +25,11 @@ namespace Nu3D
 	void CopyTextureToSurface(BmpDataNode* bitmapDataNode) {}
 
 	// FUNCTION: TOY2 0x004B0400
-	uint32_t CountAlphaBits(LPDDPIXELFORMAT pixelFormat)
+	int32_t CountAlphaBits(LPDDPIXELFORMAT pixelFormat)
 	{
 		DWORD alphaBitMask = pixelFormat->dwRGBAlphaBitMask;
 
-		uint32_t result;
+		int32_t result;
 
 		for (result = 0; alphaBitMask; alphaBitMask >>= 1)
 		{
@@ -56,7 +56,7 @@ namespace Nu3D
 
 		DWORD bitCount = pixelFormat->dwRGBBitCount;
 
-		if (bitCount < 0x10)
+		if (bitCount < 16)
 			return 1;
 
 		if (pixelFormat->dwFourCC)
