@@ -22,13 +22,13 @@ namespace Renderer
 	// GLOBAL: TOY2 0x0088448C
 	int32_t g_fogEnabled;
 
-	// GLOBAL: TOY2 0x00E4D96C
+	// GLOBAL: TOY2 0x00E4D95C
 	int32_t g_deviceBlendShadeCaps;
 
 	// FUNCTION: TOY2 0x004B2CE0
 	void DisableFog() { g_fogEnabled = 0; }
 
-	// GLOBAL: TOY2 0x004B9710
+	// STUB: TOY2 0x004B9710
 	void InitResources() {}
 
 	// STUB: TOY2 0x004B37F0
@@ -64,16 +64,16 @@ namespace Renderer
 		D3DDEVICEDESC outSurfaceDesc;
 		memcpy(&outSurfaceDesc, DrawingDevice::CopySurfaceDesc(&outSurfaceDesc), sizeof(outSurfaceDesc));
 
-		if ((outSurfaceDesc.dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAGOURAUDBLEND) != 0)
+		if (outSurfaceDesc.dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAGOURAUDBLEND)
 			g_deviceBlendShadeCaps |= 1;
 
-		if ((outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_ONE) != 0)
+		if (outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_ONE)
 			g_deviceBlendShadeCaps |= 2;
 
-		if ((outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_INVSRCCOLOR) != 0)
+		if (outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_INVSRCCOLOR)
 			g_deviceBlendShadeCaps |= 4;
 
-		if ((outSurfaceDesc.dpcTriCaps.dwTextureBlendCaps & D3DPTEXTURECAPS_TRANSPARENCY) != 0)
+		if (outSurfaceDesc.dpcTriCaps.dwTextureBlendCaps & D3DPTEXTURECAPS_TRANSPARENCY)
 			g_deviceBlendShadeCaps |= 8;
 	}
 

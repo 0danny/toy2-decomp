@@ -56,17 +56,19 @@ namespace NGNLoader
 
 		Nu3D::Portal::PortalState* head = AllocAreaPortal(ngnImage);
 
-		if (! head)
-			return 0;
+		if (head)
+		{
+			head->targetAreaIdx = targetAreaIdx;
+			head->portal = portal;
+			head->sourceAreaIdx = sourceAreaIdx;
 
-		head->targetAreaIdx = targetAreaIdx;
-		head->portal = portal;
-		head->sourceAreaIdx = sourceAreaIdx;
+			head->next = ngnImage->portalHashTable->buckets[sourceAreaIdx].portalStateHead;
+			ngnImage->portalHashTable->buckets[sourceAreaIdx].portalStateHead = head;
 
-		head->next = ngnImage->portalHashTable->buckets[sourceAreaIdx].portalStateHead;
-		ngnImage->portalHashTable->buckets[sourceAreaIdx].portalStateHead = head;
+			return 1;
+		}
 
-		return 1;
+		return 0;
 	}
 
 	// FUNCTION: TOY2 0x004BC230
@@ -75,8 +77,8 @@ namespace NGNLoader
 		ngnImage->portalEntryCount = 0;
 		ngnImage->scalerEntryCount = 0;
 
-		ngnImage->maxScalerEntries = maxScalerEntries;
 		ngnImage->scalerEntryPool = (Nu3D::Portal::ScalerEntry*)malloc(sizeof(Nu3D::Portal::ScalerEntry) * maxScalerEntries);
+		ngnImage->maxScalerEntries = maxScalerEntries;
 
 		ngnImage->scalerEntryCount = 0;
 		ngnImage->portalStatePool = (Nu3D::Portal::PortalState*)malloc(sizeof(Nu3D::Portal::PortalState) * portalCount);
@@ -94,19 +96,16 @@ namespace NGNLoader
 	// FUNCTION: TOY2 0x004B3350
 	Nu3D::Portal::AreaPortal* AllocPortalVertices(int32_t vertexCount)
 	{
-		int32_t size = sizeof(Vector3F) * vertexCount * sizeof(Nu3D::Portal::AreaPortal);
-
-		Nu3D::Portal::AreaPortal* portal = (Nu3D::Portal::AreaPortal*)malloc(size);
+		Nu3D::Portal::AreaPortal* portal = (Nu3D::Portal::AreaPortal*)malloc(sizeof(Vector3F) * vertexCount + sizeof(Nu3D::Portal::AreaPortal));
 
 		if (portal)
 		{
-			memset(portal, 0, size);
+			memset(portal, 0, sizeof(Vector3F) * vertexCount + sizeof(Nu3D::Portal::AreaPortal));
 
 			if (vertexCount)
 			{
-				portal->vertexCount = vertexCount;
-
 				// Points to space after struct, is the vertex space.
+				portal->vertexCount = vertexCount;
 				portal->vertices = reinterpret_cast<Vector3F*>(&portal[1]);
 			}
 		}
@@ -305,27 +304,23 @@ namespace NGNLoader
 	// FUNCTION: TOY2 0x004C3DF0
 	void ParseAreaPortalIdx(FILE* stream, NGNImage* ngnImage)
 	{
-		int32_t portalCount;
+		int32_t portalId, targetAreaIdx, sourceAreaIdx, portalCount;
+
 		fread(&portalCount, sizeof(int32_t), 1, stream);
 
-		if (portalCount)
+		if (! portalCount)
+			return;
+
+		AllocPools(ngnImage, portalCount, 4000);
+
+		for (int32_t index = 0; index < portalCount; ++index)
 		{
-			AllocPools(ngnImage, portalCount, 4000);
+			fread(&portalId, sizeof(int32_t), 1, stream);
+			fread(&sourceAreaIdx, sizeof(int32_t), 1, stream);
+			fread(&targetAreaIdx, sizeof(int32_t), 1, stream);
 
-			for (int32_t index = 0; index < portalCount; ++index)
-			{
-				int32_t portalId;
-				int32_t targetAreaIdx;
-				int32_t sourceAreaIdx;
-
-				fread(&portalId, sizeof(int32_t), 1, stream);
-				fread(&sourceAreaIdx, sizeof(int32_t), 1, stream);
-				fread(&targetAreaIdx, sizeof(int32_t), 1, stream);
-
-				Nu3D::Portal::AreaPortal::CalculateBoundingSphere(ngnImage->areaPortals[portalId]);
-
-				InsertPortal(ngnImage, sourceAreaIdx, targetAreaIdx, ngnImage->areaPortals[portalId]);
-			}
+			Nu3D::Portal::AreaPortal::CalculateBoundingSphere(ngnImage->areaPortals[portalId]);
+			InsertPortal(ngnImage, sourceAreaIdx, targetAreaIdx, ngnImage->areaPortals[portalId]);
 		}
 	}
 
@@ -379,7 +374,7 @@ namespace NGNLoader
 	void ParseGeometry(FILE* stream, NGNImage* ngnImage) {}
 
 	// STUB: TOY2 0x004B9630
-	void BuildTex14() {}
+	void BuildTex14(int32_t unused) {}
 
 	// STUB: TOY2 0x004C36A0
 	void BuildGrid(int32_t gridWidth, int32_t gridHeight, int32_t type, NGNImage* ngnImage) {}
@@ -394,71 +389,71 @@ namespace NGNLoader
 		NGNImage* ngnImage = 0;
 
 		g_curFileName = fileName;
+
 		FILE* fileHandle = fopen(fileName, "rb");
 
 		if (fileHandle)
 		{
-			ngnImage = (NGNImage*)(malloc(sizeof(NGNImage)));
+			ngnImage = (NGNImage*)malloc(sizeof(NGNImage));
 
 			if (ngnImage)
 			{
 				memset(ngnImage, 0, sizeof(NGNImage));
 
 				g_curPrimCount = 0;
+
+				int32_t chunkSize;
 				int32_t chunkHeaderId;
 
-				if (fread(&chunkHeaderId, sizeof(int32_t), 1, fileHandle)) // Get Chunk Header ID
+				if (fread(&chunkHeaderId, sizeof(int32_t), 1, fileHandle))
 				{
 					do
 					{
-						int32_t chunkSize;
-
-						fread(&chunkSize, sizeof(int32_t), 1, fileHandle); // Get Chunk Size
+						fread(&chunkSize, sizeof(int32_t), 1, fileHandle);
 						ftell(fileHandle);
 
-						if (chunkHeaderId > 259)
+						switch (chunkHeaderId)
 						{
-							switch (chunkHeaderId)
-							{
-								case 260:
-									ParseTextures(fileHandle, ngnImage);
-									break;
-								case 261:
-									ParseLinker(fileHandle, ngnImage);
-									break;
-								case 262:
-									ParseCreatures(fileHandle, ngnImage);
-									break;
-								case 266:
-									Parse266(fileHandle, ngnImage);
-									break;
-								default:
-									fseek(fileHandle, chunkSize, 1);
-							}
-						}
-						else if (chunkHeaderId == 259)
-						{
-							ParseAreaPortalIdx(fileHandle, ngnImage);
-						}
-						else if (chunkHeaderId > 257)
-						{
-							ParseAreaPortalPos(fileHandle, ngnImage);
-						}
-						else if (chunkHeaderId == 257)
-						{
-							ParseGscale(fileHandle, ngnImage);
-							++ngnImage->gscaleType;
-						}
-						else if (chunkHeaderId)
-						{
-							if (chunkHeaderId == 256)
+							case 256:
 								ParseGeometry(fileHandle, ngnImage);
-							else
+								break;
+
+							case 257:
+								ParseGscale(fileHandle, ngnImage);
+								++ngnImage->gscaleType;
+								break;
+
+							case 258:
+								ParseAreaPortalPos(fileHandle, ngnImage);
+								break;
+
+							case 259:
+								ParseAreaPortalIdx(fileHandle, ngnImage);
+								break;
+
+							case 266:
+								Parse266(fileHandle, ngnImage);
+								break;
+
+							case 260:
+								ParseTextures(fileHandle, ngnImage);
+								break;
+
+							case 261:
+								ParseLinker(fileHandle, ngnImage);
+								break;
+
+							case 262:
+								ParseCreatures(fileHandle, ngnImage);
+								break;
+
+							case 0:
+								terminate = 1;
+								break;
+
+							default:
 								fseek(fileHandle, chunkSize, 1);
-						}
-						else
-						{
-							terminate = 1;
+								break;
 						}
 
 						ftell(fileHandle);
@@ -470,7 +465,7 @@ namespace NGNLoader
 			fclose(fileHandle);
 		}
 
-		BuildTex14();
+		BuildTex14(14);
 
 		if (ngnImage)
 		{

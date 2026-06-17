@@ -117,9 +117,9 @@ namespace Toy2
 	namespace Graphics
 	{
 		// FUNCTION: TOY2 0x004CDD90
-		uint32_t AddDetailLevel()
+		int32_t AddDetailLevel()
 		{
-			uint32_t detail = g_toyCfgData.detail + 1;
+			int32_t detail = g_toyCfgData.detail + 1;
 
 			if ((g_toyCfgData.detail + 1) >= 2)
 				detail = 2;
@@ -130,9 +130,9 @@ namespace Toy2
 		}
 
 		// FUNCTION: TOY2 0x004CDDB0
-		uint32_t RemoveDetailLevel()
+		int32_t RemoveDetailLevel()
 		{
-			uint32_t detail = (g_toyCfgData.detail - 1) <= 0 ? 0 : g_toyCfgData.detail - 1;
+			int32_t detail = (g_toyCfgData.detail - 1) <= 0 ? 0 : g_toyCfgData.detail - 1;
 			g_toyCfgData.detail = detail;
 
 			return detail;
@@ -208,13 +208,14 @@ namespace Toy2
 
 		FILE* fileHandle = fopen("toy2.cfg", "rb");
 
-		if (! fileHandle)
-			return 0;
+		if (fileHandle)
+		{
+			fread(&g_toyCfgData, 1, sizeof(ToyCfg), fileHandle);
+			fclose(fileHandle);
+			return 1;
+		}
 
-		fread(&g_toyCfgData, 1, sizeof(ToyCfg), fileHandle);
-		fclose(fileHandle);
-
-		return 1;
+		return 0;
 	}
 
 	// FUNCTION: TOY2 0x00412B50
