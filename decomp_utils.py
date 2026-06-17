@@ -10,11 +10,11 @@ init(autoreset=True)
 
 import build as build_script
 
-
 # Templates
 #
-# Functions: $FUNC 004CE810 [IMPLEMENTED] || $FUNC 004CE810 [UNFINISHED]
-# Global Vars: $GLOBAL 004CE810
+# Functions: FUNCTION: TOY2 0x04CE810
+# Stubs: STUB: TOY2 0x04CE810
+# Global Vars: GLOBAL: TOY2 0x04CE810
 # Bugs: $BUG
 # TODO: $TODO
 
@@ -29,8 +29,12 @@ def parse_source_files():
     func_occurrences = {}
     global_occurrences = {}
 
-    func_pattern = re.compile(r'//\s*\$FUNC\s+([0-9A-Fa-f]+)\s+\[(\w+)\]')
-    global_pattern = re.compile(r'//\s*\$GLOBAL\s+([0-9A-Fa-f]+)')
+    func_pattern = re.compile(
+        r'//\s*(FUNCTION|STUB):\s*TOY2\s+0x([0-9A-Fa-f]+)'
+    )
+    global_pattern = re.compile(
+        r'//\s*GLOBAL:\s*TOY2\s+0x([0-9A-Fa-f]+)'
+    )
 
     source_files = list(src_main_path.glob("**/*.h")) + list(src_main_path.glob("**/*.cpp"))
 
@@ -43,10 +47,13 @@ def parse_source_files():
 
             matches = func_pattern.findall(content)
 
-            for address, status in matches:
+            for kind, address in matches:
                 address = address.upper().zfill(8)
+
+                status = "IMPLEMENTED" if kind.upper() == "FUNCTION" else "UNFINISHED"
+
                 implemented_functions[address] = {
-                    "status": status.upper(),
+                    "status": status,
                     "file": rel_path,
                 }
                 func_occurrences.setdefault(address, []).append(rel_path)
@@ -81,7 +88,7 @@ def report_duplicates(duplicate_funcs, duplicate_globals):
     print("=" * 60)
 
     if duplicate_funcs:
-        print(f"{Fore.RED}Duplicate $FUNC addresses:{Style.RESET_ALL}")
+        print(f"{Fore.RED}Duplicate FUNCTION/STUB addresses:{Style.RESET_ALL}")
         for address in sorted(duplicate_funcs):
             files = duplicate_funcs[address]
             print(f"  {address} ({len(files)}x): {', '.join(files)}")
@@ -89,7 +96,7 @@ def report_duplicates(duplicate_funcs, duplicate_globals):
     if duplicate_globals:
         if duplicate_funcs:
             print("-" * 60)
-        print(f"{Fore.RED}Duplicate $GLOBAL addresses:{Style.RESET_ALL}")
+        print(f"{Fore.RED}Duplicate GLOBAL addresses:{Style.RESET_ALL}")
         for address in sorted(duplicate_globals):
             files = duplicate_globals[address]
             print(f"  {address} ({len(files)}x): {', '.join(files)}")
