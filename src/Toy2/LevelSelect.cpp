@@ -4,7 +4,7 @@ namespace Toy2
 {
 	namespace LevelSelect
 	{
-		// $FUNC 00452170 [UNFINISHED]
+		// STUB: TOY2 0x00452170
 		void ResetCursor() {}
 	}
 }

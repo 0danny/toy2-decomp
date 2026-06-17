@@ -7,34 +7,34 @@
 
 namespace Renderer
 {
-	// $GLOBAL 00884484
+	// GLOBAL: TOY2 0x00884484
 	int32_t g_isSoftwareRendering;
 
-	// $GLOBAL 00884488
+	// GLOBAL: TOY2 0x00884488
 	int32_t g_rendererValid;
 
-	// $GLOBAL 00E4D964
+	// GLOBAL: TOY2 0x00E4D964
 	LPDIRECT3D3 g_drawDeviceD3D;
 
-	// $GLOBAL 00E4D968
+	// GLOBAL: TOY2 0x00E4D968
 	LPDIRECT3DDEVICE3 g_drawDeviceD3DDevice;
 
-	// $GLOBAL 0088448C
+	// GLOBAL: TOY2 0x0088448C
 	int32_t g_fogEnabled;
 
-	// $GLOBAL 00E4D96C
+	// GLOBAL: TOY2 0x00E4D96C
 	int32_t g_deviceBlendShadeCaps;
 
-	// $FUNC 004B2CE0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B2CE0
 	void DisableFog() { g_fogEnabled = 0; }
 
-	// $GLOBAL 004B9710
+	// GLOBAL: TOY2 0x004B9710
 	void InitResources() {}
 
-	// $FUNC 004B37F0 [UNFINISHED]
+	// STUB: TOY2 0x004B37F0
 	void Cleanup() {}
 
-	// $FUNC 004B3630 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B3630
 	void Init()
 	{
 		if (g_rendererValid)
@@ -77,9 +77,9 @@ namespace Renderer
 			g_deviceBlendShadeCaps |= 8;
 	}
 
-	// $FUNC 004B3860 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B3860
 	void SetIsSoftwareRendering(int32_t value) { g_isSoftwareRendering = value; }
 
-	// $FUNC 00453CD0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00453CD0
 	void SetVirtualRatioTo54() {}
 }

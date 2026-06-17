@@ -2,18 +2,18 @@
 
 namespace AudioManager
 {
-	// $FUNC 0047D840 [UNFINISHED]
+	// STUB: TOY2 0x0047D840
 	void StopAndFlush() {}
 
-	// $FUNC 0047EDE0 [UNFINISHED]
+	// STUB: TOY2 0x0047EDE0
 	void Init() {}
 
-	// $FUNC 0049E8D0 [UNFINISHED]
+	// STUB: TOY2 0x0049E8D0
 	void SetVolumesProcessed(int32_t musicVolume, int32_t sfxVolume) {}
 
-	// $FUNC 004A3EF0 [UNFINISHED]
+	// STUB: TOY2 0x004A3EF0
 	void FlushSoundVoices() {}
 
-	// $FUNC 00436D40 [UNFINISHED]
+	// STUB: TOY2 0x00436D40
     int32_t StopAndWait() { return 1; }
 }

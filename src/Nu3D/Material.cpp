@@ -2,6 +2,6 @@
 
 namespace Nu3D
 {
-	// $FUNC 004C2910 [UNFINISHED]
+	// STUB: TOY2 0x004C2910
 	void Material::Init() {}
 }

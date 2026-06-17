@@ -3,28 +3,28 @@
 
 namespace Nu3D
 {
-	// $GLOBAL 00884044
+	// GLOBAL: TOY2 0x00884044
 	uint8_t g_lastBmpPalette[1024];
 
-	// $GLOBAL 00884448
+	// GLOBAL: TOY2 0x00884448
 	int32_t g_minTextureSize;
 
-	// $GLOBAL 00508214
+	// GLOBAL: TOY2 0x00508214
 	int32_t g_maxTextureSize = 256;
 
-	// $GLOBAL 00508210
+	// GLOBAL: TOY2 0x00508210
 	int32_t g_unusedTexShift = 1;
 
-	// $GLOBAL 00884444
+	// GLOBAL: TOY2 0x00884444
 	BmpDataNode* g_bmpDataHead;
 
-	// $GLOBAL 0088400C
+	// GLOBAL: TOY2 0x0088400C
 	BmpDataNode *g_currentBmpDataNode;
 
-	// $FUNC 004AFF80 [UNFINISHED]
+	// STUB: TOY2 0x004AFF80
 	void CopyTextureToSurface(BmpDataNode* bitmapDataNode) {}
 
-	// $FUNC 004B0400 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0400
 	uint32_t CountAlphaBits(LPDDPIXELFORMAT pixelFormat)
 	{
 		DWORD alphaBitMask = pixelFormat->dwRGBAlphaBitMask;
@@ -40,7 +40,7 @@ namespace Nu3D
 		return result;
 	}
 
-	// $FUNC 004B0380 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0380
 	LONG WINAPI FindSuitablePixelFormat(LPDDPIXELFORMAT pixelFormat, void* context)
 	{
 		if (! pixelFormat)
@@ -81,7 +81,7 @@ namespace Nu3D
 		return 0;
 	}
 
-	// $FUNC 004AFBA0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AFBA0
 	void DestroyBmpDataNode(BmpDataNode* bmpDataNode)
 	{
 		LPDIRECT3DTEXTURE2 d3dTexture = bmpDataNode->d3dTexture;
@@ -102,7 +102,7 @@ namespace Nu3D
 		}
 	}
 
-	// $FUNC 004B0200 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0200
 	int32_t InitialiseTextureSurface(BmpDataNode* bmpDataNode)
 	{
 		FindPixelFormat findPixelFormat;
@@ -173,7 +173,7 @@ namespace Nu3D
 		return 1;
 	}
 
-	// $FUNC 004B0760 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0760
 	int32_t GetBitmapWidth(HANDLE bmpHandle)
 	{
 		BITMAP bmp;
@@ -181,7 +181,7 @@ namespace Nu3D
 		return bmp.bmWidth;
 	}
 
-	// $FUNC 004B0780 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0780
 	int32_t GetBitmapHeight(HANDLE bmpHandle)
 	{
 		BITMAP bmp;
@@ -189,7 +189,7 @@ namespace Nu3D
 		return bmp.bmHeight;
 	}
 
-	// $FUNC 004AFC10 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AFC10
 	BmpDataNode* AllocateBmpDataNode()
 	{
 		BmpDataNode* bmpDataStruct = (BmpDataNode*)malloc(sizeof(BmpDataNode));
@@ -212,7 +212,7 @@ namespace Nu3D
 		return bmpDataStruct;
 	}
 
-	// $FUNC 004B0870 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0870
 	RGBA SampleBitmapPixel(BITMAP* mainBmp, BITMAP* alphaBmp, int32_t x, int32_t y, int32_t textureSize, uint8_t flags)
 	{
 		RGBA color;
@@ -283,7 +283,7 @@ namespace Nu3D
 		return color;
 	}
 
-	// $FUNC 004B0B60 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0B60
 	HBITMAP ProcessBmpInfoFromStream(FILE* stream)
 	{
 		int32_t offset = ftell(stream);
@@ -333,7 +333,7 @@ namespace Nu3D
 		return hBitmap;
 	}
 
-	// $FUNC 004B06D0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B06D0
 	int32_t CalculateTexSize(HANDLE bmp, int32_t flags)
 	{
 		BITMAP bitmap;
@@ -361,7 +361,7 @@ namespace Nu3D
 		return textureSize;
 	}
 
-	// $FUNC 004B07A0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B07A0
 	uint32_t* ProcessBmpPixelData(HANDLE mainBmp, HANDLE alphaBmp, int32_t flags)
 	{
 		int32_t texSize = CalculateTexSize(mainBmp, flags);
@@ -408,10 +408,10 @@ namespace Nu3D
 		return buffer;
 	}
 
-	// $FUNC 004AFAF0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AFAF0
 	void SetMinTexSize(int32_t minTexSize) { g_minTextureSize = minTexSize; }
 
-	// $FUNC 004B0A30 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0A30
 	BmpDataNode* LoadTextureByStream(FILE* handle, const char* rawTexStr, int32_t flags)
 	{
 		HBITMAP mainBmp = ProcessBmpInfoFromStream(handle);

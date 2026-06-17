@@ -2,9 +2,9 @@
 
 namespace Nu3D
 {
-	// $GLOBAL 00884470
+	// GLOBAL: TOY2 0x00884470
 	int32_t g_isSoftwareRendering;
 
-	// $FUNC 004B1880 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B1880
 	void SetIsSoftwareRendering(int32_t value) { g_isSoftwareRendering = value; }
 }

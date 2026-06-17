@@ -2,6 +2,6 @@
 
 namespace SoftwareRenderer
 {
-	// $FUNC 00452130 [UNFINISHED]
+	// STUB: TOY2 0x00452130
 	void SwapRenderBuffer() {}
 }

@@ -8,28 +8,28 @@
 
 namespace NGNLoader
 {
-	// $GLOBAL 00B62410
+	// GLOBAL: TOY2 0x00B62410
 	NGNImage* g_ngnImage;
 
-	// $GLOBAL 00AAD7AC
+	// GLOBAL: TOY2 0x00AAD7AC
 	char* g_curFileName;
 
-	// $GLOBAL 00AAD7A8;
+	// GLOBAL: TOY2 0x00AAD7A8;
 	int32_t g_curPrimCount;
 
-	// $GLOBAL 00508A58
+	// GLOBAL: TOY2 0x00508A58
 	Vector3F g_vertexScaleVector = { 1.0, 1.0, 1.0 };
 
-	// $FUNC 004CB300 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004CB300
 	void GetScaleVector(Vector3F* output) { *output = g_vertexScaleVector; }
 
-	// $FUNC 004BB3C0 [UNFINISHED]
+	// STUB: TOY2 0x004BB3C0
 	int32_t GetOrAllocateTexture(NGNTextureParams* texParams) { return 0; }
 
-	// $FUNC 004AC220 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AC220
 	Nu3D::BmpDataNode* LoadTextureContents(FILE* stream, const char* rawTexStr, int32_t flags) { return Nu3D::LoadTextureByStream(stream, rawTexStr, flags); }
 
-	// $FUNC 004BC320 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004BC320
 	Nu3D::Portal::PortalState* AllocAreaPortal(NGNImage* ngnImage)
 	{
 		int32_t entryCount = ngnImage->portalEntryCount;
@@ -48,7 +48,7 @@ namespace NGNLoader
 		return newAlloc;
 	}
 
-	// $FUNC 004BC2C0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004BC2C0
 	int32_t InsertPortal(NGNImage* ngnImage, int32_t sourceAreaIdx, int32_t targetAreaIdx, Nu3D::Portal::AreaPortal* portal)
 	{
 		if (Toy2::g_isElevatorHopLevel && targetAreaIdx == 15)
@@ -69,7 +69,7 @@ namespace NGNLoader
 		return 1;
 	}
 
-	// $FUNC 004BC230 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004BC230
 	void AllocPools(NGNImage* ngnImage, int32_t portalCount, int32_t maxScalerEntries)
 	{
 		ngnImage->portalEntryCount = 0;
@@ -91,7 +91,7 @@ namespace NGNLoader
 		memset(rotLookup, 0, sizeof(Nu3D::Portal::PortalHashTable));
 	}
 
-	// $FUNC 004B3350 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B3350
 	Nu3D::Portal::AreaPortal* AllocPortalVertices(int32_t vertexCount)
 	{
 		int32_t size = sizeof(Vector3F) * vertexCount * sizeof(Nu3D::Portal::AreaPortal);
@@ -114,7 +114,7 @@ namespace NGNLoader
 		return portal;
 	}
 
-	// $FUNC 004C4080 [UNFINISHED]
+	// STUB: TOY2 0x004C4080
 	void ParseTextures(FILE* stream, NGNImage* ngnImage)
 	{
 		NGNTextureParams texParams;
@@ -176,7 +176,7 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C3EB0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004C3EB0
 	void ParseLinker(FILE* stream, NGNImage* ngnImage)
 	{
 		int32_t maxLinkId;
@@ -248,10 +248,10 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C4220 [UNFINISHED]
+	// STUB: TOY2 0x004C4220
 	void ParseCreatures(FILE* stream, NGNImage* ngnImage) {}
 
-	// $FUNC 004C3CA0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004C3CA0
 	void Parse266(FILE* stream, NGNImage* ngnImage)
 	{
 		// data266 isn't actually used anywhere in the game
@@ -302,7 +302,7 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C3DF0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004C3DF0
 	void ParseAreaPortalIdx(FILE* stream, NGNImage* ngnImage)
 	{
 		int32_t portalCount;
@@ -329,7 +329,7 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C3BE0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004C3BE0
 	void ParseAreaPortalPos(FILE* stream, NGNImage* ngnImage)
 	{
 		int32_t portalCount;
@@ -372,22 +372,22 @@ namespace NGNLoader
 		}
 	}
 
-	// $FUNC 004C3740 [UNFINISHED]
+	// STUB: TOY2 0x004C3740
 	void ParseGscale(FILE* stream, NGNImage* ngnImage) {}
 
-	// $FUNC 004C35C0 [UNFINISHED]
+	// STUB: TOY2 0x004C35C0
 	void ParseGeometry(FILE* stream, NGNImage* ngnImage) {}
 
-	// $FUNC 004B9630 [UNFINISHED]
+	// STUB: TOY2 0x004B9630
 	void BuildTex14() {}
 
-	// $FUNC 004C36A0 [UNFINISHED]
+	// STUB: TOY2 0x004C36A0
 	void BuildGrid(int32_t gridWidth, int32_t gridHeight, int32_t type, NGNImage* ngnImage) {}
 
-	// $FUNC 004C3240 [UNFINISHED]
+	// STUB: TOY2 0x004C3240
 	void BuildScalerEntries(NGNImage* ngnImage) {}
 
-	// $FUNC 004C33F0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004C33F0
 	NGNImage* BuildImage(char* fileName)
 	{
 		int32_t terminate = 0;
@@ -483,7 +483,7 @@ namespace NGNLoader
 		return ngnImage;
 	}
 
-	// $FUNC 004CEAE0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004CEAE0
 	void SetNewImage(char* fileName)
 	{
 		g_ngnImage = BuildImage(fileName);
@@ -491,6 +491,6 @@ namespace NGNLoader
 		Nu3D::Portal::ClearVisibleAreaFlags();
 	}
 
-	// $FUNC 004BB720 [UNFINISHED]
+	// STUB: TOY2 0x004BB720
 	void Init() {}
 }

@@ -7,19 +7,19 @@
 
 namespace FileUtils
 {
-	// $GLOBAL 00882F40
+	// GLOBAL: TOY2 0x00882F40
 	char g_pathRegValue[512];
 
-	// $GLOBAL 00883144
+	// GLOBAL: TOY2 0x00883144
 	char g_cdPathRegValue[512];
 
-	// $GLOBAL 00882F3C
+	// GLOBAL: TOY2 0x00882F3C
 	int32_t g_registryKeysRead;
 
-	// $GLOBAL 00882E34
+	// GLOBAL: TOY2 0x00882E34
 	char g_fileNameBuffer[260];
 
-	// $FUNC 004A67D0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A67D0
 	int32_t GetFileSize(const char* fileName)
 	{
 		if (! g_registryKeysRead)
@@ -48,7 +48,7 @@ namespace FileUtils
 		}
 	}
 
-	// $FUNC 004A65E0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A65E0
 	void AppendCDPath(char* path)
 	{
 		if (! g_registryKeysRead)
@@ -57,7 +57,7 @@ namespace FileUtils
 		strcpy(path, g_cdPathRegValue);
 	}
 
-	// $FUNC 004A6790 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A6790
 	void AppendRegPathToBuffer()
 	{
 		if (! g_registryKeysRead)
@@ -66,7 +66,7 @@ namespace FileUtils
 		strcpy(g_fileNameBuffer, g_pathRegValue);
 	}
 
-	// $FUNC 004A65A0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A65A0
 	void GetPathValue(char* pathOut)
 	{
 		if (! g_registryKeysRead)
@@ -75,7 +75,7 @@ namespace FileUtils
 		strcpy(pathOut, g_pathRegValue);
 	}
 
-	// $FUNC 004A6940 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A6940
 	size_t LoadFile(const char* fileName, void* buffer)
 	{
 		if (! g_registryKeysRead)
@@ -115,7 +115,7 @@ namespace FileUtils
 		return elemSize;
 	}
 
-	// $FUNC 004A6390 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A6390
 	void ValidateInstall()
 	{
 		HKEY keyHandle;

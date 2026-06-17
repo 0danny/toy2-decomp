@@ -4,7 +4,7 @@ namespace Toy2
 {
     namespace Buzz
     {
-        // $FUNC 00414110 [UNFINISHED]
+        // STUB: TOY2 0x00414110
         void Respawn() {}
     }
 }

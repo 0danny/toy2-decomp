@@ -23,7 +23,7 @@
 
 namespace Toy2
 {
-	// $GLOBAL 00508D70
+	// GLOBAL: TOY2 0x00508D70
 	ToyCfg g_toyCfgData = {
 		7, /* flags */
 		1, /* detail */
@@ -33,82 +33,82 @@ namespace Toy2
 		-1, /* display mode index */
 	};
 
-	// $GLOBAL 0088278C
+	// GLOBAL: TOY2 0x0088278C
 	int32_t g_levelFileIndex;
 
-	// $GLOBAL 0052AD9C
+	// GLOBAL: TOY2 0x0052AD9C
 	int32_t g_returnedToTitle;
 
-	// $GLOBAL 0052ADA0
+	// GLOBAL: TOY2 0x0052ADA0
 	int32_t g_attractModeTimer;
 
-	// $GLOBAL 00A4C454
+	// GLOBAL: TOY2 0x00A4C454
 	int32_t g_isElevatorHopLevel;
 
-	// $GLOBAL 004FCDB4
+	// GLOBAL: TOY2 0x004FCDB4
 	int32_t g_cdBaseTrack = 2;
 
-	// $GLOBAL 005281C8
+	// GLOBAL: TOY2 0x005281C8
 	int32_t g_modeSelectFinished;
 
-	// $GLOBAL 0052ADA4
+	// GLOBAL: TOY2 0x0052ADA4
 	int32_t g_unused1;
 
-	// $GLOBAL 0052ADA8
+	// GLOBAL: TOY2 0x0052ADA8
 	int32_t g_unused2;
 
-	// $GLOBAL 0072EFD8
+	// GLOBAL: TOY2 0x0072EFD8
 	int32_t g_pastInitialBoot;
 
-	// $GLOBAL 0052ADB4
+	// GLOBAL: TOY2 0x0052ADB4
 	int32_t g_attractModeInputTimer;
 
-	// $GLOBAL 0052C83C
+	// GLOBAL: TOY2 0x0052C83C
 	int32_t g_curDemoLevel;
 
-	// $GLOBAL 0052B7DC
+	// GLOBAL: TOY2 0x0052B7DC
 	int32_t g_levelTransition;
 
-	// $GLOBAL 0052AD94
+	// GLOBAL: TOY2 0x0052AD94
 	int32_t g_demoMode;
 
-	// $GLOBAL 00830C88
+	// GLOBAL: TOY2 0x00830C88
 	int32_t g_mainMenuState;
 
-	// $GLOBAL 0055A114
+	// GLOBAL: TOY2 0x0055A114
 	int32_t g_levelLoadConfig;
 
-	// $GLOBAL 00830D58
+	// GLOBAL: TOY2 0x00830D58
 	int32_t g_saveLoaded;
 
-	// $GLOBAL 0052AD8A
+	// GLOBAL: TOY2 0x0052AD8A
 	int16_t g_levelIndex;
 
-	// $GLOBAL 0050268C
+	// GLOBAL: TOY2 0x0050268C
 	int32_t g_levelFileConversion[15] = { 1, 2, 6, 4, 5, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-	// $GLOBAL 0052AD7C
+	// GLOBAL: TOY2 0x0052AD7C
 	int32_t g_demoPathWriteIdx;
 
-	// $GLOBAL 0052EF40
+	// GLOBAL: TOY2 0x0052EF40
 	int32_t g_demoInputRunLength;
 
-	// $GLOBAL 0052F2D4
+	// GLOBAL: TOY2 0x0052F2D4
 	uint32_t g_frameDelta;
 
-	// $GLOBAL 0052B818
+	// GLOBAL: TOY2 0x0052B818
 	int16_t g_isPaused;
 
-	// $GLOBAL 00529E48
+	// GLOBAL: TOY2 0x00529E48
 	int16_t g_pauseMenuBlinkTimer;
 
-	// $GLOBAL 0052F2DC
+	// GLOBAL: TOY2 0x0052F2DC
 	int16_t g_levelTransitionTimer;
 
-	// $GLOBAL 00830D50
+	// GLOBAL: TOY2 0x00830D50
 	int32_t g_quitToTitleFlag;
 
-	// $GLOBAL 0052F300
+	// GLOBAL: TOY2 0x0052F300
 	Buzz::Toy2BuzzActor g_buzzActor;
 }
 
@@ -116,7 +116,7 @@ namespace Toy2
 {
 	namespace Graphics
 	{
-		// $FUNC 004CDD90 [IMPLEMENTED]
+		// FUNCTION: TOY2 0x004CDD90
 		uint32_t AddDetailLevel()
 		{
 			uint32_t detail = g_toyCfgData.detail + 1;
@@ -129,7 +129,7 @@ namespace Toy2
 			return detail;
 		}
 
-		// $FUNC 004CDDB0 [IMPLEMENTED]
+		// FUNCTION: TOY2 0x004CDDB0
 		uint32_t RemoveDetailLevel()
 		{
 			uint32_t detail = (g_toyCfgData.detail - 1) <= 0 ? 0 : g_toyCfgData.detail - 1;
@@ -141,56 +141,56 @@ namespace Toy2
 
 	namespace Game
 	{
-		// $FUNC 0049E330 [UNFINISHED]
+		// STUB: TOY2 0x0049E330
 		void PauseLoop() {}
 
-		// $FUNC 0049DFE0 [UNFINISHED]
+		// STUB: TOY2 0x0049DFE0
 		void MainLoop() {}
 	}
 
-	// $FUNC 00454020 [UNFINISHED]
+	// STUB: TOY2 0x00454020
 	void ShowPostGameSaveMenu() {}
 
-	// $FUNC 00453D90 [UNFINISHED]
+	// STUB: TOY2 0x00453D90
 	void ShowActClearScreen() {}
 
-	// $FUNC 0049EB50 [UNFINISHED]
+	// STUB: TOY2 0x0049EB50
 	int32_t ComputeTokenProgress() { return 1; }
 
-	// $FUNC 00414720 [UNFINISHED]
+	// STUB: TOY2 0x00414720
 	int32_t EnterLevel(int32_t levelIndex) { return 0; }
 
-	// $FUNC 004A3770 [UNFINISHED]
+	// STUB: TOY2 0x004A3770
 	void LoadPathBin() {}
 
-	// $FUNC 00453CF0 [UNFINISHED]
+	// STUB: TOY2 0x00453CF0
 	int32_t ShowLevelSelect() { return 0; }
 
-	// $FUNC 00453FA0 [UNFINISHED]
+	// STUB: TOY2 0x00453FA0
 	void ShowMovieViewer() {}
 
-	// $FUNC 00453F20 [UNFINISHED]
+	// STUB: TOY2 0x00453F20
 	int32_t ShowSaveScreen() { return 0; }
 
-	// $FUNC 0049EB20 [UNFINISHED]
+	// STUB: TOY2 0x0049EB20
 	void UnlockAndPlayMovie(int32_t movieId, int32_t backgroundId, int32_t forcePlay) {}
 
-	// $FUNC 0049AB90 [UNFINISHED]
+	// STUB: TOY2 0x0049AB90
 	int32_t PlayMovieWithTransition(int32_t movieId, int32_t backgroundId) { return 1; }
 
-	// $FUNC 004381F0 [UNFINISHED]
+	// STUB: TOY2 0x004381F0
 	int32_t ScreenDispatcher(int32_t index) { return 1; }
 
-	// $FUNC 00452FC0 [UNFINISHED]
+	// STUB: TOY2 0x00452FC0
 	void InitLevelPlay(int32_t levelId) {}
 
-	// $FUNC 0048E730 [UNFINISHED]
+	// STUB: TOY2 0x0048E730
 	void OneInit() {}
 
-	// $FUNC 00490730 [UNFINISHED]
+	// STUB: TOY2 0x00490730
 	void CheckForQuit() {}
 
-	// $FUNC 004CE760 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004CE760
 	void InitCfg()
 	{
 		memset(&g_toyCfgData, 0, sizeof(g_toyCfgData));
@@ -217,7 +217,7 @@ namespace Toy2
 		return 1;
 	}
 
-	// $FUNC 00412B50 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00412B50
 	void RunModeSelect()
 	{
 		if (! g_modeSelectFinished)
@@ -273,16 +273,16 @@ namespace Toy2
 		}
 	}
 
-	// $FUNC 0047D8D0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x0047D8D0
 	void UnusedInit()
 	{
-		// $GLOBAL 00725F20
+		// GLOBAL: TOY2 0x00725F20
 		static int32_t g_unusedInit;
 
 		g_unusedInit = 2;
 	}
 
-	// $FUNC 00412D70 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00412D70
 	int32_t ShowModeSelect()
 	{
 		char cdFileName[8];
@@ -328,7 +328,7 @@ namespace Toy2
 		return 1;
 	}
 
-	// $FUNC 0049D910 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x0049D910
 	int32_t Run(int32_t argCount, char** argList)
 	{
 		g_returnedToTitle = 0;
@@ -720,7 +720,7 @@ namespace Toy2
 		return 0;
 	}
 
-	// $FUNC 0047CC90 [UNFINISHED]
+	// STUB: TOY2 0x0047CC90
 	void InitSoftwareRenderer()
 	{
 		// Some back story on this, the game has two rendering modes. Hardware accelerated (DirectX) or full software based rendering.
@@ -731,7 +731,7 @@ namespace Toy2
 		return;
 	}
 
-	// $FUNC 00499950 [UNFINISHED]
+	// STUB: TOY2 0x00499950
 	void InitDirect3DRenderer()
 	{
 		// Weird method, a good portion of these variables are never even used in the game
@@ -755,10 +755,10 @@ void AllocateConsole()
 	printf("[Debug Console Allocated!]\n");
 }
 
-// $FUNC 004316C0 [IMPLEMENTED]
+// FUNCTION: TOY2 0x004316C0
 int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int32_t cmdShow)
 {
-	// $GLOBAL 00534550
+	// GLOBAL: TOY2 0x00534550
 	static int32_t g_unused0;
 
 	AllocateConsole();

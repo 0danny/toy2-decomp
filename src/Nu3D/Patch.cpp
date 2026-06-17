@@ -2,6 +2,6 @@
 
 namespace Nu3D
 {
-    // $GLOBAL 00884480
+    // GLOBAL: TOY2 0x00884480
     Patch *g_patchListHead;
 }

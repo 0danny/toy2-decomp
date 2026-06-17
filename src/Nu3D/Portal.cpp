@@ -6,10 +6,10 @@
 
 namespace Nu3D
 {
-	// $GLOBAL 00A4C414
+	// GLOBAL: TOY2 0x00A4C414
 	uint8_t Portal::g_visibleAreaFlags[64];
 
-	// $FUNC 004B33B0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B33B0
 	void Portal::AreaPortal::CalculateBoundingSphere(Nu3D::Portal::AreaPortal* portal)
 	{
 		float z = 3.4028235e38;
@@ -67,7 +67,7 @@ namespace Nu3D
 		portal->radiusSquared = sqrt(radSqrt);
 	}
 
-	// $FUNC 004BC120 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004BC120
 	void Portal::ClearVisibleAreaFlags()
 	{
 		g_visibleAreaFlags[0] = 1;

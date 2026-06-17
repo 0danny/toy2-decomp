@@ -11,106 +11,106 @@
 
 namespace ModeSelect
 {
-	// $GLOBAL 00505590
+	// GLOBAL: TOY2 0x00505590
 	int32_t g_forceFullscreen = 1;
 
-	// $GLOBAL 004ECC10
+	// GLOBAL: TOY2 0x004ECC10
 	int32_t g_unusedFlag1 = 1;
 
-	// $GLOBAL 004ECC0C
+	// GLOBAL: TOY2 0x004ECC0C
 	int32_t g_unusedFlag2 = 1;
 
-	// $GLOBAL 00884034;
+	// GLOBAL: TOY2 0x00884034;
 	DeviceFilterCallback_t g_ddDeviceFilterCallback;
 
-	// $GLOBAL 00884020
+	// GLOBAL: TOY2 0x00884020
 	int32_t g_foundRefDevice;
 
-	// $GLOBAL 00884024
+	// GLOBAL: TOY2 0x00884024
 	int32_t g_foundAnyD3DDevice;
 
-	// $GLOBAL 0088401C
+	// GLOBAL: TOY2 0x0088401C
 	LPDIRECTDRAW4 g_ddraw4;
 
-	// $GLOBAL 0053C598
+	// GLOBAL: TOY2 0x0053C598
 	HWND g_hWnd;
 
-	// $GLOBAL 0053C59C
+	// GLOBAL: TOY2 0x0053C59C
 	HBITMAP g_backgroundBitmap;
 
-	// $GLOBAL 0053C5BC
+	// GLOBAL: TOY2 0x0053C5BC
 	int32_t g_lineHeight;
 
-	// $GLOBAL 0053C5B8
+	// GLOBAL: TOY2 0x0053C5B8
 	int32_t g_textStartY;
 
-	// $GLOBAL 0053C5B4
+	// GLOBAL: TOY2 0x0053C5B4
 	int32_t g_textStartX;
 
-	// $GLOBAL 0053C5C0
+	// GLOBAL: TOY2 0x0053C5C0
 	int32_t g_instructionLineHeight;
 
-	// $GLOBAL 0053C5A4
+	// GLOBAL: TOY2 0x0053C5A4
 	HFONT g_mainFont;
 
-	// $GLOBAL 0053C5A8
+	// GLOBAL: TOY2 0x0053C5A8
 	HFONT g_headerFont;
 
-	// $GLOBAL 0053C5A0
+	// GLOBAL: TOY2 0x0053C5A0
 	HFONT g_instructionFont;
 
-	// $GLOBAL 0053C57C
+	// GLOBAL: TOY2 0x0053C57C
 	DrawingDevice::DDAppDevice::App* g_ddAppIterator;
 
-	// $GLOBAL 0053C58C
+	// GLOBAL: TOY2 0x0053C58C
 	int32_t g_savedDriverIndex;
 
-	// $GLOBAL 0053C590
+	// GLOBAL: TOY2 0x0053C590
 	int32_t g_savedDeviceIndex;
 
-	// $GLOBAL 0053C594
+	// GLOBAL: TOY2 0x0053C594
 	int32_t g_savedModeIndex;
 
-	// $GLOBAL 0053C5B0
+	// GLOBAL: TOY2 0x0053C5B0
 	int32_t g_selectionState;
 
-	// $GLOBAL 0053C5AC
+	// GLOBAL: TOY2 0x0053C5AC
 	int32_t g_keyDown;
 
-	// $GLOBAL 0053C580
+	// GLOBAL: TOY2 0x0053C580
 	DrawingDevice::DDAppDevice::App* g_selectedDDApp;
 
-	// $GLOBAL 0053C588
+	// GLOBAL: TOY2 0x0053C588
 	DrawingDevice::DDAppDevice* g_ddAppSelectedDevice;
 
-	// $GLOBAL 0053C574
+	// GLOBAL: TOY2 0x0053C574
 	DrawingDevice::DDAppDevice::DisplayMode* g_ddAppSelectedDisplayMode;
 
-	// $GLOBAL 0053C568
+	// GLOBAL: TOY2 0x0053C568
 	HDC g_offscreenDC;
 
-	// $GLOBAL 0053C564
+	// GLOBAL: TOY2 0x0053C564
 	HGDIOBJ g_offscreenBitmap;
 
-	// $GLOBAL 0053C570
+	// GLOBAL: TOY2 0x0053C570
 	HGDIOBJ g_originalBitmap;
 
-	// $GLOBAL 0053C5CC
+	// GLOBAL: TOY2 0x0053C5CC
 	int32_t g_paintError;
 
-	// $GLOBAL 0053C56C
+	// GLOBAL: TOY2 0x0053C56C
 	HGDIOBJ g_savedHeaderFont;
 
-	// $GLOBAL 0053C584
+	// GLOBAL: TOY2 0x0053C584
 	COLORREF g_savedTextColor;
 
-	// $GLOBAL 0053C578
+	// GLOBAL: TOY2 0x0053C578
 	int32_t g_savedBkMode;
 
-	// $GLOBAL 004F574C
+	// GLOBAL: TOY2 0x004F574C
 	int32_t g_highlightColor = 0xFFFF;
 
-	// $GLOBAL 004F56FC
+	// GLOBAL: TOY2 0x004F56FC
 	const char* g_deviceSelectionInstructions[5] = {
 		"Please select your preferred display",
 		"device using the arrow keys.",
@@ -119,7 +119,7 @@ namespace ModeSelect
 		0,
 	};
 
-	// $GLOBAL 004F5710
+	// GLOBAL: TOY2 0x004F5710
 	const char* g_renderMethodInstructions[7] = {
 		"First, choose a Render Method",
 		"using the up and down arrow keys.",
@@ -130,7 +130,7 @@ namespace ModeSelect
 		0,
 	};
 
-	// $GLOBAL 004F572C
+	// GLOBAL: TOY2 0x004F572C
 	const char* g_resolutionSelectionInstructions[8] = {
 		"Choose a Screen Resolution using",
 		"the up and down arrow keys.",
@@ -145,7 +145,7 @@ namespace ModeSelect
 
 namespace ModeSelect
 {
-	// $FUNC 004ACD90 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004ACD90
 	void MarkCompatibleBitDepthDevices()
 	{
 		using namespace DrawingDevice;
@@ -177,7 +177,7 @@ namespace ModeSelect
 		}
 	}
 
-	// $FUNC 004ACBE0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004ACBE0
 	int32_t SelectPrimaryDevice(uint8_t selectionFlags)
 	{
 		using namespace DrawingDevice;
@@ -319,13 +319,13 @@ namespace ModeSelect
 		return 0;
 	}
 
-	// $FUNC 004ACFB0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004ACFB0
 	void SetForceFullscreen(int32_t forceFullscreen) { g_forceFullscreen = forceFullscreen; }
 
-	// $FUNC 004AC390 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AC390
 	void SetForceFullscreen_T(int32_t forceFullscreen) { SetForceFullscreen(forceFullscreen); }
 
-	// $FUNC 004AC9C0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AC9C0
 	HRESULT CALLBACK EnumDisplayModes(LPDDSURFACEDESC2 lpDDSurfaceDesc2, LPVOID lpContext)
 	{
 		using namespace DrawingDevice;
@@ -441,7 +441,7 @@ namespace ModeSelect
 		return D3DENUMRET_OK;
 	}
 
-	// $FUNC 004AC760 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AC760
 	HRESULT CALLBACK D3DDeviceEnumCallback(
 		GUID* lpGuid, LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC lpD3DHWDeviceDesc, LPD3DDEVICEDESC lpD3DHELDeviceDesc, LPVOID lpContext)
 	{
@@ -532,7 +532,7 @@ namespace ModeSelect
 		return D3DENUMRET_OK;
 	}
 
-	// $FUNC 004AC540 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AC540
 	BOOL WINAPI DDrawEnumCallbackExA(GUID* lpGUID, LPSTR lpDriverName, LPSTR lpDriverDescription, LPVOID lpContext, HMONITOR hm)
 	{
 		using namespace DrawingDevice;
@@ -620,13 +620,13 @@ namespace ModeSelect
 		return reinterpret_cast<BOOL>(ddApp);
 	}
 
-	// $FUNC 004ACBC0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004ACBC0
 	BOOL WINAPI DDrawEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName, LPVOID lpContext)
 	{
 		return DDrawEnumCallbackExA(lpGUID, lpDriverDescription, lpDriverName, 0, 0);
 	}
 
-	// $FUNC 004AC4D0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AC4D0
 	int32_t EnumerateDrivers(DeviceFilterCallback_t callback)
 	{
 		typedef HRESULT(WINAPI * DirectDrawEnumerateExA_t)(LPDDENUMCALLBACKEXA lpCallback, LPVOID lpContext, DWORD dwFlags);
@@ -649,13 +649,13 @@ namespace ModeSelect
 		return SelectPrimaryDevice(0);
 	}
 
-	// $FUNC 004AC3A0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004AC3A0
 	int32_t EnumerateDrivers_T(DeviceFilterCallback_t callback) { return EnumerateDrivers(callback); }
 
-	// $FUNC 00412B00 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00412B00
 	int32_t DeviceFilterCallback(LPDDCAPS caps, void* context) { return FALSE; }
 
-	// $FUNC 00431C40 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00431C40
 	BOOL DrawTextOutA(HDC hdc, int32_t x, int32_t y, const char* format, ...)
 	{
 		char buffer[512];
@@ -667,7 +667,7 @@ namespace ModeSelect
 		return TextOutA(hdc, x, y, buffer, strlen(buffer));
 	}
 
-	// $FUNC 00433410 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00433410
 	COLORREF ApplyTextStyle(HDC hdc, HFONT hfont, COLORREF textColor, int32_t styleOp)
 	{
 		COLORREF result;
@@ -700,7 +700,7 @@ namespace ModeSelect
 		return result;
 	}
 
-	// $FUNC 00432AD0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00432AD0
 	LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		if (msg > WM_CLOSE)
@@ -1054,7 +1054,7 @@ namespace ModeSelect
 		return DefWindowProcA(hWnd, msg, wParam, lParam);
 	}
 
-	// $FUNC 00431CA0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00431CA0
 	int32_t SelectDDAppByIndex(int32_t index)
 	{
 		int32_t result = 0;
@@ -1079,7 +1079,7 @@ namespace ModeSelect
 		return result;
 	}
 
-	// $FUNC 00431CE0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00431CE0
 	int32_t SelectDeviceByIndex(int32_t index)
 	{
 		int32_t result = 0;
@@ -1114,7 +1114,7 @@ namespace ModeSelect
 		return result;
 	}
 
-	// $FUNC 00431DA0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00431DA0
 	int32_t SelectDisplayModeByIndex(int32_t index)
 	{
 		int32_t result = 0;
@@ -1148,7 +1148,7 @@ namespace ModeSelect
 		return result;
 	}
 
-	// $FUNC 00431D40 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00431D40
 	int32_t FindFirstHardwareDevice()
 	{
 		int32_t result = 0;
@@ -1186,7 +1186,7 @@ namespace ModeSelect
 		return result;
 	}
 
-	// $FUNC 00431E00 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00431E00
 	int32_t SelectSuitableDisplayMode()
 	{
 		int32_t result = 0;
@@ -1210,7 +1210,7 @@ namespace ModeSelect
 		return result;
 	}
 
-	// $FUNC 00432020 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00432020
 	void Run()
 	{
 		// $TODO: I'd like to clean/unwrap the labels in this method when I have some spare time
@@ -1878,7 +1878,7 @@ namespace ModeSelect
 		g_ddAppSelectedDevice->canRenderWindowedOnPrimary = 0;
 	}
 
-	// $FUNC 004334B0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004334B0
 	void Show()
 	{
 		ShowCursor(0);

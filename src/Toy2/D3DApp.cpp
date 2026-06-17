@@ -4,49 +4,49 @@
 
 namespace D3DApp
 {
-	// $GLOBAL 0050AF64
+	// GLOBAL: TOY2 0x0050AF64
 	int32_t g_changingCoopLevel = 0;
 
-	// $GLOBAL 004E0690
+	// GLOBAL: TOY2 0x004E0690
 	int32_t g_checkAvailableMem = 1;
 
-	// $GLOBAL 00882C20
+	// GLOBAL: TOY2 0x00882C20
 	int32_t g_sysParamsInfo;
 
-	// $GLOBAL 00884038
+	// GLOBAL: TOY2 0x00884038
 	int32_t g_no32bitColors = 0;
 
-	// $GLOBAL 0051B0B8
+	// GLOBAL: TOY2 0x0051B0B8
 	D3DAppInfo g_d3dAppI;
 
-	// $GLOBAL 0050B650
+	// GLOBAL: TOY2 0x0050B650
 	PC g_pcStruct;
 
-	// $GLOBAL 00534488
+	// GLOBAL: TOY2 0x00534488
 	WindowData g_windowData;
 
-	// $GLOBAL 00534554
+	// GLOBAL: TOY2 0x00534554
 	RenderMode g_renderMode;
 
-	// $GLOBAL 0050A770
+	// GLOBAL: TOY2 0x0050A770
 	int32_t g_readyForRender = 0;
 
-	// $GLOBAL 0051ABD4
+	// GLOBAL: TOY2 0x0051ABD4
 	int32_t g_usesPalette;
 
-	// $GLOBAL 0051AAC8
+	// GLOBAL: TOY2 0x0051AAC8
 	int32_t g_backBufferSupportsAlpha;
 
-	// $GLOBAL 0050AA58
+	// GLOBAL: TOY2 0x0050AA58
 	LPDIRECTDRAWPALETTE g_lpPalette = 0;
 }
 
 namespace D3DApp
 {
-	// $FUNC 004318F0 [UNFINISHED]
+	// STUB: TOY2 0x004318F0
 	void LogErrorNotSet() {}
 
-	// $FUNC 004093A0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004093A0
 	int32_t BuildProfileMachine()
 	{
 		memset(&g_pcStruct, 0, sizeof(g_pcStruct));
@@ -400,16 +400,16 @@ namespace D3DApp
 		return 1;
 	}
 
-	// $FUNC 004A6B30 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A6B30
 	int32_t BuildWindow()
 	{
 		memset(&g_windowData.wndClass, 0, sizeof(g_windowData.wndClass));
 
-		// $GLOBAL 00882E30
+		// GLOBAL: TOY2 0x00882E30
 		static int32_t g_unused1;
-		// $GLOBAL 00882C28
+		// GLOBAL: TOY2 0x00882C28
 		static int32_t g_unused2;
-		// $GLOBAL 00504E58
+		// GLOBAL: TOY2 0x00504E58
 		static int32_t g_windowCreationError = 1;
 
 		g_unused1 = 0;
@@ -472,7 +472,7 @@ namespace D3DApp
 		}
 	}
 
-	// $FUNC 00408D30 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00408D30
 	int32_t WINAPI EnumerateDevices(LPGUID guid, LPSTR driverDesc, LPSTR driverName, LPVOID lpContext)
 	{
 		memset(&g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount], 0, sizeof(g_pcStruct.examineDevices[g_pcStruct.ddDeviceCount]));
@@ -655,7 +655,7 @@ namespace D3DApp
 		return 1;
 	}
 
-	// $FUNC 004092F0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004092F0
 	HRESULT WINAPI EnumDisplayModes(LPDDSURFACEDESC surfaceDesc, LPVOID context)
 	{
 		ExamineDevice* examineContext = (ExamineDevice*)context;
@@ -677,7 +677,7 @@ namespace D3DApp
 		return curDisplayModeCount != 128;
 	}
 
-	// $FUNC 00409130 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00409130
 	HRESULT WINAPI
 	EnumDevices(LPGUID guid, LPSTR deviceDesc, LPSTR deviceName, LPD3DDEVICEDESC d3DHWDeviceDesc, LPD3DDEVICEDESC d3DHELDeviceDesc, LPVOID context)
 	{
@@ -752,7 +752,7 @@ namespace D3DApp
 		return 1;
 	}
 
-	// $FUNC 00408CD0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00408CD0
 	int32_t SortDisplayModes(const void* modeA, const void* modeB)
 	{
 		DisplayMode* displayModeA = (DisplayMode*)modeA;
@@ -782,7 +782,7 @@ namespace D3DApp
 			return -1;
 	}
 
-	// $FUNC 00409360 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00409360
 	LRESULT WINAPI ProfileWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		if (msg == WM_DESTROY)
@@ -794,7 +794,7 @@ namespace D3DApp
 		return DefWindowProcA(hWnd, msg, wParam, lParam);
 	}
 
-	// $FUNC 0040CAC0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x0040CAC0
 	int32_t ProcessWndProc(WPARAM* wParamPtr, LPARAM* lParamPtr, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		int32_t result;
@@ -917,7 +917,7 @@ namespace D3DApp
 		return result;
 	}
 
-	// $FUNC 004A6D40 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A6D40
 	LRESULT WINAPI NormalWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		WPARAM copyWParam = wParam;
@@ -937,6 +937,6 @@ namespace D3DApp
 		}
 	}
 
-	// $FUNC 004A6B10 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A6B10
 	void SysParmsOnExit() { SystemParametersInfoA(SPI_SETSCREENSAVERRUNNING, g_sysParamsInfo, &g_sysParamsInfo, 0); }
 }

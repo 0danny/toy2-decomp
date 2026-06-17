@@ -6,58 +6,58 @@ namespace Nu3D
 {
 	namespace Viewport
 	{
-		// $GLOBAL 00884640
+		// GLOBAL: TOY2 0x00884640
 		D3DVIEWPORT2 g_pendingViewport;
 
-		// $GLOBAL 00884680
+		// GLOBAL: TOY2 0x00884680
 		D3DVIEWPORT2 g_currentViewport;
 
-		// $GLOBAL 00884638
+		// GLOBAL: TOY2 0x00884638
 		int32_t g_renderWidth;
 
-		// $GLOBAL 00884634
+		// GLOBAL: TOY2 0x00884634
 		int32_t g_renderHeight;
 
-		// $GLOBAL 008846AC
+		// GLOBAL: TOY2 0x008846AC
 		float g_clipOffsetX;
 
-		// $GLOBAL 008846B0
+		// GLOBAL: TOY2 0x008846B0
 		float g_clipOffsetY;
 
-		// $GLOBAL 00884630
+		// GLOBAL: TOY2 0x00884630
 		int32_t g_clipNormMatrixDirty;
 
-		// $GLOBAL 008846B4
+		// GLOBAL: TOY2 0x008846B4
 		int32_t g_screenSpaceMatrixDirty;
 
-		// $GLOBAL 00884670
+		// GLOBAL: TOY2 0x00884670
 		float g_currentViewportX;
 
-		// $GLOBAL 00884674
+		// GLOBAL: TOY2 0x00884674
 		float g_currentViewportY;
 
-		// $GLOBAL 008845A0
+		// GLOBAL: TOY2 0x008845A0
 		float g_minViewportY;
 
-		// $GLOBAL 008845A4
+		// GLOBAL: TOY2 0x008845A4
 		float g_minViewportX;
 
-		// $GLOBAL 00884678
+		// GLOBAL: TOY2 0x00884678
 		DWORD g_currentViewportWidth;
 
-		// $GLOBAL 0088466C
+		// GLOBAL: TOY2 0x0088466C
 		DWORD g_currentViewportHeight;
 
-		// $GLOBAL 00E4D958
+		// GLOBAL: TOY2 0x00E4D958
 		int32_t g_viewportChangeCount;
 
-		// $GLOBAL 008845A8
+		// GLOBAL: TOY2 0x008845A8
 		int32_t g_drawDeviceWidth;
 
-		// $GLOBAL 008845AC
+		// GLOBAL: TOY2 0x008845AC
 		int32_t g_drawDeviceHeight;
 
-		// $FUNC 004B55D0 [IMPLEMENTED]
+		// FUNCTION: TOY2 0x004B55D0
 		void Init()
 		{
 			DrawingDevice::BuildFreshViewport(&g_pendingViewport);
@@ -73,7 +73,7 @@ namespace Nu3D
 			g_screenSpaceMatrixDirty = 1;
 		}
 
-		// $FUNC 004B5630 [IMPLEMENTED]
+		// FUNCTION: TOY2 0x004B5630
 		void Reset()
 		{
 			DrawingDevice::SetViewport(&g_currentViewport);

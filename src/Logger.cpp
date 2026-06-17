@@ -5,25 +5,25 @@
 
 namespace Logger
 {
-	// $GLOBAL 00B6269C
+	// GLOBAL: TOY2 0x00B6269C
 	const char* g_errorHandlerPath;
 
-	// $GLOBAL 00B626A0
+	// GLOBAL: TOY2 0x00B626A0
 	int32_t g_errorHandlerLine;
 
-	// $GLOBAL 00883348
+	// GLOBAL: TOY2 0x00883348
 	int32_t g_showMsgBoxOnThrow;
 
-	// $GLOBAL 00882F38
+	// GLOBAL: TOY2 0x00882F38
 	int32_t g_logsEnabled;
 
-	// $GLOBAL 00504E54
+	// GLOBAL: TOY2 0x00504E54
 	int32_t g_logFileExists = 1;
 }
 
 namespace Logger
 {
-	// $FUNC 004A87C0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A87C0
 	ThrowErrorFunc GetErrorHandler(char* filePath, int32_t lineNumber)
 	{
 		g_errorHandlerPath = filePath;
@@ -32,7 +32,7 @@ namespace Logger
 		return ThrowError;
 	}
 
-	// $FUNC 004A8710 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A8710
 	void ThrowError(char* format, ...)
 	{
 		char caption[256];
@@ -61,7 +61,7 @@ namespace Logger
 		exit(-1);
 	}
 
-	// $FUNC 004A66A0 [IMPLEMENTED] [MODIFIED]
+	// FUNCTION: TOY2 0x004A66A0 [MODIFIED]
 	void Log(char* format, ...)
 	{
 		char buffer[1024];
@@ -92,7 +92,7 @@ namespace Logger
 		}
 	}
 
-	// $FUNC 004A6730 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A6730
 	void LogLn(char* format, ...)
 	{
 		char buffer[1024];
@@ -107,7 +107,7 @@ namespace Logger
 		Log(buffer);
 	}
 
-	// $FUNC 00431900 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x00431900
 	void LogDDError(const char* message, HRESULT error)
 	{
 		char buffer[2048];
@@ -119,6 +119,6 @@ namespace Logger
 		LogLn(buffer);
 	}
 
-	// $FUNC 0040D490 [UNFINISHED];
+	// STUB: TOY2 0x0040D490;
 	char* ErrorToMessage(HRESULT error) { return "Unimplemented"; }
 }

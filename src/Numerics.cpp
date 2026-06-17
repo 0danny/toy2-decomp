@@ -4,10 +4,10 @@
 
 namespace Numerics
 {
-	// $GLOBAL 0088334C
+	// GLOBAL: TOY2 0x0088334C
 	float* g_trigLUT;
 
-	// $FUNC 004A91E0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A91E0
 	void VertexSubtract(Vector3F* result, Vector3F* v1, Vector3F* v2)
 	{
 		result->x = v1->x - v2->x;
@@ -15,7 +15,7 @@ namespace Numerics
 		result->z = v1->z - v2->z;
 	}
 
-	// $FUNC 004B0740 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004B0740
 	int32_t RoundUpToPowerOf2(int32_t number)
 	{
 		int32_t result;
@@ -25,7 +25,7 @@ namespace Numerics
 		return result;
 	}
 
-	// $FUNC 004A88B0 [IMPLEMENTED]
+	// FUNCTION: TOY2 0x004A88B0
 	void InitTrigLut()
 	{
 		if (! g_trigLUT)

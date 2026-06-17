@@ -1,4 +1,4 @@
 #include "Nullsub.h"
 
-// $FUNC 00490D00 [IMPLEMENTED]
+// FUNCTION: TOY2 0x00490D00
 void Nullsub5() {}
