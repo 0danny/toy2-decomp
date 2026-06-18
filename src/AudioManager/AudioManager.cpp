@@ -2,6 +2,9 @@
 
 namespace AudioManager
 {
+	// GLOBAL: TOY2 005282CC
+	int32_t g_curTrackIndex;
+
 	// STUB: TOY2 0x0047D840
 	void StopAndFlush() {}
 
@@ -16,4 +19,7 @@ namespace AudioManager
 
 	// STUB: TOY2 0x00436D40
     int32_t StopAndWait() { return 1; }
+
+	// STUB: TOY2 0x0047EC20
+	void LoadSfxPackForLevel(int32_t levelId) {}
 }

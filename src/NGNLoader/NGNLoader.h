@@ -10,4 +10,5 @@ namespace NGNLoader
 
 	void SetNewImage(char* fileName);
 	void Init();
+	void DetectBackdropTextures();
 }

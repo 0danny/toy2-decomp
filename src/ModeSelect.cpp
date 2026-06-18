@@ -1231,7 +1231,13 @@ namespace ModeSelect
 		if (! RegisterClassA(&wndClass))
 			return;
 
-		g_hWnd = CreateWindowExA(WS_EX_TOPMOST,
+		int32_t wndExStyle = WS_EX_TOPMOST;
+
+#ifdef APPLY_FIXES
+		wndExStyle = 0;
+#endif
+
+		g_hWnd = CreateWindowExA(wndExStyle,
 			"Screen Mode Select",
 			"Screen Mode Select",
 			CW_USEDEFAULT,
@@ -1311,19 +1317,19 @@ namespace ModeSelect
 
 		int32_t suitableDisplayMode;
 
-		if (Toy2::g_toyCfgData.driverIndex >= 0)
-		{
-			g_savedDriverIndex = SelectDDAppByIndex(Toy2::g_toyCfgData.driverIndex);
-			g_savedDeviceIndex = SelectDeviceByIndex(Toy2::g_toyCfgData.deviceIndex);
-
-			suitableDisplayMode = SelectDisplayModeByIndex(Toy2::g_toyCfgData.displayModeIndex);
-		}
-		else
+		if (Toy2::g_toyCfgData.driverIndex < 0)
 		{
 			g_savedDriverIndex = SelectDDAppByIndex(0);
 			g_savedDeviceIndex = FindFirstHardwareDevice();
 
 			suitableDisplayMode = SelectSuitableDisplayMode();
+		}
+		else
+		{
+			g_savedDriverIndex = SelectDDAppByIndex(Toy2::g_toyCfgData.driverIndex);
+			g_savedDeviceIndex = SelectDeviceByIndex(Toy2::g_toyCfgData.deviceIndex);
+
+			suitableDisplayMode = SelectDisplayModeByIndex(Toy2::g_toyCfgData.displayModeIndex);
 		}
 
 		g_savedModeIndex = suitableDisplayMode;

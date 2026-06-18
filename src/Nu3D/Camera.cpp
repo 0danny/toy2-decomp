@@ -6,5 +6,8 @@ namespace Nu3D
 	{
 		// STUB: TOY2 0x004A1BB0
 		void SetTint(uint8_t blue, uint8_t green, uint8_t red, uint8_t fadeSpeed) {}
+
+		// STUB: TOY2 0x0044DF90
+		void InitViewMatrixGlobals() {}
 	}
 }

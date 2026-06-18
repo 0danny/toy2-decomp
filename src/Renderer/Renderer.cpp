@@ -64,16 +64,16 @@ namespace Renderer
 		D3DDEVICEDESC outSurfaceDesc;
 		memcpy(&outSurfaceDesc, DrawingDevice::CopySurfaceDesc(&outSurfaceDesc), sizeof(outSurfaceDesc));
 
-		if (outSurfaceDesc.dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAGOURAUDBLEND)
+		if ((outSurfaceDesc.dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAGOURAUDBLEND) != 0)
 			g_deviceBlendShadeCaps |= 1;
 
-		if (outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_ONE)
+		if ((outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_ONE) != 0)
 			g_deviceBlendShadeCaps |= 2;
 
-		if (outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_INVSRCCOLOR)
+		if ((outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & D3DPBLENDCAPS_INVSRCCOLOR) != 0)
 			g_deviceBlendShadeCaps |= 4;
 
-		if (outSurfaceDesc.dpcTriCaps.dwTextureBlendCaps & D3DPTEXTURECAPS_TRANSPARENCY)
+		if ((outSurfaceDesc.dpcTriCaps.dwTextureBlendCaps & D3DPTEXTURECAPS_TRANSPARENCY) != 0)
 			g_deviceBlendShadeCaps |= 8;
 	}
 
@@ -82,4 +82,7 @@ namespace Renderer
 
 	// STUB: TOY2 0x00453CD0
 	void SetVirtualRatioTo54() {}
+
+	// STUB: TOY2 0x00447D40
+	void InitSpriteSheets() {}
 }

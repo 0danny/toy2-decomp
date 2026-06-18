@@ -62,6 +62,9 @@ set(TOY2_SOURCES
     src/ModeSelect.cpp
     src/ModeSelect.h
 
+    src/Random.h
+    src/Random.cpp
+
     src/SoftwareRenderer.cpp
     src/SoftwareRenderer.h
 
@@ -70,6 +73,12 @@ set(TOY2_SOURCES
 
     src/InputManager.h
     src/InputManager.cpp
+
+    src/CharacterLoader.h
+    src/CharacterLoader.cpp
+
+    src/RawLoader.cpp
+    src/RawLoader.h
 
     # Toy2
     src/Toy2/LevelSelect.cpp
@@ -81,6 +90,15 @@ set(TOY2_SOURCES
     src/Toy2/D3DAppTypes.h
     src/Toy2/Buzz.cpp
     src/Toy2/Buzz.h
+    src/Toy2/Actor.cpp
+    src/Toy2/Actor.h
+    src/Toy2/Levels.cpp
+    src/Toy2/Levels.h
+    src/Toy2/Collision.h
+    src/Toy2/Collision.cpp
+    src/Toy2/Collectables.cpp
+    src/Toy2/Collectables.h
+
 
     # Nu3D
     src/Nu3D/Creature.h
@@ -107,12 +125,16 @@ set(TOY2_SOURCES
     src/Nu3D/Light.h
     src/Nu3D/Camera.cpp
     src/Nu3D/Camera.h
+    src/Nu3D/Particles.h
+    src/Nu3D/Particles.cpp
 
     # Renderer
     src/Renderer/Renderer.h
     src/Renderer/Renderer.cpp
     src/Renderer/RenderType.h
     src/Renderer/SpriteRenderer.h
+    src/Renderer/Shadows.cpp
+    src/Renderer/Shadows.h
 
     # NGNLoader
     src/NGNLoader/NGNLoader.cpp

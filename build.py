@@ -6,7 +6,7 @@ import subprocess
 import argparse
 
 # Constants
-PROJECT_NAME = "toy2decomp"
+PROJECT_NAME = "toy2"
 BUILD_FOLDER = "build"
 
 def track_process(command, custom_name=""):

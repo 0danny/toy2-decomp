@@ -19,7 +19,7 @@ namespace Nu3D
 	BmpDataNode* g_bmpDataHead;
 
 	// GLOBAL: TOY2 0x0088400C
-	BmpDataNode *g_currentBmpDataNode;
+	BmpDataNode* g_currentBmpDataNode;
 
 	// STUB: TOY2 0x004AFF80
 	void CopyTextureToSurface(BmpDataNode* bitmapDataNode) {}
@@ -244,7 +244,7 @@ namespace Nu3D
 
 			if ((flags & 8) != 0 && color.value == 0xFF00FF00)
 			{
-				RGBA empty = {0};
+				RGBA empty = { 0 };
 				return empty;
 			}
 		}
@@ -320,6 +320,7 @@ namespace Nu3D
 		}
 
 		pixelDataSize = bmpInfo.bmiHeader.biWidth * calcHeight / 8;
+		
 	READ_BMDATA:
 
 		fseek(stream, offset + bmpHeader.bfOffBits, 0);
@@ -346,16 +347,15 @@ namespace Nu3D
 
 		int32_t textureSize;
 
-		if (g_minTextureSize <= Numerics::RoundUpToPowerOf2(height))
-			textureSize = Numerics::RoundUpToPowerOf2(height);
-		else
+		if (g_minTextureSize > Numerics::RoundUpToPowerOf2(height))
 			textureSize = g_minTextureSize;
+		else
+			textureSize = Numerics::RoundUpToPowerOf2(height);
 
 		if (textureSize >= g_maxTextureSize)
 			textureSize = g_maxTextureSize;
 
-		// compiler artifact?
-		if ((flags == 0 & 16) != 0)
+		if (((flags == 0) & 16) != 0)
 			textureSize >>= g_unusedTexShift;
 
 		return textureSize;

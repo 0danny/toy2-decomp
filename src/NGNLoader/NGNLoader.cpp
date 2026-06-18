@@ -488,4 +488,7 @@ namespace NGNLoader
 
 	// STUB: TOY2 0x004BB720
 	void Init() {}
+
+	// STUB: TOY2 0x0044FF50
+	void DetectBackdropTextures() {}
 }

@@ -10,6 +10,7 @@
 #include "SaveManager.h"
 #include "LevelSelect.h"
 #include "Buzz.h"
+#include "Levels.h"
 
 #include "Nu3D/Font.h"
 #include "Nu3D/Viewport.h"
@@ -45,6 +46,9 @@ namespace Toy2
 	// GLOBAL: TOY2 0x00A4C454
 	int32_t g_isElevatorHopLevel;
 
+	// GLOBAL: TOY2 0x005D2A90
+	int32_t g_hasBackdrop;
+
 	// GLOBAL: TOY2 0x004FCDB4
 	int32_t g_cdBaseTrack = 2;
 
@@ -74,9 +78,6 @@ namespace Toy2
 
 	// GLOBAL: TOY2 0x00830C88
 	int32_t g_mainMenuState;
-
-	// GLOBAL: TOY2 0x0055A114
-	int32_t g_levelLoadConfig;
 
 	// GLOBAL: TOY2 0x00830D58
 	int32_t g_saveLoaded;
@@ -181,9 +182,6 @@ namespace Toy2
 	// STUB: TOY2 0x004381F0
 	int32_t ScreenDispatcher(int32_t index) { return 1; }
 
-	// STUB: TOY2 0x00452FC0
-	void InitLevelPlay(int32_t levelId) {}
-
 	// STUB: TOY2 0x0048E730
 	void OneInit() {}
 
@@ -266,6 +264,7 @@ namespace Toy2
 			}
 
 			ShowWindow(D3DApp::g_windowData.mainHwnd, SW_SHOWMAXIMIZED);
+
 
 			if (DrawingDevice::CD3DFramework::Build(
 					D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive)
@@ -363,10 +362,10 @@ namespace Toy2
 		g_mainMenuState = 0;
 		g_levelFileIndex = 0;
 
-		g_levelLoadConfig = 1084;
+		Levels::g_levelLoadConfig = 1084;
 
 		Renderer::SetVirtualRatioTo54();
-		InitLevelPlay(0);
+		Levels::InitLevelPlay(0);
 		ScreenDispatcher(10);
 
 		g_levelFileIndex = levelIdxCache;
@@ -392,10 +391,10 @@ namespace Toy2
 		{
 			int32_t savedLevelFileIndex = g_levelFileIndex;
 			g_levelFileIndex = 0;
-			g_levelLoadConfig = 1084;
+			Levels::g_levelLoadConfig = 1084;
 
 			Renderer::SetVirtualRatioTo54();
-			InitLevelPlay(0);
+			Levels::InitLevelPlay(0);
 			ScreenDispatcher(2);
 
 			g_levelFileIndex = savedLevelFileIndex;
@@ -412,10 +411,10 @@ namespace Toy2
 
 				case 2: // Options Screen
 					g_levelFileIndex = 0;
-					g_levelLoadConfig = 1212;
+					Levels::g_levelLoadConfig = 1212;
 
 					Renderer::SetVirtualRatioTo54();
-					InitLevelPlay(0);
+					Levels::InitLevelPlay(0);
 					ScreenDispatcher(9);
 
 					g_levelFileIndex = enteredLevelIdx;
@@ -436,10 +435,10 @@ namespace Toy2
 
 				case 8:
 					g_levelFileIndex = 0;
-					g_levelLoadConfig = 1084;
+					Levels::g_levelLoadConfig = 1084;
 
 					Renderer::SetVirtualRatioTo54();
-					InitLevelPlay(0);
+					Levels::InitLevelPlay(0);
 					ScreenDispatcher(8);
 
 					g_levelFileIndex = enteredLevelIdx;
@@ -606,11 +605,11 @@ namespace Toy2
 					levelIdxCache = g_levelFileIndex;
 
 					g_levelFileIndex = 0;
-					g_levelLoadConfig = 1148;
+					Levels::g_levelLoadConfig = 1148;
 
 					Renderer::SetVirtualRatioTo54();
 
-					InitLevelPlay(0);
+					Levels::InitLevelPlay(0);
 					ScreenDispatcher(5);
 
 					g_levelFileIndex = levelIdxCache;
@@ -636,10 +635,10 @@ namespace Toy2
 				if (g_levelFileIndex % 3)
 				{
 					g_levelFileIndex = 0;
-					g_levelLoadConfig = 1148;
+					Levels::g_levelLoadConfig = 1148;
 
 					Renderer::SetVirtualRatioTo54();
-					InitLevelPlay(0);
+					Levels::InitLevelPlay(0);
 					ScreenDispatcher(4);
 					g_levelFileIndex = enteredLevelIdx;
 
@@ -681,10 +680,10 @@ namespace Toy2
 						levelIdxCache = g_levelFileIndex;
 
 						g_levelFileIndex = 0;
-						g_levelLoadConfig = 1276;
+						Levels::g_levelLoadConfig = 1276;
 
 						Renderer::SetVirtualRatioTo54();
-						InitLevelPlay(0);
+						Levels::InitLevelPlay(0);
 						ScreenDispatcher(11); // Show credits
 
 						goto LBL_RESTART_GAME;

@@ -24,11 +24,13 @@ namespace Renderer
 	};
 
 	extern int32_t g_isSoftwareRendering;
+	extern int32_t g_hasBackdrop;
 
 	void Cleanup();
 	void Init();
 	void SetIsSoftwareRendering(int32_t value);
 	void SetVirtualRatioTo54();
+	void InitSpriteSheets();
 
 	STATIC_ASSERT(sizeof(RenderEntry) == 0x18);
 }

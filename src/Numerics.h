@@ -47,6 +47,25 @@ struct PosAndAngles
 	Angles angles;
 };
 
+struct PointI
+{
+	int32_t x;
+	int32_t y;
+};
+
+struct Matrix3x3I16
+{
+	int16_t m00;
+	int16_t m01;
+	int16_t m02;
+	int16_t m10;
+	int16_t m11;
+	int16_t m12;
+	int16_t m20;
+	int16_t m21;
+	int16_t m22;
+};
+
 namespace Numerics
 {
 	extern float* g_trigLUT;
