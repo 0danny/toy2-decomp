@@ -7,6 +7,7 @@
 namespace NGNLoader
 {
 	extern NGNImage* g_ngnImage;
+	extern NGNTextureData g_textureDataFreeList[2000];
 
 	void SetNewImage(char* fileName);
 	void Init();

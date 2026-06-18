@@ -78,8 +78,8 @@ namespace Toy2
 		void InitLevelPlay(int32_t levelId)
 		{
 			SoftwareRenderer::SetLevelFileIndex(g_levelFileIndex);
-			Levels::FlushRenderer();
-			Levels::InitLevelDefaults();
+			FlushRenderer();
+			InitLevelDefaults();
 
 			FileUtils::LoadFile("rand.dat", g_randDatBuffer);
 
@@ -407,7 +407,7 @@ namespace Toy2
 				int32_t fileSize = FileUtils::LoadFile(fileNameBuffer, bufferPtr);
 				dataBuffer = dataBuffer + fileSize;
 
-				int32_t offset = Levels::LoadDAT(levelIdCpy, fileSize);
+				int32_t offset = LoadDAT(levelIdCpy, fileSize);
 				dataBuffer = dataBuffer + offset;
 			}
 
@@ -446,9 +446,9 @@ namespace Toy2
 					if (((g_levelLoadConfig >> 8) & 3) != 2)
 					{
 						if (((g_levelLoadConfig >> 8) & 3) == 3)
-							Levels::BuildLevelPath(levelIdCpy, fileNameBuffer, "level3");
+							BuildLevelPath(levelIdCpy, fileNameBuffer, "level3");
 						else
-							Levels::BuildLevelPath(levelIdCpy, fileNameBuffer, "level");
+							BuildLevelPath(levelIdCpy, fileNameBuffer, "level");
 
 						loadConfigCpy2 = g_levelLoadConfig;
 

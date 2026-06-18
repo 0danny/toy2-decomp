@@ -57,6 +57,9 @@ namespace Nu3D
 		// GLOBAL: TOY2 0x008845AC
 		int32_t g_drawDeviceHeight;
 
+		// GLOBAL: TOY2 0x009F6224
+		FustrumInfo g_fustrumInfo;
+
 		// FUNCTION: TOY2 0x004B55D0
 		void Init()
 		{

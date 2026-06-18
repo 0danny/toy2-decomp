@@ -11,6 +11,18 @@ namespace NGNLoader
 	// GLOBAL: TOY2 0x00B62410
 	NGNImage* g_ngnImage;
 
+	// GLOBAL: TOY2 0x009F6240
+	NGNTextureData g_textureDataFreeList[2000];
+
+	// GLOBAL: TOY2 0x00A03D00
+	NGNTextureDataSentinal g_textureData;
+
+	// GLOBAL: TOY2 0x00A03D08
+	NGNTextureCache g_textureCacheFreeList[1000];
+
+	// GLOBAL: TOY2 0x00A4C148
+	NGNTextureCacheSentinal g_textureCache;
+
 	// GLOBAL: TOY2 0x00AAD7AC
 	char* g_curFileName;
 
@@ -20,11 +32,141 @@ namespace NGNLoader
 	// GLOBAL: TOY2 0x00508A58
 	Vector3F g_vertexScaleVector = { 1.0, 1.0, 1.0 };
 
+	// STUB: TOY2 0x004B1190
+	void FreeAllBmpDataNodes() {}
+
 	// FUNCTION: TOY2 0x004CB300
 	void GetScaleVector(Vector3F* output) { *output = g_vertexScaleVector; }
 
-	// STUB: TOY2 0x004BB3C0
-	int32_t GetOrAllocateTexture(NGNTextureParams* texParams) { return 0; }
+	// FUNCTION: TOY2 0x004BB320
+	NGNTextureData* GetTextureData(NGNTextureParams* texParams, int32_t ignoreParams)
+	{
+		NGNTextureParams localTexParams;
+		NGNTextureCache* cacheHead = g_textureCache.activeList;
+
+		memcpy(&localTexParams, texParams, sizeof(localTexParams));
+		localTexParams.rawTexStr = 0;
+
+		if (! g_textureCache.activeList)
+			return 0;
+
+		while (! ignoreParams && memcmp(&cacheHead->params, &localTexParams, 28) || _strcmpi(cacheHead->texName, texParams->rawTexStr))
+		{
+			cacheHead = cacheHead->next;
+
+			if (! cacheHead)
+				return 0;
+		}
+
+		NGNTextureData* result = g_textureData.activeList;
+
+		if (! g_textureData.activeList)
+			return 0;
+
+		while (result->textureCacheIndex != cacheHead->textureIndex)
+		{
+			result = result->next;
+
+			if (! result)
+				return 0;
+		}
+
+		return result;
+	}
+
+	// FUNCTION: TOY2 0x004BB4C0
+	NGNTextureCache* AllocateTextureCache()
+	{
+		NGNTextureCache* result = g_textureCache.freeList;
+
+		if (g_textureCache.freeList)
+		{
+			g_textureCache.freeList = g_textureCache.freeList->next;
+			result->next = g_textureCache.activeList;
+
+			if (g_textureCache.activeList)
+				g_textureCache.activeList->prev = result;
+
+			result->prev = 0;
+			g_textureCache.activeList = result;
+		}
+
+		return result;
+	}
+
+	// FUNCTION: TOY2 0x004BB1B0
+	NGNTextureData* AllocateTextureData()
+	{
+		NGNTextureData* result = g_textureData.freeList;
+
+		if (g_textureData.freeList)
+		{
+			g_textureData.freeList = g_textureData.freeList->next;
+			result->next = g_textureData.activeList;
+
+			if (g_textureData.activeList)
+				g_textureData.activeList->prev = result;
+
+			result->prev = 0;
+			g_textureData.activeList = result;
+		}
+
+		return result;
+	}
+
+	// FUNCTION: TOY2 0x004AC240
+	Nu3D::BmpDataNode* LoadLocalBmpTexture(const char* rawTexStr, int32_t flags) { return 0; }
+
+	// FUNCTION: TOY2 0x004BB3C0
+	uint32_t GetOrAllocateTexture(NGNTextureParams* texParams)
+	{
+		char rawTexStrBuffer[256];
+
+		NGNTextureData* cachedTextureData = GetTextureData(texParams, 0);
+
+		// If its already cached, return it
+		if (cachedTextureData)
+			return cachedTextureData->textureIndex;
+
+		NGNTextureCache* textureCache = AllocateTextureCache();
+
+		// Build a new entry if its new
+		if (textureCache)
+		{
+			memcpy(&textureCache->params, texParams, sizeof(textureCache->params));
+
+			textureCache->params.rawTexStr = 0;
+
+			strcpy(textureCache->texName, texParams->rawTexStr);
+
+			NGNTextureData* textureData = AllocateTextureData();
+
+			if (textureData)
+			{
+				textureData->isTex14 = texParams->isTex14;
+				textureData->color.r = texParams->color.r;
+				textureData->color.g = texParams->color.g;
+				textureData->color.b = texParams->color.b;
+
+				uint32_t isTex14 = texParams->isTex14;
+				strcpy(rawTexStrBuffer, texParams->rawTexStr);
+
+				int32_t flags;
+
+				if ((isTex14 & 2) != 0)
+					flags = 1;
+				else
+					flags = 2 * (isTex14 & 4);
+
+				textureData->bmpDataNode = LoadLocalBmpTexture(rawTexStrBuffer, flags);
+				textureData->textureCacheIndex = textureCache->textureIndex;
+
+				return textureData->textureIndex;
+			}
+		}
+
+		return 0;
+	}
 
 	// FUNCTION: TOY2 0x004AC220
 	Nu3D::BmpDataNode* LoadTextureContents(FILE* stream, const char* rawTexStr, int32_t flags) { return Nu3D::LoadTextureByStream(stream, rawTexStr, flags); }
@@ -113,7 +255,7 @@ namespace NGNLoader
 		return portal;
 	}
 
-	// STUB: TOY2 0x004C4080
+	// FUNCTION: TOY2 0x004C4080
 	void ParseTextures(FILE* stream, NGNImage* ngnImage)
 	{
 		NGNTextureParams texParams;
@@ -247,8 +389,62 @@ namespace NGNLoader
 		}
 	}
 
-	// STUB: TOY2 0x004C4220
-	void ParseCreatures(FILE* stream, NGNImage* ngnImage) {}
+	// FUNCTION: TOY2 0x004CA420
+	Nu3D::Creature* ExtractCreatureData(FILE* stream) { return 0; }
+
+	// FUNCTION: TOY2 0x004C4220
+	uint32_t ParseCreatures(FILE* stream, NGNImage* ngnImage)
+	{
+		uint32_t creatureCount;
+		fread(&creatureCount, 1, sizeof(uint32_t), stream);
+
+		ngnImage->creatureCount = creatureCount;
+
+		if (creatureCount > 0)
+		{
+			Nu3D::Creature** creatureArray = (Nu3D::Creature**)malloc(sizeof(Nu3D::Creature*) * creatureCount);
+			ngnImage->creatureData = creatureArray;
+
+			if (! creatureArray)
+				Logger::GetErrorHandler("C:\\projects\\nu3d\\world.c", 617)("unable to alloc space for %d creatures", creatureCount);
+
+			memset(ngnImage->creatureData, 0, sizeof(Nu3D::Creature*) * creatureCount);
+
+			uint8_t creatureValidFlags[512];
+			memset(creatureValidFlags, 0, creatureCount);
+
+			if (creatureCount > 0)
+			{
+				int32_t count;
+
+				do
+				{
+					uint8_t charNameLen;
+					fread(&charNameLen, 1, sizeof(uint8_t), stream);
+
+					if (charNameLen)
+					{
+						char charNameBuffer[256];
+						fread(charNameBuffer, charNameLen, sizeof(char), stream);
+						creatureValidFlags[count] = 1;
+					}
+
+					++count;
+
+				} while (count < creatureCount);
+			}
+
+			for (int32_t index = 0; index < creatureCount; ++index)
+			{
+				if (creatureValidFlags[index])
+					ngnImage->creatureData[index] = ExtractCreatureData(stream);
+			}
+
+			return creatureCount;
+		}
+
+		return creatureCount;
+	}
 
 	// FUNCTION: TOY2 0x004C3CA0
 	void Parse266(FILE* stream, NGNImage* ngnImage)
@@ -412,6 +608,8 @@ namespace NGNLoader
 						fread(&chunkSize, sizeof(int32_t), 1, fileHandle);
 						ftell(fileHandle);
 
+						DECOMP_PRINT(("[NGNLoader]: Loading chunk type %d\n", chunkHeaderId));
+
 						switch (chunkHeaderId)
 						{
 							case 256:
@@ -481,13 +679,62 @@ namespace NGNLoader
 	// FUNCTION: TOY2 0x004CEAE0
 	void SetNewImage(char* fileName)
 	{
+		DECOMP_PRINT(("[NGNLoader]: Loading file %s\n", fileName));
+
 		g_ngnImage = BuildImage(fileName);
 
 		Nu3D::Portal::ClearVisibleAreaFlags();
 	}
 
-	// STUB: TOY2 0x004BB720
-	void Init() {}
+	// FUNCTION: TOY2 0x004BB720
+	void Init()
+	{
+		FreeAllBmpDataNodes();
+
+		uint32_t textureDataCount = 1;
+		NGNTextureData* dataFreeListPtr = g_textureDataFreeList;
+
+		do
+		{
+			++textureDataCount;
+
+			dataFreeListPtr->next = dataFreeListPtr + 1;
+			dataFreeListPtr[1].prev = dataFreeListPtr;
+			dataFreeListPtr[1].textureIndex = textureDataCount;
+
+			++dataFreeListPtr;
+
+		} while (dataFreeListPtr < &g_textureDataFreeList[1999]);
+
+		g_textureDataFreeList[0].textureIndex = 1;
+		g_textureDataFreeList[0].prev = 0;
+		g_textureDataFreeList[textureDataCount].next = 0;
+
+		g_textureData.freeList = &g_textureDataFreeList[0];
+		g_textureData.activeList = 0;
+
+		uint32_t textureCacheCount = 1;
+		NGNTextureCache* cacheFreeListPtr = g_textureCacheFreeList;
+
+		do
+		{
+			cacheFreeListPtr->next = cacheFreeListPtr + 1;
+			cacheFreeListPtr[1].prev = cacheFreeListPtr;
+			cacheFreeListPtr[1].textureIndex = textureCacheCount;
+
+			++cacheFreeListPtr;
+			++textureCacheCount;
+
+		} while (cacheFreeListPtr < &g_textureCacheFreeList[999]);
+
+		g_textureCacheFreeList[0].textureIndex = textureCacheCount;
+		g_textureCacheFreeList[0].prev = 0;
+
+		g_textureCache.freeList = g_textureCacheFreeList;
+		g_textureCache.activeList = 0;
+
+		g_textureDataFreeList[1999].next = 0;
+	}
 
 	// STUB: TOY2 0x0044FF50
 	void DetectBackdropTextures() {}

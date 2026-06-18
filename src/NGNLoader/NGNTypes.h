@@ -9,6 +9,7 @@
 #include "Nu3D/Link.h"
 #include "Nu3D/Portal.h"
 #include "Nu3D/Creature.h"
+#include "Nu3D/BmpDataNode.h"
 
 #include <directx7/d3d.h>
 
@@ -74,7 +75,44 @@ namespace NGNLoader
 		TextureEntry textureEntries[64];
 	};
 
+	struct NGNTextureData
+	{
+		NGNTextureData* next;
+		NGNTextureData* prev;
+		uint32_t isTex14;
+		uint32_t textureIndex;
+		Nu3D::BmpDataNode* bmpDataNode;
+		RGBA color;
+		uint32_t textureCacheIndex;
+	};
+
+	struct NGNTextureDataSentinal
+	{
+		NGNTextureData* freeList;
+		NGNTextureData* activeList;
+	};
+
+	struct NGNTextureCache
+	{
+		NGNTextureCache* next;
+		NGNTextureCache* prev;
+		char texName[256];
+		NGNTextureParams params;
+		uint32_t textureIndex;
+	};
+
+	struct NGNTextureCacheSentinal
+	{
+		NGNTextureCache* activeList;
+		NGNTextureCache* freeList;
+	};
+
 	STATIC_ASSERT(sizeof(NGNImage) == 0x67C);
+	STATIC_ASSERT(sizeof(NGNTextureData) == 0x1C);
+	STATIC_ASSERT(sizeof(NGNTextureDataSentinal) == 0x8);
+	STATIC_ASSERT(sizeof(NGNTextureCache) == 0x128);
+	STATIC_ASSERT(sizeof(NGNTextureCacheSentinal) == 0x8);
+
 	STATIC_ASSERT(sizeof(TextureEntry) == 0x10);
 	STATIC_ASSERT(sizeof(Type266Entry) == 0x8);
 }

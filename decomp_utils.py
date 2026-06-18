@@ -19,7 +19,7 @@ import build as build_script
 # TODO: $TODO
 
 def count_lines():
-    build_script.track_process(["cloc", "src_main"], "CountLines")
+    build_script.track_process(["cloc", "src"], "CountLines")
 
 def parse_source_files():
     src_main_path = Path("src")
@@ -125,7 +125,7 @@ def parse_functions_map(functions_map_path):
     return ida_functions
 
 
-def count_progress(namespace_filter=None):
+def count_progress(namespace_filter=None, verbose=True):
     functions_map_path = Path("tools/Resources/functions_map.txt")
     if not functions_map_path.exists():
         print("Error: tools/Resources/functions_map.txt not found!")
@@ -152,6 +152,10 @@ def count_progress(namespace_filter=None):
     unfinished_addresses = set()
 
     for address, info in source_functions.items():
+        # Only count functions that are actually in the IDA map.
+        if address not in ida_addresses:
+            continue
+
         if info["status"] == "IMPLEMENTED":
             implemented_addresses.add(address)
         elif info["status"] == "UNFINISHED":
@@ -192,11 +196,13 @@ def count_progress(namespace_filter=None):
     print("=" * 60)
 
     extra_functions = set(source_functions.keys()) - ida_addresses
-    if extra_functions:
+    if extra_functions and verbose:
         print(f"\nWarning: Found {len(extra_functions)} functions in source files that are not in IDA map:")
         for address in sorted(extra_functions):
             info = source_functions[address]
             print(f"  {address} - {info['file']} [{info['status']}]")
+    elif extra_functions:
+        print(f"\nWarning: Found {len(extra_functions)} functions in source files that are not in IDA map.")
 
 
 def print_namespace_progress(namespace, ida_functions, source_functions):
@@ -288,6 +294,12 @@ def main():
         help="Count implemented decomp functions. Optionally filter by namespace.",
     )
 
+    parser.add_argument(
+        "--no-verbose",
+        action="store_true",
+        help="Suppress the list of functions found in source but not in the IDA map.",
+    )
+
     args = parser.parse_args()
 
     if args.count:
@@ -295,7 +307,7 @@ def main():
 
     if args.progress:
         namespace_filter = None if args.progress is True else args.progress
-        count_progress(namespace_filter)
+        count_progress(namespace_filter, verbose=not args.no_verbose)
 
     if not args.progress and not args.count:
         print("Enter an option, --count or --progress.")

@@ -26,6 +26,12 @@ typedef double float64_t;
 
 #define STATIC_ASSERT(expr) typedef char STATIC_ASSERT_JOIN(static_assert_failed_at_line_, __LINE__)[(expr) ? 1 : -1]
 
+#ifdef APPLY_FIXES
+#define DECOMP_PRINT(args) printf args
+#else
+#define DECOMP_PRINT(args) ((void)0)
+#endif
+
 // Colors
 struct RGB32
 {

@@ -40,10 +40,11 @@ namespace Nu3D
 		DDPIXELFORMAT* out;
 	};
 
-	extern BmpDataNode *g_currentBmpDataNode;
+	extern BmpDataNode* g_currentBmpDataNode;
 
 	void SetMinTexSize(int32_t minTexSize);
 	BmpDataNode* LoadTextureByStream(FILE* handle, const char* rawTexStr, int32_t flags);
+	Nu3D::BmpDataNode* LoadLocalBmpTexture(const char* rawTexStr, int32_t flags);
 
 	STATIC_ASSERT(sizeof(BmpDataNode) == 0x110);
 }

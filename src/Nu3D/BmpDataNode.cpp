@@ -289,10 +289,15 @@ namespace Nu3D
 		int32_t offset = ftell(stream);
 
 		BITMAPFILEHEADER bmpHeader;
-		BITMAPINFO bmpInfo;
+
+		struct
+		{
+			BITMAPINFOHEADER bmiHeader;
+			RGBQUAD bmiColors[256];
+		} bmpInfo;
 
 		fread(&bmpHeader, 1, sizeof(BITMAPFILEHEADER), stream);
-		fread(&bmpInfo, 1, sizeof(BITMAPINFO), stream);
+		fread(&bmpInfo, 1, sizeof(BITMAPINFOHEADER), stream);
 
 		size_t pixelDataSize;
 		uint32_t calcHeight;
@@ -310,7 +315,7 @@ namespace Nu3D
 			case 8:
 				fread(bmpInfo.bmiColors, 256, 4, stream);
 
-				memcpy(Nu3D::g_lastBmpPalette, bmpInfo.bmiColors, sizeof(Nu3D::g_lastBmpPalette));
+				memcpy(g_lastBmpPalette, bmpInfo.bmiColors, sizeof(g_lastBmpPalette));
 				pixelDataSize = bmpInfo.bmiHeader.biWidth * bmpInfo.bmiHeader.biHeight;
 
 				goto READ_BMDATA;
@@ -320,13 +325,13 @@ namespace Nu3D
 		}
 
 		pixelDataSize = bmpInfo.bmiHeader.biWidth * calcHeight / 8;
-		
+
 	READ_BMDATA:
 
 		fseek(stream, offset + bmpHeader.bfOffBits, 0);
 
 		void* bitmapBits;
-		HBITMAP hBitmap = CreateDIBSection(0, &bmpInfo, 0, &bitmapBits, 0, 0);
+		HBITMAP hBitmap = CreateDIBSection(0, (BITMAPINFO*)&bmpInfo, 0, &bitmapBits, 0, 0);
 
 		if (hBitmap)
 			fread(bitmapBits, pixelDataSize, 1, stream);
@@ -470,5 +475,50 @@ namespace Nu3D
 		InitialiseTextureSurface(bmpDataNode);
 
 		return bmpDataNode;
+	}
+
+	// FUNCTION: TOY2 0x004AFC70
+	BmpDataNode* GetBmpDataNodeByName(const char* texName)
+	{
+		BmpDataNode* nodeIter;
+
+		for (nodeIter = g_bmpDataHead; nodeIter; nodeIter = nodeIter->next)
+		{
+			if (! strcmpi(texName, nodeIter->texName))
+				break;
+		}
+
+		return nodeIter;
+	}
+
+	// FUNCTION: TOY2 0x004B0CF0
+	void AddRef(BmpDataNode* bmpDataNode) { ++bmpDataNode->refCount; }
+
+	// FUNCTION: TOY2 0x004B0C90
+	BmpDataNode* LoadLocalBmpTexture(const char* rawTexStr, int32_t flags)
+	{
+		BmpDataNode* dataNode = GetBmpDataNodeByName(rawTexStr);
+
+		if (dataNode)
+		{
+			AddRef(dataNode);
+			return dataNode;
+		}
+		else
+		{
+			FILE* fileHandle = fopen(rawTexStr, "rb");
+
+			if (fileHandle)
+			{
+				BmpDataNode* loadedNode = LoadTextureByStream(fileHandle, rawTexStr, flags);
+				fclose(fileHandle);
+
+				return loadedNode;
+			}
+			else
+			{
+				return 0;
+			}
+		}
 	}
 }
