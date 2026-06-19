@@ -649,11 +649,79 @@ namespace DrawingDevice
 	// FUNCTION: TOY2 0x004ABCA0
 	LPD3DDEVICEDESC CopySurfaceDesc(LPD3DDEVICEDESC outSurfaceDesc)
 	{
-		D3DDEVICEDESC l_surfaceDesc; 
+		D3DDEVICEDESC l_surfaceDesc;
 
 		memcpy(&l_surfaceDesc, &g_drawingDevice->m_ddDeviceDesc, sizeof(outSurfaceDesc));
 		memcpy(outSurfaceDesc, &l_surfaceDesc, sizeof(D3DDEVICEDESC));
 
 		return outSurfaceDesc;
+	}
+
+	// FUNCTION: TOY2 0x004AC370
+	HRESULT SetRenderState(D3DRENDERSTATETYPE renderStateType, DWORD value) { return g_drawingDevice->m_pd3dDevice->SetRenderState(renderStateType, value); }
+
+	// FUNCTION: TOY2 0x004ABFA0
+	HRESULT SetLightState(D3DLIGHTSTATETYPE lightState, DWORD value) { return g_drawingDevice->m_pd3dDevice->SetLightState(lightState, value); }
+
+	// FUNCTION: TOY2 0x004AC150
+	HRESULT SetTextureStageState(DWORD stage, D3DTEXTURESTAGESTATETYPE state, DWORD value)
+	{
+		return g_drawingDevice->m_pd3dDevice->SetTextureStageState(stage, state, value);
+	}
+}
+
+namespace HardwareDevice
+{
+	// FUNCTION: TOY2 0x004AC340
+	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags)
+	{
+		return DDERR_UNSUPPORTED;
+	}
+
+	// FUNCTION: TOY2 0x004AC300
+	HRESULT DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
+		DWORD dwVertexTypeDesc,
+		LPVOID lpvVertices,
+		DWORD dwVertexCount,
+		LPWORD lpwIndices,
+		DWORD dwIndexCount,
+		DWORD dwFlags)
+	{
+		return DDERR_UNSUPPORTED;
+	}
+
+	// Vertex Methods
+
+	// FUNCTION: TOY2 0x004AC070
+	HRESULT ReleaseVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer) { return buffer->Release(); }
+
+	// FUNCTION: TOY2 0x004AC080
+	HRESULT CreateVertexBuffer(D3DVERTEXBUFFERDESC* desc, LPDIRECT3DVERTEXBUFFER* outBuffer, DWORD flags)
+	{
+		return DrawingDevice::g_drawingDevice->m_pD3D->CreateVertexBuffer(desc, outBuffer, flags, 0);
+	}
+
+	// FUNCTION: TOY2 0x004AC0A0
+	HRESULT LockVertexBuffer(LPDIRECT3DVERTEXBUFFER vertexBuffer, DWORD dwFlags, LPVOID* lplpData, DWORD* lpStride)
+	{
+		return vertexBuffer->Lock(dwFlags, lplpData, lpStride);
+	}
+
+	// FUNCTION: TOY2 0x004AC0C0
+	HRESULT UnlockVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer) { return buffer->Unlock(); }
+
+	// FUNCTION: TOY2 0x004AC0D0
+	HRESULT OptimizeVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer, LPDIRECT3DDEVICE3 device, DWORD flags) { return buffer->Optimize(device, flags); }
+
+	// FUNCTION: TOY2 0x004AC030
+	HRESULT ProcessVerticesOnBuffer(LPDIRECT3DVERTEXBUFFER destBuffer,
+		DWORD dwVertexOp,
+		DWORD dwDestIndex,
+		DWORD dwCount,
+		LPDIRECT3DVERTEXBUFFER srcBuffer,
+		DWORD dwSrcIndex,
+		DWORD dwFlags)
+	{
+		return destBuffer->ProcessVertices(dwVertexOp, dwDestIndex, dwCount, srcBuffer, dwSrcIndex, DrawingDevice::g_drawingDevice->m_pd3dDevice, dwFlags);
 	}
 }

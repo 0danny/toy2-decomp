@@ -98,7 +98,8 @@ set(TOY2_SOURCES
     src/Toy2/Collision.cpp
     src/Toy2/Collectables.cpp
     src/Toy2/Collectables.h
-
+    src/Toy2/MainMenu.cpp
+    src/Toy2/MainMenu.h
 
     # Nu3D
     src/Nu3D/Creature.h
@@ -170,7 +171,7 @@ add_library(patcher SHARED
 
 target_link_directories(patcher PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/external/libs
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/libs/directx7
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/libs/directx6
 )
 target_link_libraries(patcher PRIVATE minhook_x86 ddraw dxguid)
 

@@ -2,13 +2,56 @@
 
 #include "Common.h"
 #include "Renderer/RenderType.h"
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 namespace Nu3D
 {
 	struct Primitive;
 	struct Material;
 	struct InstanceData;
+}
+
+namespace DrawingAPI
+{
+	// Drawing Methods
+	typedef HRESULT Device_DrawIndexedPrimitiveVB(
+		D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
+
+	typedef HRESULT Device_DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
+		DWORD dwVertexTypeDesc,
+		LPVOID lpvVertices,
+		DWORD dwVertexCount,
+		LPWORD lpwIndices,
+		DWORD dwIndexCount,
+		DWORD dwFlags);
+
+	// Vertex Methods
+	typedef HRESULT Device_ReleaseVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer);
+	typedef HRESULT Device_CreateVertexBuffer(D3DVERTEXBUFFERDESC* desc, LPDIRECT3DVERTEXBUFFER* outBuffer, DWORD flags);
+
+	typedef HRESULT Device_LockVertexBuffer(LPDIRECT3DVERTEXBUFFER vertexBuffer, DWORD dwFlags, LPVOID* lplpData, DWORD* lpStride);
+
+	typedef HRESULT Device_UnlockVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer);
+	typedef HRESULT Device_OptimizeVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer, LPDIRECT3DDEVICE3 device, DWORD flags);
+
+	typedef HRESULT Device_ProcessVerticesOnBuffer(LPDIRECT3DVERTEXBUFFER destBuffer,
+		DWORD dwVertexOp,
+		DWORD dwDestIndex,
+		DWORD dwCount,
+		LPDIRECT3DVERTEXBUFFER srcBuffer,
+		DWORD dwSrcIndex,
+		DWORD dwFlags);
+
+	extern Device_DrawIndexedPrimitive* DrawIndexedPrimitive;
+	extern Device_DrawIndexedPrimitiveVB* DrawIndexedPrimitiveVB;
+
+	extern Device_ReleaseVertexBuffer* ReleaseVertexBuffer;
+	extern Device_CreateVertexBuffer* CreateVertexBuffer;
+	extern Device_LockVertexBuffer* LockVertexBuffer;
+	extern Device_UnlockVertexBuffer* UnlockVertexBuffer;
+	extern Device_OptimizeVertexBuffer* OptimizeVertexBuffer;
+	extern Device_ProcessVerticesOnBuffer* ProcessVerticesOnBuffer;
 }
 
 namespace Renderer
@@ -31,6 +74,10 @@ namespace Renderer
 	void SetIsSoftwareRendering(int32_t value);
 	void SetVirtualRatioTo54();
 	void InitSpriteSheets();
+
+	// Render Methods
+	void RenderMenu();
+	void DrawMainMenuText(int16_t yPos, char* text, int32_t fadeAlpha);
 
 	STATIC_ASSERT(sizeof(RenderEntry) == 0x18);
 }

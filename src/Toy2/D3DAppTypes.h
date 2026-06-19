@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Common.h"
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 struct D3DAppMode
 {

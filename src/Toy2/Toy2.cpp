@@ -8,9 +8,11 @@
 #include "Nullsub.h"
 #include "SoftwareRenderer.h"
 #include "SaveManager.h"
-#include "LevelSelect.h"
-#include "Buzz.h"
-#include "Levels.h"
+#include "Random.h"
+#include "Toy2/LevelSelect.h"
+#include "Toy2/Buzz.h"
+#include "Toy2/Levels.h"
+#include "Toy2/MainMenu.h"
 
 #include "Nu3D/Font.h"
 #include "Nu3D/Viewport.h"
@@ -18,8 +20,9 @@
 #include "Renderer/Renderer.h"
 #include "AudioManager/AudioManager.h"
 
-#include <windows.h>
-#include <fstream>
+#include <WINDOWS.H>
+#include <STDIO.H>
+
 #include <Numerics.h>
 
 namespace Toy2
@@ -149,6 +152,18 @@ namespace Toy2
 		void MainLoop() {}
 	}
 
+	namespace PostGameRecap
+	{
+		// STUB: TOY2 0x004398B0
+		void Tick() {}
+	}
+
+	namespace GameOver
+	{
+		// STUB: TOY2 0x00437B20
+		void Tick() {}
+	}
+
 	// STUB: TOY2 0x00454020
 	void ShowPostGameSaveMenu() {}
 
@@ -179,11 +194,210 @@ namespace Toy2
 	// STUB: TOY2 0x0049AB90
 	int32_t PlayMovieWithTransition(int32_t movieId, int32_t backgroundId) { return 1; }
 
-	// STUB: TOY2 0x004381F0
-	int32_t ScreenDispatcher(int32_t index) { return 1; }
+	// STUB: TOY2 0x0048F1B0
+	void SetBackdropByIndex(int32_t index) {}
+
+	// STUB: TOY2 0x00438520
+	int32_t ShowStaticScreen(int32_t backdropIndex) { return 0; }
+
+	// STUB: TOY2 0x0043A380
+	int32_t ShowCredits() { return 0; }
+
+	// FUNCTION: TOY2 0x004381F0
+	int32_t ScreenDispatcher(int32_t index)
+	{
+		int32_t defaultFadeFramesRemaining;
+
+		switch (index)
+		{
+			case 1: {
+				int32_t caseOneFadeFrames = 160;
+				InputManager::g_curButtonsPressed = 0;
+				InputManager::g_prevButtonsPressed = 0;
+
+				MainMenu::g_fadeTimer = 0;
+				MainMenu::g_nextScreen = 0;
+
+				Nu3D::Camera::g_cameraTintBlue = 0;
+				Nu3D::Camera::g_cameraTintGreen = 0;
+				Nu3D::Camera::g_cameraTintRed = 0;
+
+				Nu3D::Camera::SetTint(128, 128, 128, 12);
+				SoftwareRenderer::UnkFunc67(0, 0);
+				g_frameDelta = 1;
+
+				SetBackdropByIndex(1);
+
+				while (true)
+				{
+					Nu3D::Camera::FadeToTargetTint();
+					caseOneFadeFrames -= g_frameDelta;
+
+					if (caseOneFadeFrames <= 0)
+						break;
+
+					if (caseOneFadeFrames <= 23)
+					{
+						if ((caseOneFadeFrames + g_frameDelta) > 23)
+							Nu3D::Camera::SetTint(0, 0, 0, 12);
+					}
+
+				LBL_CHECK_FADE_COMPLETE:
+
+					if (! caseOneFadeFrames)
+						return 1;
+				}
+
+				caseOneFadeFrames = 0;
+
+				if ((caseOneFadeFrames + g_frameDelta) > 23)
+					Nu3D::Camera::SetTint(0, 0, 0, 12);
+
+				goto LBL_CHECK_FADE_COMPLETE;
+			}
+
+			case 2:
+				g_mainMenuState = MainMenu::Tick();
+				return 1;
+
+			case 4:
+				PostGameRecap::Tick();
+				return 1;
+
+			case 5:
+				GameOver::Tick();
+				return 1;
+
+			case 6: {
+				if (! g_returnedToTitle && g_attractModeTimer >= 0)
+				{
+					int32_t caseSixFadeFrames = 2 * g_attractModeTimer;
+					InputManager::g_curButtonsPressed = 0;
+					InputManager::g_prevButtonsPressed = 0;
+
+					MainMenu::g_fadeTimer = 0;
+					MainMenu::g_nextScreen = 0;
+
+					Nu3D::Camera::g_cameraTintBlue = 0;
+					Nu3D::Camera::g_cameraTintGreen = 0;
+					Nu3D::Camera::g_cameraTintRed = 0;
+
+					Nu3D::Camera::SetTint(128, 128, 128, 12);
+					SoftwareRenderer::UnkFunc67(0, 0);
+					g_frameDelta = 1;
+					SetBackdropByIndex(0);
+
+					int32_t skipInputThreshold = caseSixFadeFrames - 120;
+
+					if (! caseSixFadeFrames)
+						return 1;
+
+					while (true)
+					{
+						Nu3D::Camera::FadeToTargetTint();
+
+						if (caseSixFadeFrames > 0)
+						{
+							caseSixFadeFrames -= g_frameDelta;
+
+							if (caseSixFadeFrames <= 0)
+								break;
+						}
+
+						if (caseSixFadeFrames)
+						{
+							if ((caseSixFadeFrames + g_frameDelta) > 23)
+								Nu3D::Camera::SetTint(0, 0, 0, 12);
+						}
+
+					LBL_CHECK_OR_COMPLETE:
+
+						if ((InputManager::g_curButtonsPressed & (INPUT_CANCEL | INPUT_SPIN | INPUT_JUMP | INPUT_FIRE)) != 0
+							&& caseSixFadeFrames < skipInputThreshold && caseSixFadeFrames > 23)
+						{
+							caseSixFadeFrames = 24;
+						}
+						else if (! caseSixFadeFrames)
+						{
+							return 1;
+						}
+					}
+
+					caseSixFadeFrames = 0;
+
+					if ((caseSixFadeFrames + g_frameDelta) > 23)
+						Nu3D::Camera::SetTint(0, 0, 0, 12);
+
+					goto LBL_CHECK_OR_COMPLETE;
+				}
+
+				defaultFadeFramesRemaining = 600;
+
+				InputManager::g_curButtonsPressed = 0;
+				InputManager::g_prevButtonsPressed = 0;
+
+				MainMenu::g_fadeTimer = 0;
+				MainMenu::g_nextScreen = 0;
+
+				Nu3D::Camera::g_cameraTintBlue = 0;
+				Nu3D::Camera::g_cameraTintGreen = 0;
+				Nu3D::Camera::g_cameraTintRed = 0;
+
+				Nu3D::Camera::SetTint(128, 128, 128, 12);
+				SoftwareRenderer::UnkFunc67(0, 0);
+				g_frameDelta = 1;
+
+				SetBackdropByIndex(0);
+				break;
+			}
+
+			case 8:
+				g_mainMenuState = MainMenu::g_nextScreen - 1;
+				return 1;
+
+			case 9:
+				MainMenu::ShowSettings();
+				return 1;
+
+			case 10:
+				ShowStaticScreen(2);
+				ShowStaticScreen(3);
+				return 1;
+
+			case 11:
+				ShowCredits();
+				return 1;
+
+			default:
+				return 1;
+		}
+
+		do
+		{
+			Nu3D::Camera::FadeToTargetTint();
+
+			defaultFadeFramesRemaining -= g_frameDelta;
+
+			if (defaultFadeFramesRemaining > 0)
+			{
+				if (defaultFadeFramesRemaining > 23)
+					continue;
+			}
+			else
+			{
+				defaultFadeFramesRemaining = 0;
+			}
+
+			if ((defaultFadeFramesRemaining + g_frameDelta) > 23)
+				Nu3D::Camera::SetTint(0, 0, 0, 12);
+
+		} while (defaultFadeFramesRemaining);
+
+		return 1;
+	}
 
 	// STUB: TOY2 0x0048E730
-	void OneInit() {}
+	void OneInit() { g_randDatBufferPtr = g_randDatBuffer; }
 
 	// STUB: TOY2 0x00490730
 	void CheckForQuit() {}
@@ -264,7 +478,6 @@ namespace Toy2
 			}
 
 			ShowWindow(D3DApp::g_windowData.mainHwnd, SW_SHOWMAXIMIZED);
-
 
 			if (DrawingDevice::CD3DFramework::Build(
 					D3DApp::g_windowData.mainHwnd, &ddApp->guid, primaryDevice, primaryDevice->primaryDisplayMode, fullscreenExclusive)

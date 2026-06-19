@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Nu3D/Nu3D.h"
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 namespace Nu3D
 {
@@ -11,9 +12,17 @@ namespace Nu3D
 		{
 			int32_t format;
 			int32_t vertexCount;
-			Vertex* vertices;
+
+			union
+			{
+				Vertex* vertices;
+				VertexTL* verticesTL;
+			} data;
+
 			int32_t renderFlags;
 			LPDIRECT3DVERTEXBUFFER vertexBuffer;
+
+			static BOOL CreateVertexBuffer(PatchVertices* patchVertices, int32_t flags);
 		};
 
 		Patch* next;
@@ -28,7 +37,8 @@ namespace Nu3D
 		int32_t unkVar15;
 	};
 
-	extern Patch *g_patchListHead;;
+	extern Patch* g_patchListHead;
+	;
 
 	STATIC_ASSERT(sizeof(Patch) == 0x3C);
 	STATIC_ASSERT(sizeof(Patch::PatchVertices) == 0x14);

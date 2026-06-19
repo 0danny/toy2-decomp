@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Common.h"
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 namespace Renderer
 {
@@ -28,7 +29,9 @@ namespace Nu3D
 		float vertOffset;
 
 		static void Init();
+		static Material* CreateFromColor(RGBColor *rgbColor);
 	};
+
 
 	STATIC_ASSERT(sizeof(Material) == 0x84);
 }

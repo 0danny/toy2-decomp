@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Common.h"
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 namespace DrawingDevice
 {
@@ -117,10 +118,40 @@ namespace DrawingDevice
 	HRESULT GetChosenDevice_T(DDAppDevice::App** outApp, DDAppDevice** outDevice);
 	DDAppDevice::App* GetListHead();
 	LPD3DDEVICEDESC CopySurfaceDesc(LPD3DDEVICEDESC outSurfaceDesc);
+	HRESULT SetRenderState(D3DRENDERSTATETYPE renderStateType, DWORD value);
+	HRESULT SetLightState(D3DLIGHTSTATETYPE lightState, DWORD value);
+	HRESULT SetTextureStageState(DWORD stage, D3DTEXTURESTAGESTATETYPE state, DWORD value);
 
 	STATIC_ASSERT(sizeof(DrawingDeviceSlot) == 0x18);
 	STATIC_ASSERT(sizeof(CD3DFramework) == 0x234);
 	STATIC_ASSERT(sizeof(DDAppDevice::DisplayMode) == 0xA8);
 	STATIC_ASSERT(sizeof(DDAppDevice::App) == 0x384);
 	STATIC_ASSERT(sizeof(DDAppDevice) == 0x154);
+}
+
+namespace HardwareDevice
+{
+	// Drawing Methods
+	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
+	HRESULT DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
+		DWORD dwVertexTypeDesc,
+		LPVOID lpvVertices,
+		DWORD dwVertexCount,
+		LPWORD lpwIndices,
+		DWORD dwIndexCount,
+		DWORD dwFlags);
+
+	// Vertex Methods
+	HRESULT ReleaseVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer);
+	HRESULT CreateVertexBuffer(D3DVERTEXBUFFERDESC* desc, LPDIRECT3DVERTEXBUFFER* outBuffer, DWORD flags);
+	HRESULT LockVertexBuffer(LPDIRECT3DVERTEXBUFFER vertexBuffer, DWORD dwFlags, LPVOID* lplpData, DWORD* lpStride);
+	HRESULT UnlockVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer);
+	HRESULT OptimizeVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer, LPDIRECT3DDEVICE3 device, DWORD flags);
+	HRESULT ProcessVerticesOnBuffer(LPDIRECT3DVERTEXBUFFER destBuffer,
+		DWORD dwVertexOp,
+		DWORD dwDestIndex,
+		DWORD dwCount,
+		LPDIRECT3DVERTEXBUFFER srcBuffer,
+		DWORD dwSrcIndex,
+		DWORD dwFlags);
 }

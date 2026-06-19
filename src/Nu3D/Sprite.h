@@ -4,7 +4,8 @@
 #include "Numerics.h"
 #include "Nu3D/Viewport.h"
 #include "Renderer/RenderType.h"
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 namespace Nu3D
 {

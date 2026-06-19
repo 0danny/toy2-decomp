@@ -11,9 +11,70 @@ namespace SoftwareRenderer
 	// GLOBAL: TOY2 0x00A4CC74
 	int32_t g_levelFileIndex;
 
+	// GLOBAL: TOY2 0x009F5FF4
+	Nu3D::Viewport::ViewportRect* g_viewportRect;
+
 	// STUB: TOY2 0x00452130
 	void SwapRenderBuffer() {}
 
 	// FUNCTION: TOY2 0x004C20E0
 	void SetLevelFileIndex(int32_t index) { g_levelFileIndex = index; }
+
+	// STUB: TOY2 0x004BCE00
+	void InitialisePrimarySurface() {}
+
+	// STUB: TOY2 0x00490410
+	void UnkFunc67(int32_t param1, int32_t param2) {}
+}
+
+namespace SoftwareDevice
+{
+	// Drawing Methods
+
+	// STUB: TOY2 0x004B9950
+	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags)
+	{
+		return DDERR_UNSUPPORTED;
+	}
+
+	// STUB: TOY2 0x004B99F0
+	HRESULT DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
+		DWORD dwVertexTypeDesc,
+		LPVOID lpvVertices,
+		DWORD dwVertexCount,
+		LPWORD lpwIndices,
+		DWORD dwIndexCount,
+		DWORD dwFlags)
+	{
+		return DDERR_UNSUPPORTED;
+	}
+
+	// Vertex Methods
+
+	// STUB: TOY2 0x004B2B20
+	HRESULT ReleaseVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer) { return DDERR_UNSUPPORTED; }
+
+	// STUB: TOY2 0x004B2B30
+	HRESULT CreateVertexBuffer(D3DVERTEXBUFFERDESC* desc, LPDIRECT3DVERTEXBUFFER* outBuffer, DWORD flags) { return DDERR_UNSUPPORTED; }
+
+	// STUB: TOY2 0x004B2BB0
+	HRESULT LockVertexBuffer(LPDIRECT3DVERTEXBUFFER vertexBuffer, DWORD dwFlags, LPVOID* lplpData, DWORD* lpStride) { return DDERR_UNSUPPORTED; }
+
+	// FUNCTION: TOY2 0x004B2BD0
+	HRESULT UnlockVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer) { return 0; }
+
+	// FUNCTION: TOY2 0x004B2BE0
+	HRESULT OptimizeVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer, LPDIRECT3DDEVICE3 device, DWORD flags) { return 0; }
+
+	// STUB: TOY2 0x004C19E0
+	HRESULT ProcessVerticesOnBuffer(LPDIRECT3DVERTEXBUFFER destBuffer,
+		DWORD dwVertexOp,
+		DWORD dwDestIndex,
+		DWORD dwCount,
+		LPDIRECT3DVERTEXBUFFER srcBuffer,
+		DWORD dwSrcIndex,
+		DWORD dwFlags)
+	{
+		return DDERR_UNSUPPORTED;
+	}
 }

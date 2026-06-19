@@ -5,7 +5,8 @@
 #include "Toy2/D3DApp.h"
 #include "Toy2/Toy2.h"
 
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 #include <cstdio>
 #include <windows.h>
 

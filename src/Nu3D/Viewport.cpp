@@ -1,6 +1,7 @@
 #include "Nu3D/Viewport.h"
 #include "DrawingDevice.h"
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 namespace Nu3D
 {

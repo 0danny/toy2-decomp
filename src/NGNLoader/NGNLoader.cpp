@@ -50,7 +50,7 @@ namespace NGNLoader
 		if (! g_textureCache.activeList)
 			return 0;
 
-		while (! ignoreParams && memcmp(&cacheHead->params, &localTexParams, 28) || _strcmpi(cacheHead->texName, texParams->rawTexStr))
+		while (! ignoreParams && memcmp(&cacheHead->params, &localTexParams, sizeof(NGNTextureParams)) || strcmpi(cacheHead->texName, texParams->rawTexStr))
 		{
 			cacheHead = cacheHead->next;
 

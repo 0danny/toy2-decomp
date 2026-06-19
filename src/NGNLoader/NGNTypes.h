@@ -11,7 +11,8 @@
 #include "Nu3D/Creature.h"
 #include "Nu3D/BmpDataNode.h"
 
-#include <directx7/d3d.h>
+#include <directx6/ddraw.h>
+#include <directx6/d3d.h>
 
 namespace NGNLoader
 {

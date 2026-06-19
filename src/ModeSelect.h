@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-#include <directx7/ddraw.h>
+#include <directx6/ddraw.h>
 
 namespace ModeSelect
 {

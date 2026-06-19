@@ -1,0 +1,16 @@
+#pragma once
+
+#include <STDIO.H>
+#include "Common.h"
+
+namespace Toy2
+{
+	namespace MainMenu
+	{
+        int32_t Tick();
+        void ShowSettings();
+
+		extern int32_t g_fadeTimer;
+		extern int32_t g_nextScreen;
+	}
+}
