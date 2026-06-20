@@ -525,9 +525,6 @@ namespace Renderer
 	// STUB: TOY2 0x00453CD0
 	void SetVirtualRatioTo54() {}
 
-	// STUB: TOY2 0x00447D40
-	void InitSpriteSheets() {}
-
 	// FUNCTION: TOY2 0x00490860 [MATCHED]
 	void DoFrameDelay(int32_t isGameplayFrame)
 	{

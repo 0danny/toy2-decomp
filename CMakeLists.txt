@@ -137,6 +137,8 @@ set(TOY2_SOURCES
     src/Renderer/Sprite.cpp
     src/Renderer/Shadows.cpp
     src/Renderer/Shadows.h
+    src/Renderer/SpriteSheets.cpp
+    src/Renderer/SpriteSheets.h
 
     # NGNLoader
     src/NGNLoader/NGNLoader.cpp

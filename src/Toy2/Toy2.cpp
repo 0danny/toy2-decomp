@@ -958,7 +958,7 @@ namespace Toy2
 	// STUB: TOY2 0x00490BF0
 	int16_t UpdateD3DState() { return 0; }
 
-	// STUB: TOY2 0x004909E0
+	// FUNCTION: TOY2 0x004909E0
 	void ProcessMiscEventsEx()
 	{
 		Nu3D::Font::SetTextCursor(0, Nu3D::g_scaledFontAscent);

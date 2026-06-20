@@ -69,7 +69,6 @@ namespace Renderer
 	void Init();
 	void SetIsSoftwareRendering(int32_t value);
 	void SetVirtualRatioTo54();
-	void InitSpriteSheets();
 	void DoFrameDelay(int32_t isGameplayFrame);
 
 	// Draw Methods
