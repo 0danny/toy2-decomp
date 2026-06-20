@@ -668,14 +668,68 @@ namespace DrawingDevice
 	{
 		return g_drawingDevice->m_pd3dDevice->SetTextureStageState(stage, state, value);
 	}
+
+	// FUNCTION: TOY2 0x004ABAF0
+	HRESULT ClearScreen(DWORD clearFlags, D3DCOLOR clearColor)
+	{
+		LPDIRECT3DVIEWPORT3 viewport = g_drawingDevice->m_pvViewport;
+
+		if (viewport)
+		{
+			LPRECT destRect = DrawingDevice::GetDestRect();
+
+			return viewport->Clear2(1, (LPD3DRECT)destRect, clearFlags, clearColor, 1.0, 0);
+		}
+
+		return -1;
+	}
+
+	// FUNCTION: TOY2 0x004ABA90
+	HRESULT BeginScene()
+	{
+		LPDIRECT3DDEVICE3 device = DrawingDevice::GetD3DDevice();
+
+		if (device)
+			return device->BeginScene();
+		else
+			return -1;
+	}
+
+	// FUNCTION: TOY2 0x004ABD40
+	HRESULT PresentFrame()
+	{
+		LPDIRECTDRAWSURFACE4 frontBuffer = g_drawingDevice->m_pddsFrontBuffer;
+
+		if (! frontBuffer)
+			return 0x8200000E;
+
+		LPDIRECTDRAWSURFACE4 backBuffer = g_drawingDevice->m_pddsBackBuffer;
+
+		if (! backBuffer)
+			return frontBuffer->IsLost();
+
+		if (g_drawingDevice->m_bIsFullscreen)
+			return frontBuffer->Flip(0, 1);
+
+		return frontBuffer->Blt(&g_drawingDevice->m_rcScreenRect, backBuffer, &g_drawingDevice->m_rcViewportRect, 0x1000000, 0);
+	}
+
+	// FUNCTION: TOY2 0x004ABAD0
+	void EndScene()
+	{
+		LPDIRECT3DDEVICE3 device = DrawingDevice::GetD3DDevice();
+
+		if (device)
+			device->EndScene();
+	}
 }
 
 namespace HardwareDevice
 {
 	// FUNCTION: TOY2 0x004AC340
-	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags)
+	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags)
 	{
-		return DDERR_UNSUPPORTED;
+		return DrawingDevice::g_drawingDevice->m_pd3dDevice->DrawIndexedPrimitiveVB(primitiveType, vertexBuffer, indices, indexCount, flags);
 	}
 
 	// FUNCTION: TOY2 0x004AC300
@@ -687,7 +741,8 @@ namespace HardwareDevice
 		DWORD dwIndexCount,
 		DWORD dwFlags)
 	{
-		return DDERR_UNSUPPORTED;
+		return DrawingDevice::g_drawingDevice->m_pd3dDevice->DrawIndexedPrimitive(
+			d3dptPrimitiveType, dwVertexTypeDesc, lpvVertices, dwVertexCount, lpwIndices, dwIndexCount, dwFlags);
 	}
 
 	// Vertex Methods

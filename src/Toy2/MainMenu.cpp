@@ -44,7 +44,7 @@ namespace Toy2
 				Renderer::DrawTintOverlay();
 
 				Renderer::FlushRenderQueues();
-				Renderer::DrawQueuedSprite();
+				Renderer::Sprite::DrawQueuedSprite();
 				DevDraw::DrawSlots();
 
 				Renderer::DoFrameDelay(0);

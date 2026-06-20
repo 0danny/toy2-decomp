@@ -104,5 +104,8 @@ namespace Nu3D
 			g_drawDeviceWidth = g_renderWidth;
 			g_drawDeviceHeight = g_renderHeight;
 		}
+
+		// FUNCTION: TOY2 0x004BA3A0
+		void SetViewClipRect() {}
 	}
 }

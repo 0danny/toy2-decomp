@@ -16,7 +16,7 @@ namespace DrawingAPI
 {
 	// Drawing Methods
 	typedef HRESULT Device_DrawIndexedPrimitiveVB(
-		D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
+		D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
 	typedef HRESULT Device_DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
 		DWORD dwVertexTypeDesc,
 		LPVOID lpvVertices,
@@ -64,6 +64,8 @@ namespace Renderer
 
 	extern int32_t g_isSoftwareRendering;
 	extern uint32_t g_frameDelta;
+	extern float g_virtualScreenWidth;
+	extern float g_virtualScreenHeight;
 
 	void Cleanup();
 	void Init();
@@ -83,7 +85,6 @@ namespace Renderer
 	void ResetParallax();
 	void RenderParallaxBackground(int32_t forceRender);
 	void FlushRenderQueues();
-	void DrawQueuedSprite();
 
 	STATIC_ASSERT(sizeof(RenderEntry) == 0x18);
 }

@@ -738,4 +738,41 @@ namespace NGNLoader
 
 	// STUB: TOY2 0x0044FF50
 	void DetectBackdropTextures() {}
+
+	// FUNCTION: TOY2 0x004CE2C0
+	int32_t GetTextureDataIndex(uint32_t textureIndex)
+	{
+		if (g_ngnImage && textureIndex < 64)
+			return g_ngnImage->textureEntries[textureIndex].textureDataIndex;
+		else
+			return 0;
+	}
+
+	// FUNCTION: TOY2 0x004BB5E0
+	void RetrieveTextureData(
+		int32_t texDataIndex, uint32_t* bitmapWidthOut, uint32_t* bitmapHeightOut, uint32_t* textureWidth, uint32_t* textureHeight, uint32_t** textureData)
+	{
+		if (texDataIndex)
+		{
+			Nu3D::BmpDataNode* bmpDataNode = g_textureDataFreeList[texDataIndex].bmpDataNode;
+
+			if (bmpDataNode)
+			{
+				if (bitmapWidthOut)
+					*bitmapWidthOut = bmpDataNode->bitmapWidth;
+
+				if (bitmapHeightOut)
+					*bitmapHeightOut = bmpDataNode->bitmapHeight;
+
+				if (textureWidth)
+					*textureWidth = bmpDataNode->textureWidth;
+
+				if (textureHeight)
+					*textureHeight = bmpDataNode->textureHeight;
+
+				if (textureData)
+					*textureData = bmpDataNode->texData;
+			}
+		}
+	}
 }

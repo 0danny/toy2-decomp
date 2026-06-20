@@ -18,5 +18,8 @@ namespace Renderer
 			int16_t flags,
 			int32_t scaleX,
 			int32_t scaleY);
+
+		void ResetQueue();
+		void DrawQueuedSprite();
 	}
 }

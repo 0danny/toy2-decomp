@@ -20,6 +20,7 @@ namespace Renderer
 	};
 
     extern SpriteSheet *g_spriteSheets[128];
+	extern SpriteSheet* g_fallbackSpriteSheet;
 
     void InitSpriteSheets();
 

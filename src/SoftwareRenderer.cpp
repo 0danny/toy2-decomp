@@ -17,6 +17,9 @@ namespace SoftwareRenderer
 	// GLOBAL: TOY2 0x009F5FF4
 	Nu3D::Viewport::ViewportRect* g_viewportRect;
 
+	// GLOBAL: TOY2 0x00E4D960
+	int32_t g_softwareClearColor;
+
 	// STUB: TOY2 0x00452130
 	void SwapRenderBuffer() {}
 
@@ -35,6 +38,9 @@ namespace SoftwareRenderer
 	// STUB: TOY2 0x004C1F00
 	void ZoomIn() {}
 
+	// STUB: TOY2 0x004C17B0
+	void PresentFrame() {}
+
 	// STUB: TOY2 0x00490410
 	void UnkFunc67(int32_t param1, int32_t param2) {}
 
@@ -43,6 +49,15 @@ namespace SoftwareRenderer
 
 	// STUB: TOY2 0x00490290
 	int16_t UnkFunc3() { return 0; }
+
+	// STUB: TOY2 0x004BCBE0
+	void UnkFunc31() {}
+
+	// STUB: TOY2 0x004BCC40
+	void UnkFunc32() {}
+
+	// STUB: TOY2 0x004BCB60
+	void UnkFunc33() {}
 }
 
 namespace SoftwareDevice
@@ -50,7 +65,7 @@ namespace SoftwareDevice
 	// Drawing Methods
 
 	// STUB: TOY2 0x004B9950
-	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags)
+	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags)
 	{
 		return DDERR_UNSUPPORTED;
 	}

@@ -27,6 +27,7 @@ namespace Nu3D
 
         void Init();
         void Reset();
+        void SetViewClipRect();
     }
 
 	STATIC_ASSERT(sizeof(Viewport::ViewportRect) == 0x10);

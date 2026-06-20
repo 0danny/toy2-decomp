@@ -121,6 +121,11 @@ namespace DrawingDevice
 	HRESULT SetRenderState(D3DRENDERSTATETYPE renderStateType, DWORD value);
 	HRESULT SetLightState(D3DLIGHTSTATETYPE lightState, DWORD value);
 	HRESULT SetTextureStageState(DWORD stage, D3DTEXTURESTAGESTATETYPE state, DWORD value);
+	HRESULT ClearScreen(DWORD clearFlags, D3DCOLOR clearColor);
+	HRESULT BeginScene();
+	HRESULT PresentFrame();
+	void EndScene();
+
 
 	STATIC_ASSERT(sizeof(DrawingDeviceSlot) == 0x18);
 	STATIC_ASSERT(sizeof(CD3DFramework) == 0x234);
@@ -132,7 +137,7 @@ namespace DrawingDevice
 namespace HardwareDevice
 {
 	// Drawing Methods
-	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
+	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
 	HRESULT DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
 		DWORD dwVertexTypeDesc,
 		LPVOID lpvVertices,

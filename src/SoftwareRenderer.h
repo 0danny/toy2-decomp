@@ -12,6 +12,7 @@ namespace SoftwareRenderer
 	extern int32_t g_unk500A1C;
 	extern int32_t g_unk830C60;
 	extern Nu3D::Viewport::ViewportRect* g_viewportRect;
+	extern int32_t g_softwareClearColor;
 
 	void SwapRenderBuffer();
 	void SetLevelFileIndex(int32_t index);
@@ -19,16 +20,20 @@ namespace SoftwareRenderer
 	void Destroy();
 	void ZoomOut();
 	void ZoomIn();
+	void PresentFrame();
 
 	void UnkFunc67(int32_t param1, int32_t param2);
 	void UnkFunc2();
 	int16_t UnkFunc3();
+	void UnkFunc31();
+	void UnkFunc32();
+	void UnkFunc33();
 }
 
 namespace SoftwareDevice
 {
 	// Drawing Methods
-	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
+	HRESULT DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
 	HRESULT DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
 		DWORD dwVertexTypeDesc,
 		LPVOID lpvVertices,

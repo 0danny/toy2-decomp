@@ -30,6 +30,15 @@ namespace Renderer
 	// GLOBAL: TOY2 0x0088448C
 	int32_t g_fogEnabled;
 
+	// GLOBAL: TOY2 0x00508514
+	float g_fogStart = 1.0;
+
+	// GLOBAL: TOY2 0x00508518
+	float g_fogEnd = 100.0;
+
+	// GLOBAL: TOY2 0x00884478
+	DWORD g_fogColor;
+
 	// GLOBAL: TOY2 0x00E4D95C
 	int32_t g_deviceBlendShadeCaps;
 
@@ -101,6 +110,40 @@ namespace Renderer
 
 	// GLOBAL: TOY2 0x00500AA8
 	int32_t g_targetSpeedMultiplier = 1;
+
+	// GLOBAL: TOY2 0x0050851C
+	uint8_t g_gammaLUT[256] = {
+		// clang-format off
+		0u,   1u,   2u,   3u,   4u,   5u,   6u,   7u,   8u,   9u,  10u,  11u,  12u,  13u,  14u,  15u,
+		16u,  17u,  18u,  19u,  20u,  21u,  22u,  23u,  24u,  25u,  26u,  27u,  28u,  29u,  30u,  31u,
+		32u,  33u,  34u,  35u,  36u,  37u,  38u,  39u,  40u,  41u,  42u,  43u,  44u,  45u,  46u,  47u,
+		48u,  49u,  50u,  51u,  52u,  53u,  54u,  55u,  56u,  57u,  58u,  59u,  60u,  61u,  62u,  63u,
+		64u,  65u,  66u,  67u,  68u,  69u,  70u,  71u,  72u,  73u,  74u,  75u,  76u,  77u,  78u,  79u,
+		80u,  81u,  82u,  83u,  84u,  85u,  86u,  87u,  88u,  89u,  90u,  91u,  92u,  93u,  94u,  95u,
+		96u,  97u,  98u,  99u, 100u, 101u, 102u, 103u, 104u, 105u, 106u, 107u, 108u, 109u, 110u, 111u,
+		112u, 113u, 114u, 115u, 116u, 117u, 118u, 119u, 120u, 121u, 122u, 123u, 124u, 125u, 126u, 127u,
+		128u, 129u, 130u, 131u, 132u, 133u, 134u, 135u, 136u, 137u, 138u, 139u, 140u, 141u, 142u, 143u,
+		144u, 145u, 146u, 147u, 148u, 149u, 150u, 151u, 152u, 153u, 154u, 155u, 156u, 157u, 158u, 159u,
+		160u, 161u, 162u, 163u, 164u, 165u, 166u, 167u, 168u, 169u, 170u, 171u, 172u, 173u, 174u, 175u,
+		176u, 177u, 178u, 179u, 180u, 181u, 182u, 183u, 184u, 185u, 186u, 187u, 188u, 189u, 190u, 191u,
+		192u, 193u, 194u, 195u, 196u, 197u, 198u, 199u, 200u, 201u, 202u, 203u, 204u, 205u, 206u, 207u,
+		208u, 209u, 210u, 211u, 212u, 213u, 214u, 215u, 216u, 217u, 218u, 219u, 220u, 221u, 222u, 223u,
+		224u, 225u, 226u, 227u, 228u, 229u, 230u, 231u, 232u, 233u, 234u, 235u, 236u, 237u, 238u, 239u,
+		240u, 241u, 242u, 243u, 244u, 245u, 246u, 247u, 248u, 249u, 250u, 251u, 252u, 253u, 254u, 255u,
+		// clang-format on
+	};
+
+	// GLOBAL: TOY2 0x005087F4
+	int32_t g_drawMaterialBuckets = 1;
+
+	// GLOBAL: TOY2 0x005087F8
+	int32_t g_drawTransparentBuckets = 1;
+
+	// GLOBAL: TOY2 0x004F7414
+	float g_virtualScreenWidth = 512.0;
+
+	// GLOBAL: TOY2 0x004F7418
+	float g_virtualScreenHeight = 256.0;
 }
 
 namespace DrawingAPI
@@ -369,9 +412,6 @@ namespace Renderer
 	// STUB: TOY2 0x004B62C0
 	void ResetRenderPools() {}
 
-	// STUB: TOY2 0x004B6300
-	void Reset2DSpriteQueue() {}
-
 	// FUNCTION: TOY2 0x004B9710
 	void InitResources()
 	{
@@ -416,22 +456,22 @@ namespace Renderer
 
 		Nu3D::Patch::PatchVertices::CreateVertexBuffer(&g_FVF_152_Buffer, 14);
 
-		D3DDEVICEDESC p_outSurfaceDesc;
-		memcpy(&p_outSurfaceDesc, DrawingDevice::CopySurfaceDesc(&p_outSurfaceDesc), sizeof(p_outSurfaceDesc));
+		D3DDEVICEDESC outSurfaceDesc;
+		memcpy(&outSurfaceDesc, DrawingDevice::CopySurfaceDesc(&outSurfaceDesc), sizeof(outSurfaceDesc));
 
 		memset(g_renderStateCache, 0, sizeof(g_renderStateCache));
 
-		g_maxSimultaneousTextures = p_outSurfaceDesc.wMaxSimultaneousTextures;
+		g_maxSimultaneousTextures = outSurfaceDesc.wMaxSimultaneousTextures;
 
-		if (p_outSurfaceDesc.wMaxSimultaneousTextures >= g_maxSimultaneousTexturesMax)
+		if (outSurfaceDesc.wMaxSimultaneousTextures >= g_maxSimultaneousTexturesMax)
 			g_maxSimultaneousTextures = g_maxSimultaneousTexturesMax;
 
-		if ((p_outSurfaceDesc.dpcTriCaps.dwShadeCaps & 0x4000) != 0)
+		if ((outSurfaceDesc.dpcTriCaps.dwShadeCaps & 0x4000) != 0)
 		{
-			if ((p_outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & 2) == 0)
+			if ((outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & 2) == 0)
 				g_destBlendMode = 6;
 
-			if ((p_outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & 8) == 0)
+			if ((outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & 8) == 0)
 			{
 				g_alphaBlendSrc = 5;
 				g_alphaBlendDest = 6;
@@ -442,7 +482,7 @@ namespace Renderer
 			g_srcBlendMode = 2;
 			g_destBlendMode = 2;
 
-			if ((p_outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & 8) == 0)
+			if ((outSurfaceDesc.dpcTriCaps.dwDestBlendCaps & 8) == 0)
 			{
 				g_alphaBlendSrc = 5;
 				g_alphaBlendDest = 6;
@@ -466,7 +506,7 @@ namespace Renderer
 		}
 
 		ResetRenderPools();
-		Reset2DSpriteQueue();
+		Renderer::Sprite::ResetQueue();
 
 		SoftwareRenderer::InitialisePrimarySurface();
 
@@ -522,8 +562,12 @@ namespace Renderer
 	// FUNCTION: TOY2 0x004B3860
 	void SetIsSoftwareRendering(int32_t value) { g_isSoftwareRendering = value; }
 
-	// STUB: TOY2 0x00453CD0
-	void SetVirtualRatioTo54() {}
+	// FUNCTION: TOY2 0x00453CD0
+	void SetVirtualRatioTo54()
+	{
+		g_virtualScreenWidth = 320.0;
+		g_virtualScreenHeight = 256.0;
+	}
 
 	// FUNCTION: TOY2 0x00490860 [MATCHED]
 	void DoFrameDelay(int32_t isGameplayFrame)
@@ -633,14 +677,106 @@ namespace Renderer
 		g_lastFrameTimestamp = Nu3D::GetHighResolutionTime();
 	}
 
-	// STUB: TOY2 0x004B2C80
-	void ClearScreen(RGBA clearColor, int32_t clearFlags) {}
+	// FUNCTION: TOY2 0x004C2080
+	int32_t ConvertRGBATo16Bit(RGBA color) { return 0; }
 
-	// STUB: TOY2 0x004B2D50
-	int32_t BeginScene() { return 1; }
+	// FUNCTION: TOY2 0x004B37B0
+	RGBA ApplyGammaCorrection(RGBA color)
+	{
+		color.b = g_gammaLUT[color.b];
+		color.g = g_gammaLUT[color.g];
+		color.r = g_gammaLUT[color.r];
 
-	// STUB: TOY2 0x004B2DE0
-	void EndScene(int32_t presentFrame) {}
+		return color;
+	}
+
+	// FUNCTION: TOY2 0x004B2C80
+	void ClearScreen(RGBA clearColor, int32_t clearFlags)
+	{
+		RGBA color = ApplyGammaCorrection(clearColor);
+
+		if (g_isSoftwareRendering)
+		{
+			uint16_t clearColor = Renderer::ConvertRGBATo16Bit(color);
+			SoftwareRenderer::g_softwareClearColor = (clearColor << 16) | clearColor;
+		}
+		else
+		{
+			DrawingDevice::ClearScreen(clearFlags, color.value);
+		}
+	}
+
+	// FUNCTION: TOY2 0x004B2D80
+	void ApplyFogSettings()
+	{
+		if (g_fogEnabled)
+		{
+			DrawingDevice::SetRenderState(D3DRENDERSTATE_FOGENABLE, 1);
+			DrawingDevice::SetRenderState(D3DRENDERSTATE_FOGCOLOR, g_fogColor & 0xFFFFFF);
+
+			DrawingDevice::SetLightState(D3DLIGHTSTATE_FOGMODE, 3);
+			DrawingDevice::SetLightState(D3DLIGHTSTATE_FOGSTART, g_fogStart);
+			DrawingDevice::SetLightState(D3DLIGHTSTATE_FOGEND, g_fogEnd);
+		}
+		else
+		{
+			DrawingDevice::SetRenderState(D3DRENDERSTATE_FOGENABLE, 0);
+		}
+	}
+
+	// FUNCTION: TOY2 0x004B2D50
+	int32_t BeginScene()
+	{
+		if (! DrawingDevice::BeginScene())
+		{
+			Renderer::ApplyFogSettings();
+			Nu3D::Viewport::Reset();
+			Nu3D::Viewport::SetViewClipRect();
+
+			if (g_isSoftwareRendering)
+				SoftwareRenderer::UnkFunc32();
+
+			return 1;
+		}
+
+		return 0;
+	}
+
+	// FUNCTION: TOY2 0x004B2DE0
+	void EndScene(int32_t presentFrame)
+	{
+		DrawingDevice::EndScene();
+
+		if (presentFrame)
+		{
+			if (g_isSoftwareRendering)
+			{
+				SoftwareRenderer::PresentFrame();
+			}
+			else if (DrawingDevice::PresentFrame() == DDERR_SURFACELOST)
+			{
+				DrawingDevice::CD3DFramework* device = DrawingDevice::g_drawingDevice;
+
+				LPDIRECTDRAWSURFACE4 frontBuffer = DrawingDevice::g_drawingDevice->m_pddsFrontBuffer;
+
+				if (frontBuffer && frontBuffer->IsLost())
+					device->m_pddsFrontBuffer->Restore();
+
+				LPDIRECTDRAWSURFACE4 backBuffer = device->m_pddsBackBuffer;
+
+				if (backBuffer && backBuffer->IsLost())
+					device->m_pddsBackBuffer->Restore();
+
+				LPDIRECTDRAWSURFACE4 zBuffer = device->m_pddsZBuffer;
+
+				if (zBuffer)
+				{
+					if (zBuffer->IsLost())
+						device->m_pddsZBuffer->Restore();
+				}
+			}
+		}
+	}
 
 	// FUNCTION: TOY2 0x0049B580
 	void DrawMainMenuText(int16_t yPos, char* text, int32_t fadeAlpha)
@@ -692,11 +828,33 @@ namespace Renderer
 	// STUB: TOY2 0x0048F410
 	void RenderParallaxBackground(int32_t forceRender) {}
 
-	// STUB: TOY2 0x004B6A50
-	void FlushRenderQueues() {}
+	// FUNCTION: TOY2 0x004B8400
+	void FlushMaterialBuckets() {}
 
-	// STUB: TOY2 0x004B8460
-	void DrawQueuedSprite() {}
+	// FUNCTION: TOY2 0x004B6A90
+	void FlushTransparentBuckets() {}
+
+	// FUNCTION: TOY2 0x004B5CF0
+	void FlushPrimitives() {}
+
+	// FUNCTION: TOY2 0x004B6A50
+	void FlushRenderQueues()
+	{
+		if (g_drawMaterialBuckets)
+			FlushMaterialBuckets();
+
+		if (g_drawTransparentBuckets)
+			FlushTransparentBuckets();
+
+		FlushPrimitives();
+		ResetRenderPools();
+
+		if (g_isSoftwareRendering)
+		{
+			SoftwareRenderer::UnkFunc33();
+			SoftwareRenderer::UnkFunc32();
+		}
+	}
 }
 
 namespace DevDraw
