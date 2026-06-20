@@ -7,11 +7,16 @@
 #include "Nu3D/Material.h"
 #include "NGNLoader/NGNLoader.h"
 #include "Nu3D/Patch.h"
+#include "Renderer/Sprite.h"
+#include "Toy2/Toy2.h"
 
 namespace Renderer
 {
 	// GLOBAL: TOY2 0x00884484
 	int32_t g_isSoftwareRendering;
+
+	// GLOBAL: TOY2 0x0052F2D4
+	uint32_t g_frameDelta;
 
 	// GLOBAL: TOY2 0x00884488
 	int32_t g_rendererValid;
@@ -81,6 +86,21 @@ namespace Renderer
 
 	// GLOBAL: TOY2 0x00508714
 	int32_t g_alphaBlendDest = 4;
+
+	// GLOBAL: TOY2 0x00830C54
+	int32_t g_lastFrameTimestamp;
+
+	// GLOBAL: TOY2 0x00830C58
+	int32_t g_frameStabilityCounter;
+
+	// GLOBAL: TOY2 0x00500AA4
+	int32_t g_maxSpeedMultiplier = 4;
+
+	// GLOBAL: TOY2 0x00500AAC
+	int32_t g_startupDelayFrames = 120;
+
+	// GLOBAL: TOY2 0x00500AA8
+	int32_t g_targetSpeedMultiplier = 1;
 }
 
 namespace DrawingAPI
@@ -379,18 +399,21 @@ namespace Renderer
 		g_FVF_14C_Buffer_2.vertexCount = 1000;
 		g_FVF_14C_Buffer_2.vertexBuffer = 0;
 		g_FVF_14C_Buffer_2.data.verticesTL = (Nu3D::VertexTL*)malloc(sizeof(Nu3D::VertexTL) * 1000);
+
 		Nu3D::Patch::PatchVertices::CreateVertexBuffer(&g_FVF_14C_Buffer_2, 12);
 
 		g_FVF_14C_Buffer_1.format = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX1;
 		g_FVF_14C_Buffer_1.vertexCount = 1000;
 		g_FVF_14C_Buffer_1.vertexBuffer = 0;
 		g_FVF_14C_Buffer_1.data.verticesTL = (Nu3D::VertexTL*)malloc(sizeof(Nu3D::VertexTL) * 1000);
+
 		Nu3D::Patch::PatchVertices::CreateVertexBuffer(&g_FVF_14C_Buffer_1, 2);
 
 		g_FVF_152_Buffer.format = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 		g_FVF_152_Buffer.vertexCount = 1000;
 		g_FVF_152_Buffer.vertexBuffer = 0;
 		g_FVF_152_Buffer.data.vertices = (Nu3D::Vertex*)malloc(sizeof(Nu3D::Vertex) * 1000);
+
 		Nu3D::Patch::PatchVertices::CreateVertexBuffer(&g_FVF_152_Buffer, 14);
 
 		D3DDEVICEDESC p_outSurfaceDesc;
@@ -426,8 +449,8 @@ namespace Renderer
 			}
 		}
 
-		InitRenderState(0xC06);
-		InitRenderState(0x1290);
+		InitRenderState(3078);
+		InitRenderState(4752);
 
 		DrawingAPI::SetVertexAPIs(g_isSoftwareRendering);
 
@@ -505,9 +528,185 @@ namespace Renderer
 	// STUB: TOY2 0x00447D40
 	void InitSpriteSheets() {}
 
-	// STUB: TOY2 0x00441980
-	void RenderMenu() {}
+	// FUNCTION: TOY2 0x00490860 [MATCHED]
+	void DoFrameDelay(int32_t isGameplayFrame)
+	{
+		// This method does the FPS delay for each frame, it is the source of all pain
+		int32_t hrt = Nu3D::GetHighResolutionTime();
+		int32_t elapsedMs = hrt - g_lastFrameTimestamp;
 
-	// STUB: TOY2 0x0049B580
-	void DrawMainMenuText(int16_t yPos, char* text, int32_t fadeAlpha) {}
+		if (Toy2::g_demoMode)
+		{
+			g_frameDelta = 2;
+
+			if (elapsedMs < 33)
+			{
+				Nu3D::PrecisionSleep(33 - elapsedMs);
+				g_lastFrameTimestamp = Nu3D::GetHighResolutionTime();
+				return;
+			}
+
+			goto LBL_UPDATE_TIMESTAMP;
+		}
+
+		{
+			int32_t calculatedMultiplier = 60 * elapsedMs / 1000;
+			g_frameDelta = calculatedMultiplier;
+
+			if (1000 * calculatedMultiplier / 60 != elapsedMs)
+				g_frameDelta = ++calculatedMultiplier;
+
+			int32_t minMultiplier;
+
+			if (calculatedMultiplier < 1)
+				minMultiplier = 1;
+			else
+				minMultiplier = calculatedMultiplier;
+
+			if (g_maxSpeedMultiplier < minMultiplier)
+			{
+				calculatedMultiplier = g_maxSpeedMultiplier;
+			}
+			else
+			{
+				if (calculatedMultiplier >= 1)
+					goto LBL_STARTUP_DELAY;
+
+				calculatedMultiplier = 1;
+			}
+
+			g_frameDelta = calculatedMultiplier;
+
+		LBL_STARTUP_DELAY:
+
+			int32_t delayFrames = g_startupDelayFrames;
+			if (g_startupDelayFrames > 0)
+			{
+				delayFrames = g_startupDelayFrames - calculatedMultiplier;
+				g_startupDelayFrames -= calculatedMultiplier;
+			}
+
+			if (isGameplayFrame)
+			{
+				if (delayFrames > 0)
+					goto LBL_WAIT_NEXT_FRAME;
+
+				int32_t stabilityCounter = g_frameStabilityCounter;
+				int32_t targetSpeedMultiplier = g_targetSpeedMultiplier;
+
+				if (g_frameStabilityCounter > 0)
+				{
+					stabilityCounter = g_frameStabilityCounter - targetSpeedMultiplier;
+					g_frameStabilityCounter -= targetSpeedMultiplier;
+				}
+
+				if (calculatedMultiplier < targetSpeedMultiplier)
+				{
+					if (stabilityCounter > 0)
+					{
+						calculatedMultiplier = targetSpeedMultiplier;
+						targetSpeedMultiplier = calculatedMultiplier;
+						g_frameDelta = calculatedMultiplier;
+					}
+				}
+				else
+				{
+					g_frameStabilityCounter = 60;
+				}
+
+				g_targetSpeedMultiplier = calculatedMultiplier;
+			}
+			else
+			{
+				g_targetSpeedMultiplier = 1;
+				g_frameStabilityCounter = 0;
+				g_startupDelayFrames = 120;
+			}
+
+		LBL_WAIT_NEXT_FRAME:
+
+			int32_t sleepTimeMs = 1000 * calculatedMultiplier / 60 - elapsedMs;
+
+			if (sleepTimeMs > 0)
+				Nu3D::PrecisionSleep(sleepTimeMs);
+		}
+
+	LBL_UPDATE_TIMESTAMP:
+
+		g_lastFrameTimestamp = Nu3D::GetHighResolutionTime();
+	}
+
+	// STUB: TOY2 0x004B2C80
+	void ClearScreen(RGBA clearColor, int32_t clearFlags) {}
+
+	// STUB: TOY2 0x004B2D50
+	int32_t BeginScene() { return 1; }
+
+	// STUB: TOY2 0x004B2DE0
+	void EndScene(int32_t presentFrame) {}
+
+	// FUNCTION: TOY2 0x0049B580
+	void DrawMainMenuText(int16_t yPos, char* text, int32_t fadeAlpha)
+	{
+		char* charPtr = text;
+		int32_t strLength = 0;
+
+		if (*text)
+			while (text[++strLength]) {};
+
+		int16_t xPos = 160 - 6 * strLength;
+
+		if (strLength > 0)
+		{
+			int32_t remaining = strLength;
+
+			do
+			{
+				char currentChar = *charPtr++;
+
+				if (currentChar != ' ')
+				{
+					uint8_t tileIndex;
+
+					if (currentChar == '\'')
+						tileIndex = '/';
+					else
+						tileIndex = currentChar - 97;
+
+					if (fadeAlpha == 128)
+						Sprite::DrawScaled(xPos, yPos, 50, tileIndex, 128u, 128u, 128u, 255, 2048, 2048);
+					else
+						Sprite::DrawScaled(xPos, yPos, 50, tileIndex, 255u, 255u, 255u, (fadeAlpha << 9) + 96, 2048, 2048);
+				}
+
+				xPos += 12;
+				--remaining;
+
+			} while (remaining);
+		}
+	}
+
+	// STUB: TOY2 0x0044DD80
+	void DrawTintOverlay() {}
+
+	// STUB: TOY2 0x0048F3E0
+	void ResetParallax() {}
+
+	// STUB: TOY2 0x0048F410
+	void RenderParallaxBackground(int32_t forceRender) {}
+
+	// STUB: TOY2 0x004B6A50
+	void FlushRenderQueues() {}
+
+	// STUB: TOY2 0x004B8460
+	void DrawQueuedSprite() {}
+}
+
+namespace DevDraw
+{
+	// GLOBAL: TOY2 0x00732FBC
+	int32_t g_vertexCount;
+
+	// STUB: TOY2 0x004907E0
+	int16_t DrawSlots() { return 0; }
 }

@@ -133,7 +133,8 @@ set(TOY2_SOURCES
     src/Renderer/Renderer.h
     src/Renderer/Renderer.cpp
     src/Renderer/RenderType.h
-    src/Renderer/SpriteRenderer.h
+    src/Renderer/Sprite.h
+    src/Renderer/Sprite.cpp
     src/Renderer/Shadows.cpp
     src/Renderer/Shadows.h
 
@@ -173,10 +174,10 @@ target_link_directories(patcher PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/external/libs
     ${CMAKE_CURRENT_SOURCE_DIR}/external/libs/directx6
 )
-target_link_libraries(patcher PRIVATE minhook_x86 ddraw dxguid)
+target_link_libraries(patcher PRIVATE minhook_x86 ddraw dxguid winmm)
 
 target_link_directories(toy2decomp PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/external/libs/directx6
 )
-target_link_libraries(toy2decomp PRIVATE ddraw dxguid)
+target_link_libraries(toy2decomp PRIVATE ddraw dxguid winmm)
 set_target_properties(toy2decomp PROPERTIES OUTPUT_NAME "toy2")

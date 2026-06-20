@@ -23,6 +23,9 @@ namespace Nu3D
 	};
 
 	void SetIsSoftwareRendering(int32_t value);
+	
+	uint32_t GetHighResolutionTime();
+	void PrecisionSleep(int32_t delayMs);
 
 	STATIC_ASSERT(sizeof(VertexTL) == 32);
 	STATIC_ASSERT(sizeof(Vertex) == 36);

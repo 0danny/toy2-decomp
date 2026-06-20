@@ -17,7 +17,6 @@ namespace DrawingAPI
 	// Drawing Methods
 	typedef HRESULT Device_DrawIndexedPrimitiveVB(
 		D3DPRIMITIVETYPE primitiveType, LPDIRECT3DVERTEXBUFFER* vertexBuffer, WORD* indices, DWORD indexCount, DWORD flags);
-
 	typedef HRESULT Device_DrawIndexedPrimitive(D3DPRIMITIVETYPE d3dptPrimitiveType,
 		DWORD dwVertexTypeDesc,
 		LPVOID lpvVertices,
@@ -29,12 +28,9 @@ namespace DrawingAPI
 	// Vertex Methods
 	typedef HRESULT Device_ReleaseVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer);
 	typedef HRESULT Device_CreateVertexBuffer(D3DVERTEXBUFFERDESC* desc, LPDIRECT3DVERTEXBUFFER* outBuffer, DWORD flags);
-
 	typedef HRESULT Device_LockVertexBuffer(LPDIRECT3DVERTEXBUFFER vertexBuffer, DWORD dwFlags, LPVOID* lplpData, DWORD* lpStride);
-
 	typedef HRESULT Device_UnlockVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer);
 	typedef HRESULT Device_OptimizeVertexBuffer(LPDIRECT3DVERTEXBUFFER buffer, LPDIRECT3DDEVICE3 device, DWORD flags);
-
 	typedef HRESULT Device_ProcessVerticesOnBuffer(LPDIRECT3DVERTEXBUFFER destBuffer,
 		DWORD dwVertexOp,
 		DWORD dwDestIndex,
@@ -67,17 +63,36 @@ namespace Renderer
 	};
 
 	extern int32_t g_isSoftwareRendering;
-	extern int32_t g_hasBackdrop;
+	extern uint32_t g_frameDelta;
 
 	void Cleanup();
 	void Init();
 	void SetIsSoftwareRendering(int32_t value);
 	void SetVirtualRatioTo54();
 	void InitSpriteSheets();
+	void DoFrameDelay(int32_t isGameplayFrame);
+
+	// Draw Methods
+	void ClearScreen(RGBA clearColor, int32_t clearFlags);
+	int32_t BeginScene();
+	void EndScene(int32_t presentFrame);
 
 	// Render Methods
-	void RenderMenu();
 	void DrawMainMenuText(int16_t yPos, char* text, int32_t fadeAlpha);
+	void DrawTintOverlay();
+
+	void ResetParallax();
+	void RenderParallaxBackground(int32_t forceRender);
+	void FlushRenderQueues();
+	void DrawQueuedSprite();
 
 	STATIC_ASSERT(sizeof(RenderEntry) == 0x18);
+}
+
+namespace DevDraw
+{
+	// GLOBAL: TOY2 0x00732FBC
+	extern int32_t g_vertexCount;
+
+	int16_t DrawSlots();
 }

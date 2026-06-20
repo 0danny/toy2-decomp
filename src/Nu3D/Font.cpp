@@ -4,6 +4,9 @@ namespace Nu3D
 {
 	// --------- Nu3D::Font ---------
 
+	// GLOBAL: TOY2 0x00508674
+	float g_scaledFontAscent = 1.0;
+
 	// STUB: TOY2 0x004B3AD0
 	int32_t Font::Init() { return 0; }
 
@@ -18,7 +21,10 @@ namespace Nu3D
 
 	// STUB: TOY2 0x004B3980
 	void Font::SetTextClipRect(int32_t x1, int32_t y1, int32_t x2, int32_t y2) {}
-	
+
 	// STUB: TOY2 0x004B3C20
 	void Font::BuildFontTextures() {}
+
+	// STUB: TOY2 0x004B4450
+	void Font::SetTextCursor(float x, float y) {}
 }

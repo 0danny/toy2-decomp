@@ -22,6 +22,8 @@ namespace D3DApp
 
 	int32_t BuildProfileMachine();
 	int32_t BuildWindow();
+	int32_t ProcessWndEvents();
+	int32_t PostQuitMessage();
 
 	// clang-format off
 	int32_t WINAPI EnumerateDevices(LPGUID guid, LPSTR driverDesc, LPSTR driverName, LPVOID lpContext);

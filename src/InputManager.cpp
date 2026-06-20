@@ -22,4 +22,10 @@ namespace InputManager
 
 	// STUB: TOY2 0x004152E0
 	void Init() {}
+
+	// STUB: TOY2 0x004157E0
+	uint8_t IsKeyPressed(int32_t inputCode) { return 0; }
+
+	// STUB: TOY2 0x00452180
+	void UpdateButtonStates() {}
 }

@@ -472,6 +472,35 @@ namespace D3DApp
 		}
 	}
 
+	// FUNCTION: TOY2 0x004A6CC0
+	int32_t ProcessWndEvents()
+	{
+		if (PeekMessageA(&g_windowData.wndEventMsg, 0, 0, 0, 1))
+		{
+			if (g_windowData.wndEventMsg.message == WM_QUIT)
+			{
+				g_windowData.wndIsExiting = 1;
+				return 0;
+			}
+
+			if (g_windowData.wndEventMsg.message != WM_ACTIVATEAPP
+				&& (! g_windowData.mainHwnd || ! TranslateAcceleratorA(g_windowData.mainHwnd, g_windowData.hAccTable, &g_windowData.wndEventMsg)))
+			{
+				TranslateMessage(&g_windowData.wndEventMsg);
+				DispatchMessageA(&g_windowData.wndEventMsg);
+			}
+		}
+
+		return 1;
+	}
+
+	// FUNCTION: TOY2 0x004A6D30
+	int32_t PostQuitMessage()
+	{
+		::PostQuitMessage(0);
+		return 1;
+	}
+
 	// FUNCTION: TOY2 0x00408D30
 	int32_t WINAPI EnumerateDevices(LPGUID guid, LPSTR driverDesc, LPSTR driverName, LPVOID lpContext)
 	{
@@ -788,7 +817,7 @@ namespace D3DApp
 		if (msg == WM_DESTROY)
 		{
 			g_windowData.mainHwnd = 0;
-			PostQuitMessage(0);
+			::PostQuitMessage(0);
 		}
 
 		return DefWindowProcA(hWnd, msg, wParam, lParam);

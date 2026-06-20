@@ -30,4 +30,6 @@ namespace InputManager
 	extern int16_t g_directionInputState3Frames;
 
 	void Init();
+	uint8_t IsKeyPressed(int32_t inputCode);
+	void UpdateButtonStates();
 }

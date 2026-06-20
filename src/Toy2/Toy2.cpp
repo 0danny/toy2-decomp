@@ -22,6 +22,7 @@
 
 #include <WINDOWS.H>
 #include <STDIO.H>
+#include <DINPUT.H>
 
 #include <Numerics.h>
 
@@ -51,6 +52,9 @@ namespace Toy2
 
 	// GLOBAL: TOY2 0x005D2A90
 	int32_t g_hasBackdrop;
+
+	// GLOBAL: TOY2 0x004F7280
+	int32_t g_showBlackFrames = 1;
 
 	// GLOBAL: TOY2 0x004FCDB4
 	int32_t g_cdBaseTrack = 2;
@@ -97,9 +101,6 @@ namespace Toy2
 	// GLOBAL: TOY2 0x0052EF40
 	int32_t g_demoInputRunLength;
 
-	// GLOBAL: TOY2 0x0052F2D4
-	uint32_t g_frameDelta;
-
 	// GLOBAL: TOY2 0x0052B818
 	int16_t g_isPaused;
 
@@ -114,6 +115,21 @@ namespace Toy2
 
 	// GLOBAL: TOY2 0x0052F300
 	Buzz::Toy2BuzzActor g_buzzActor;
+
+	// GLOBAL: TOY2 0x00529388
+	int32_t g_wndIsExitingUnused;
+
+	// GLOBAL: TOY2 0x0072EFC8
+	int32_t g_clearScreenSaveResult;
+
+	// GLOBAL: TOY2 0x00500AA0
+	int32_t g_setScreenSaveRunning = 1;
+
+	// GLOBAL: TOY2 0x00830C64
+	int32_t g_extraControlsUnused;
+
+	// GLOBAL: TOY2 0x00830C1C
+	int32_t g_inputSuppressFrames;
 }
 
 namespace Toy2
@@ -224,21 +240,21 @@ namespace Toy2
 
 				Nu3D::Camera::SetTint(128, 128, 128, 12);
 				SoftwareRenderer::UnkFunc67(0, 0);
-				g_frameDelta = 1;
+				Renderer::g_frameDelta = 1;
 
 				SetBackdropByIndex(1);
 
 				while (true)
 				{
 					Nu3D::Camera::FadeToTargetTint();
-					caseOneFadeFrames -= g_frameDelta;
+					caseOneFadeFrames -= Renderer::g_frameDelta;
 
 					if (caseOneFadeFrames <= 0)
 						break;
 
 					if (caseOneFadeFrames <= 23)
 					{
-						if ((caseOneFadeFrames + g_frameDelta) > 23)
+						if ((caseOneFadeFrames + Renderer::g_frameDelta) > 23)
 							Nu3D::Camera::SetTint(0, 0, 0, 12);
 					}
 
@@ -250,7 +266,7 @@ namespace Toy2
 
 				caseOneFadeFrames = 0;
 
-				if ((caseOneFadeFrames + g_frameDelta) > 23)
+				if ((caseOneFadeFrames + Renderer::g_frameDelta) > 23)
 					Nu3D::Camera::SetTint(0, 0, 0, 12);
 
 				goto LBL_CHECK_FADE_COMPLETE;
@@ -284,7 +300,7 @@ namespace Toy2
 
 					Nu3D::Camera::SetTint(128, 128, 128, 12);
 					SoftwareRenderer::UnkFunc67(0, 0);
-					g_frameDelta = 1;
+					Renderer::g_frameDelta = 1;
 					SetBackdropByIndex(0);
 
 					int32_t skipInputThreshold = caseSixFadeFrames - 120;
@@ -298,7 +314,7 @@ namespace Toy2
 
 						if (caseSixFadeFrames > 0)
 						{
-							caseSixFadeFrames -= g_frameDelta;
+							caseSixFadeFrames -= Renderer::g_frameDelta;
 
 							if (caseSixFadeFrames <= 0)
 								break;
@@ -306,7 +322,7 @@ namespace Toy2
 
 						if (caseSixFadeFrames)
 						{
-							if ((caseSixFadeFrames + g_frameDelta) > 23)
+							if ((caseSixFadeFrames + Renderer::g_frameDelta) > 23)
 								Nu3D::Camera::SetTint(0, 0, 0, 12);
 						}
 
@@ -325,7 +341,7 @@ namespace Toy2
 
 					caseSixFadeFrames = 0;
 
-					if ((caseSixFadeFrames + g_frameDelta) > 23)
+					if ((caseSixFadeFrames + Renderer::g_frameDelta) > 23)
 						Nu3D::Camera::SetTint(0, 0, 0, 12);
 
 					goto LBL_CHECK_OR_COMPLETE;
@@ -345,7 +361,7 @@ namespace Toy2
 
 				Nu3D::Camera::SetTint(128, 128, 128, 12);
 				SoftwareRenderer::UnkFunc67(0, 0);
-				g_frameDelta = 1;
+				Renderer::g_frameDelta = 1;
 
 				SetBackdropByIndex(0);
 				break;
@@ -376,7 +392,7 @@ namespace Toy2
 		{
 			Nu3D::Camera::FadeToTargetTint();
 
-			defaultFadeFramesRemaining -= g_frameDelta;
+			defaultFadeFramesRemaining -= Renderer::g_frameDelta;
 
 			if (defaultFadeFramesRemaining > 0)
 			{
@@ -388,7 +404,7 @@ namespace Toy2
 				defaultFadeFramesRemaining = 0;
 			}
 
-			if ((defaultFadeFramesRemaining + g_frameDelta) > 23)
+			if ((defaultFadeFramesRemaining + Renderer::g_frameDelta) > 23)
 				Nu3D::Camera::SetTint(0, 0, 0, 12);
 
 		} while (defaultFadeFramesRemaining);
@@ -739,7 +755,7 @@ namespace Toy2
 				InputManager::g_directionInputState2Frames = 0;
 				InputManager::g_directionInputState3Frames = 0;
 
-				g_frameDelta = 1;
+				Renderer::g_frameDelta = 1;
 				g_levelTransition = 0;
 				g_levelTransitionTimer = 90;
 
@@ -748,7 +764,7 @@ namespace Toy2
 				while (! g_levelTransition || g_levelTransitionTimer)
 				{
 					if (g_demoMode)
-						g_frameDelta = 2; // Half frame rate in demo mode
+						Renderer::g_frameDelta = 2; // Half frame rate in demo mode
 
 					if (g_isPaused)
 						Game::PauseLoop();
@@ -931,6 +947,112 @@ namespace Toy2
 		Nullsub5();
 
 		return 0;
+	}
+
+	// STUB: TOY2 0x00412E80
+	int32_t CleanupManagers() { return 0; }
+
+	// STUB: TOY2 0x0047D7C0
+	void UpdateAudioChannels() {  }
+
+	// STUB: TOY2 0x00490BF0
+	int16_t UpdateD3DState() { return 0; }
+
+	// STUB: TOY2 0x004909E0
+	void ProcessMiscEventsEx()
+	{
+		Nu3D::Font::SetTextCursor(0, Nu3D::g_scaledFontAscent);
+		DevDraw::g_vertexCount = 0;
+
+		D3DApp::g_windowData.wndIsExiting = g_wndIsExitingUnused;
+
+		if (g_wndIsExitingUnused)
+		{
+			Logger::Log("CheckForQuit : Starting shutdown now...\n");
+
+			DestroyWindow(D3DApp::g_windowData.mainHwnd);
+
+			if (D3DApp::g_renderMode == RENDERMODE_SOFTWARE)
+			{
+				SoftwareRenderer::Destroy();
+			}
+			else if (D3DApp::g_renderMode == RENDERMODE_D3D)
+			{
+				Logger::Log("QUIT : Destroying Direct3D renderer.\n");
+			}
+
+			CleanupManagers();
+			D3DApp::PostQuitMessage();
+
+			CoUninitialize();
+
+			D3DApp::g_windowData.mainHwnd = 0;
+
+			Logger::Log("CheckForQuit : Code shutdown.\n");
+
+			g_clearScreenSaveResult = SystemParametersInfoA(SPI_SCREENSAVERRUNNING, 0, &g_setScreenSaveRunning, 0);
+
+			if (g_clearScreenSaveResult)
+				Logger::Log("Managed to clear SCREENSAVERRUNNING\n");
+			else
+				Logger::Log("Failed to clear SCREENSAVERRUNNING\n");
+
+			exit(D3DApp::g_windowData.wndEventMsg.wParam);
+		}
+
+		D3DApp::ProcessWndEvents();
+
+		if (D3DApp::g_windowData.wndIsExiting)
+		{
+			DrawingDevice::g_drawingDevice->RestoreToGDISurface(1);
+			Logger::GetErrorHandler("C:\\projects\\toy2\\toy2.cpp", 4670)("");
+		}
+
+		if (InputManager::IsKeyPressed(DIK_F3))
+		{
+			SoftwareRenderer::ZoomOut();
+			g_extraControlsUnused = 15;
+		}
+
+		if (InputManager::IsKeyPressed(DIK_F4))
+		{
+			SoftwareRenderer::ZoomIn();
+			g_extraControlsUnused = 15;
+		}
+
+		if (InputManager::IsKeyPressed(DIK_F5))
+		{
+			Graphics::RemoveDetailLevel();
+			g_extraControlsUnused = 15;
+		}
+
+		if (InputManager::IsKeyPressed(DIK_F6))
+		{
+			Graphics::AddDetailLevel();
+			g_extraControlsUnused = 15;
+		}
+
+		InputManager::UpdateButtonStates();
+
+		if (g_inputSuppressFrames)
+		{
+			InputManager::g_curButtonsPressed = 0;
+			--g_inputSuppressFrames;
+		}
+
+		UpdateAudioChannels();
+
+		SoftwareRenderer::g_unk830C60 = 0;
+
+		if (D3DApp::g_renderMode == RENDERMODE_SOFTWARE)
+		{
+			SoftwareRenderer::UnkFunc2();
+			SoftwareRenderer::UnkFunc3();
+		}
+		else if (D3DApp::g_renderMode == RENDERMODE_D3D)
+		{
+			UpdateD3DState();
+		}
 	}
 
 	// STUB: TOY2 0x0047CC90

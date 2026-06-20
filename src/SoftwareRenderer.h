@@ -10,13 +10,19 @@ namespace SoftwareRenderer
 {
 	extern PointI g_unk4F7400;
 	extern int32_t g_unk500A1C;
+	extern int32_t g_unk830C60;
 	extern Nu3D::Viewport::ViewportRect* g_viewportRect;
 
 	void SwapRenderBuffer();
 	void SetLevelFileIndex(int32_t index);
 	void InitialisePrimarySurface();
+	void Destroy();
+	void ZoomOut();
+	void ZoomIn();
 
 	void UnkFunc67(int32_t param1, int32_t param2);
+	void UnkFunc2();
+	int16_t UnkFunc3();
 }
 
 namespace SoftwareDevice

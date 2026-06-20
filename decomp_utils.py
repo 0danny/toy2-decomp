@@ -125,7 +125,7 @@ def parse_functions_map(functions_map_path):
     return ida_functions
 
 
-def count_progress(namespace_filter=None, verbose=True):
+def count_progress(namespace_filter=None, verbose=False):
     functions_map_path = Path("tools/Resources/functions_map.txt")
     if not functions_map_path.exists():
         print("Error: tools/Resources/functions_map.txt not found!")
@@ -295,9 +295,9 @@ def main():
     )
 
     parser.add_argument(
-        "--no-verbose",
+        "--verbose",
         action="store_true",
-        help="Suppress the list of functions found in source but not in the IDA map.",
+        help="Shows extra info",
     )
 
     args = parser.parse_args()
@@ -307,7 +307,7 @@ def main():
 
     if args.progress:
         namespace_filter = None if args.progress is True else args.progress
-        count_progress(namespace_filter, verbose=not args.no_verbose)
+        count_progress(namespace_filter, verbose=args.verbose)
 
     if not args.progress and not args.count:
         print("Enter an option, --count or --progress.")

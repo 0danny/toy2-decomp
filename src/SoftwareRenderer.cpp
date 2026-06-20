@@ -8,6 +8,9 @@ namespace SoftwareRenderer
 	// GLOBAL: TOY2 0x00500A1C
 	int32_t g_unk500A1C = 0xFFFFFFFF;
 
+	// GLOBAL: TOY2 0x00830C60
+	int32_t g_unk830C60;
+
 	// GLOBAL: TOY2 0x00A4CC74
 	int32_t g_levelFileIndex;
 
@@ -23,8 +26,23 @@ namespace SoftwareRenderer
 	// STUB: TOY2 0x004BCE00
 	void InitialisePrimarySurface() {}
 
+	// STUB: TOY2 0x0047D0F0
+	void Destroy() {}
+
+	// STUB: TOY2 0x004C1FC0
+	void ZoomOut() {}
+
+	// STUB: TOY2 0x004C1F00
+	void ZoomIn() {}
+
 	// STUB: TOY2 0x00490410
 	void UnkFunc67(int32_t param1, int32_t param2) {}
+
+	// STUB: TOY2 0x0048FB70
+	void UnkFunc2() {}
+
+	// STUB: TOY2 0x00490290
+	int16_t UnkFunc3() { return 0; }
 }
 
 namespace SoftwareDevice
