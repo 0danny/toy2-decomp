@@ -1,11 +1,39 @@
 #include "Renderer/SpriteSheets.h"
+#include "Toy2/Toy2.h"
 
-#define SPRITE_SHEET_END ((SpriteSheet*)0xFFFFFFFF)
+#include <WINDOWS.H>
+#include <STDIO.H>
+
+#define SPRITE_SHEET_END ((SpriteSheet*)-1)
 
 namespace Renderer
 {
 	// this was way too big to put inside of Renderer/Sprite.h
 	// $TODO: Add the global addresses to these
+
+	// GLOBAL: TOY2 0x00557500
+	SpriteSheet* g_spriteSheets[128];
+
+	// GLOBAL: TOY2 0x00557704
+	SpriteSheet* g_fallbackSpriteSheet;
+
+	// GLOBAL: TOY2 0x004F7268
+	SpriteSheet g_fallbackSpriteSheetObj = {
+		-1,
+		1,
+		1,
+		-1,
+		{
+			{ 0, 0 },
+			{ 0, 0 },
+			{ 255, 255 },
+			{ 255, 255 },
+			{ 117, 0 },
+			{ 0, 0 },
+			{ 16, 0 },
+			{ 0, 0 },
+		},
+	};
 
 	SpriteSheet g_level0Sheet1 = {
 		31,
@@ -1117,4 +1145,289 @@ namespace Renderer
 		g_level18Sheets,
 		g_level19Sheets,
 	};
+
+	SpriteSheet g_commonSheet1 = {
+		31,
+		15,
+		15,
+		0,
+		{
+			{ 0, 0 },
+			{ 0, 0 },
+			{ 0, 0 },
+			{ 0, 0 },
+		},
+	};
+
+	SpriteSheet g_commonSheet2 = {
+		31,
+		15,
+		15,
+		0,
+		{
+			{ 0, 0 },
+			{ 16, 0 },
+			{ 32, 0 },
+			{ 48, 0 },
+			{ 0, 16 },
+			{ 16, 16 },
+			{ 32, 16 },
+			{ 48, 16 },
+		},
+	};
+
+	SpriteSheet g_commonSheet25 = {
+		31,
+		15,
+		15,
+		0,
+		{
+			{ 0, 32 },
+			{ 16, 32 },
+			{ 32, 32 },
+			{ 48, 32 },
+			{ 0, 48 },
+			{ 16, 48 },
+			{ 0, 0 },
+			{ 0, 0 },
+		},
+	};
+
+	SpriteSheet g_commonSheet3 = {
+		31,
+		15,
+		15,
+		0,
+		{
+			{ 0, 96 },
+			{ 16, 96 },
+			{ 32, 96 },
+			{ 48, 96 },
+		},
+
+	};
+	SpriteSheet g_commonSheet4 = {
+		31,
+		16,
+		16,
+		0,
+		{
+			{ 64, 0 },
+			{ 80, 0 },
+			{ 96, 0 },
+			{ 112, 0 },
+			{ 64, 16 },
+			{ 80, 16 },
+			{ 96, 16 },
+			{ 112, 16 },
+			{ 64, 32 },
+			{ 80, 32 },
+			{ 96, 32 },
+			{ 0, 0 },
+		},
+	};
+
+	SpriteSheet g_commonSheet5 = { 31, 31, 31, 0, { { 96, 96 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet6 = { 31, 31, 31, 0, { { 128, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet7 = { 31, 1, 1, 0, { { 112, 112 }, { 240, 80 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet8 = { 31, 32, 32, 0, { { 160, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet9 = { 31, 31, 31, 0, { { 160, 32 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet10 = { 31, 31, 8, 0, { { 128, 32 }, { 128, 41 }, { 128, 50 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet35 = { 31, 31, 15, 0, { { 96, 48 }, { 96, 48 }, { 96, 48 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet13 = { 31, 7, 32, 0, { { 216, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet14 = { 31, 31, 7, 0, { { 224, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet17 = {
+		31,
+		31,
+		31,
+		0,
+		{
+			{ 0, 192 },
+			{ 32, 192 },
+			{ 0, 224 },
+			{ 32, 224 },
+			{ 128, 192 },
+			{ 160, 192 },
+			{ 128, 224 },
+			{ 160, 224 },
+			{ 192, 192 },
+			{ 224, 192 },
+			{ 192, 224 },
+			{ 224, 224 },
+		},
+	};
+
+	SpriteSheet g_commonSheet18 = { 31, 31, 31, 0, { { 64, 64 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet19 = { 31, 16, 8, 0, { { 32, 88 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet20 = { 31, 31, 31, 0, { { 192, 96 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet22 = { 31, 31, 31, 0, { { 192, 64 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet23 = { 31, 31, 31, 0, { { 224, 64 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet24 = { 31, 31, 31, 0, { { 64, 96 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet26 = { 31, 11, 11, 0, { { 96, 64 }, { 108, 64 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet27 = { 31, 40, 32, 0, { { 0, 128 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet28 = { 31, 32, 32, 0, { { 64, 128 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet29 = { 31, 31, 19, 0, { { 224, 96 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet30 = { 31, 8, 8, 0, { { 64, 128 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet31 = { 31, 31, 39, 0, { { 128, 128 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet32 = { 31, 15, 15, 0, { { 80, 48 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet33 = { 31, 32, 32, 0, { { 192, 128 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet34 = { 31, 15, 16, 0, { { 112, 32 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet36 = { 31, 31, 16, 0, { { 160, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet39 = { 31, 16, 16, 0, { { 64, 224 }, { 80, 224 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet40 = { 31, 31, 31, 0, { { 0, 160 }, { 0, 0 } } };
+
+	SpriteSheet g_commonSheet21 = {
+		32,
+		16,
+		16,
+		0,
+		{
+			{ 0, 0 },
+			{ 16, 0 },
+			{ 32, 0 },
+			{ 48, 0 },
+			{ 64, 0 },
+			{ 80, 0 },
+			{ 96, 0 },
+			{ 112, 0 },
+			{ 0, 16 },
+			{ 16, 16 },
+			{ 32, 16 },
+			{ 48, 16 },
+			{ 64, 16 },
+			{ 80, 16 },
+			{ 96, 16 },
+			{ 112, 16 },
+			{ 0, 32 },
+			{ 16, 32 },
+			{ 32, 32 },
+			{ 48, 32 },
+			{ 64, 32 },
+			{ 80, 32 },
+			{ 96, 32 },
+			{ 112, 32 },
+			{ 0, 48 },
+			{ 16, 48 },
+			{ 32, 48 },
+			{ 48, 48 },
+			{ 64, 48 },
+			{ 80, 48 },
+			{ 96, 48 },
+			{ 112, 48 },
+			{ 0, 64 },
+			{ 16, 64 },
+			{ 32, 64 },
+			{ 48, 64 },
+			{ 64, 64 },
+			{ 80, 64 },
+			{ 96, 64 },
+			{ 112, 64 },
+			{ 0, 80 },
+			{ 16, 80 },
+			{ 32, 80 },
+			{ 48, 80 },
+			{ 64, 80 },
+			{ 80, 80 },
+			{ 96, 80 },
+			{ 112, 80 },
+			{ 0, 96 },
+			{ 16, 96 },
+			{ 32, 96 },
+			{ 48, 96 },
+			{ 64, 96 },
+			{ 80, 96 },
+			{ 96, 96 },
+			{ 112, 96 },
+		},
+	};
+
+	SpriteSheet g_commonSheet11 = { 32, 64, 64, 0, { { 128, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet12 = { 32, 48, 64, 0, { { 192, 32 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet15 = { 32, 64, 32, 0, { { 192, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet16 = { 32, 64, 32, 0, { { 128, 64 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet37 = { 32, 64, 62, 0, { { 128, 96 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	SpriteSheet g_commonSheet38 = { 32, 64, 62, 0, { { 192, 100 }, { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+
+	// GLOBAL: TOY2 0x004EC0A4
+	SpriteSheet* g_commonSpriteSheets[50] = {
+		&g_commonSheet1,
+		&g_commonSheet2,
+		&g_commonSheet3,
+		&g_commonSheet4,
+		&g_commonSheet5,
+		&g_commonSheet6,
+		&g_commonSheet7,
+		&g_commonSheet8,
+		&g_commonSheet9,
+		&g_commonSheet10,
+		&g_commonSheet11,
+		&g_commonSheet12,
+		&g_commonSheet13,
+		&g_commonSheet14,
+		&g_commonSheet15,
+		&g_commonSheet16,
+		&g_commonSheet17,
+		&g_commonSheet18,
+		&g_commonSheet19,
+		&g_commonSheet20,
+		&g_commonSheet21,
+		&g_commonSheet22,
+		&g_commonSheet23,
+		&g_commonSheet24,
+		&g_commonSheet25,
+		&g_commonSheet26,
+		&g_commonSheet27,
+		&g_commonSheet28,
+		&g_commonSheet29,
+		&g_commonSheet30,
+		&g_commonSheet31,
+		&g_commonSheet32,
+		&g_commonSheet33,
+		&g_commonSheet34,
+		&g_commonSheet35,
+		&g_commonSheet36,
+		&g_commonSheet37,
+		&g_commonSheet38,
+		&g_commonSheet39,
+		&g_commonSheet40,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+	};
+
+	// FUNCTION: TOY2 0x00447D40
+	void InitSpriteSheets()
+	{
+		uint32_t levelSheetBytes = 0;
+
+		SpriteSheet** sheet = g_levelSpriteSheets[Toy2::g_levelFileIndex];
+		SpriteSheet** curSheet = sheet + 1;
+		SpriteSheet* nextSheet;
+
+		if (*sheet != SPRITE_SHEET_END)
+		{
+			do
+			{
+				nextSheet = *curSheet;
+				levelSheetBytes += 4;
+				++curSheet;
+
+			} while (nextSheet != SPRITE_SHEET_END);
+		}
+
+		memset(g_spriteSheets, 0, sizeof(g_spriteSheets));
+		g_fallbackSpriteSheet = &g_fallbackSpriteSheetObj;
+
+		memcpy(g_spriteSheets, g_commonSpriteSheets, sizeof(SpriteSheet*) * 50);
+		memcpy(&g_spriteSheets[50], sheet, levelSheetBytes);
+
+		DECOMP_PRINT(("[Renderer::Sprite]: Initialised sprite sheets!\n"));
+	}
 }

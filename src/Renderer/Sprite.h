@@ -8,8 +8,6 @@ namespace Renderer
 	{
 		extern float g_parallaxDepthZPos;
 
-		void InitSheets();
-
 		int16_t DrawScaled(int16_t xPos,
 			int16_t yPos,
 			int32_t sheetIndex,

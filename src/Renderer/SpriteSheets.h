@@ -19,7 +19,9 @@ namespace Renderer
 		Tile tiles[];
 	};
 
-    extern SpriteSheet** g_levelSpriteSheets[20];
+    extern SpriteSheet *g_spriteSheets[128];
+
+    void InitSpriteSheets();
 
 	STATIC_ASSERT(sizeof(SpriteSheet) == 8);
 	STATIC_ASSERT(sizeof(SpriteSheet::Tile) == 2);

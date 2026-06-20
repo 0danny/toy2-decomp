@@ -7,9 +7,6 @@ namespace Renderer
 		// GLOBAL: TOY2 0x005087E8
 		float g_parallaxDepthZPos = 0.99989998;
 
-		// STUB: TOY2 0x00447D40
-		void InitSheets() {}
-
 		// STUB: TOY2 0x00493F40
 		int16_t DrawScaled(int16_t xPos,
 			int16_t yPos,

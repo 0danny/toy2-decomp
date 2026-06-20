@@ -90,7 +90,6 @@ namespace Renderer
 
 namespace DevDraw
 {
-	// GLOBAL: TOY2 0x00732FBC
 	extern int32_t g_vertexCount;
 
 	int16_t DrawSlots();

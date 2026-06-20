@@ -16,6 +16,7 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Shadows.h"
 #include "Renderer/Sprite.h"
+#include "Renderer/SpriteSheets.h"
 #include "Nu3D/Particles.h"
 #include "Nu3D/Camera.h"
 
@@ -319,7 +320,7 @@ namespace Toy2
 				strcat(fileNameBuffer, ".bin");
 			}
 
-			Renderer::Sprite::InitSheets();
+			Renderer::InitSpriteSheets();
 
 			const char* datFileName;
 			void* bufferPtr;
