@@ -111,6 +111,8 @@ namespace DrawingDevice
 	LPDIRECT3DDEVICE3 GetD3DDevice();
 	int32_t GetWidth();
 	int32_t GetHeight();
+	int32_t GetDestWidth();
+	int32_t GetDestHeight();
 	int32_t SetViewport(LPD3DVIEWPORT2 viewport);
 	int32_t BuildFreshViewport(LPD3DVIEWPORT2 viewport);
 	RECT* GetDestRect();
@@ -125,7 +127,7 @@ namespace DrawingDevice
 	HRESULT BeginScene();
 	HRESULT PresentFrame();
 	void EndScene();
-
+	HRESULT BindTexWithStage(int32_t textureIndex, int32_t stageIndex);
 
 	STATIC_ASSERT(sizeof(DrawingDeviceSlot) == 0x18);
 	STATIC_ASSERT(sizeof(CD3DFramework) == 0x234);

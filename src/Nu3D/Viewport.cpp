@@ -1,7 +1,11 @@
 #include "Nu3D/Viewport.h"
 #include "DrawingDevice.h"
+#include "Renderer/Renderer.h"
+#include "SoftwareRenderer.h"
 #include <directx6/ddraw.h>
 #include <directx6/d3d.h>
+
+#include <STDIO.H>
 
 namespace Nu3D
 {
@@ -61,6 +65,9 @@ namespace Nu3D
 		// GLOBAL: TOY2 0x009F6224
 		FustrumInfo g_fustrumInfo;
 
+		// GLOBAL: TOY2 0x00E4D8E8
+		ViewportRectAlt g_viewClipRect;
+
 		// FUNCTION: TOY2 0x004B55D0
 		void Init()
 		{
@@ -105,7 +112,44 @@ namespace Nu3D
 			g_drawDeviceHeight = g_renderHeight;
 		}
 
+		// FUNCTION: TOY2 0x004BAC40
+		void GetViewClipRect(ViewportRect* output)
+		{
+			output->top = g_viewClipRect.top;
+			output->bottom = g_viewClipRect.left;
+			output->left = g_viewClipRect.bottom;
+			output->right = g_viewClipRect.right;
+		}
+
+		// FUNCTION: TOY2 0x004B5590
+		void GetViewportRect(ViewportRectAlt* output)
+		{
+			output->left = g_currentViewportX;
+			output->top = g_currentViewportY;
+			output->right = g_currentViewportWidth + g_currentViewportX - 1.0;
+			output->bottom = g_currentViewportHeight + g_currentViewportY - 1.0;
+		}
+
 		// FUNCTION: TOY2 0x004BA3A0
-		void SetViewClipRect() {}
+		void SetViewClipRect()
+		{
+			ViewportRectAlt spriteRect;
+
+			if (Renderer::g_isSoftwareRendering)
+			{
+				g_viewClipRect.top = SoftwareRenderer::g_topOffset;
+				g_viewClipRect.left = SoftwareRenderer::g_leftOffset;
+				g_viewClipRect.bottom = SoftwareRenderer::g_bottomOffset;
+				g_viewClipRect.right = SoftwareRenderer::g_rightOffset;
+			}
+			else
+			{
+				GetViewportRect(&spriteRect);
+				g_viewClipRect.top = spriteRect.left;
+				g_viewClipRect.left = spriteRect.top;
+				g_viewClipRect.bottom = spriteRect.right;
+				g_viewClipRect.right = spriteRect.bottom;
+			}
+		}
 	}
 }

@@ -1,5 +1,7 @@
 #include "Nu3D/BmpDataNode.h"
 #include "DrawingDevice.h"
+#include "Renderer/Renderer.h"
+#include "Logger.h"
 
 namespace Nu3D
 {
@@ -21,8 +23,109 @@ namespace Nu3D
 	// GLOBAL: TOY2 0x0088400C
 	BmpDataNode* g_currentBmpDataNode;
 
-	// STUB: TOY2 0x004AFF80
-	void CopyTextureToSurface(BmpDataNode* bitmapDataNode) {}
+	// FUNCTION: TOY2 0x004AFCB0
+	void CalculatePixelFormatShifts(PixelFormatInfo* pixelFormatInfo, DDSURFACEDESC2* surfaceDesc)
+	{
+		uint32_t mask;
+
+		pixelFormatInfo->alphaShift = -8;
+		mask = surfaceDesc->ddpfPixelFormat.dwRGBAlphaBitMask;
+
+		for (pixelFormatInfo->alphaMask = mask; mask; ++pixelFormatInfo->alphaShift)
+			mask >>= 1;
+
+		pixelFormatInfo->redShift = -8;
+		mask = surfaceDesc->ddpfPixelFormat.dwRBitMask;
+
+		for (pixelFormatInfo->redMask = mask; mask; ++pixelFormatInfo->redShift)
+			mask >>= 1;
+
+		pixelFormatInfo->greenShift = -8;
+		mask = surfaceDesc->ddpfPixelFormat.dwGBitMask;
+
+		for (pixelFormatInfo->greenMask = mask; mask; ++pixelFormatInfo->greenShift)
+			mask >>= 1;
+
+		pixelFormatInfo->blueShift = -8;
+		mask = surfaceDesc->ddpfPixelFormat.dwBBitMask;
+
+		for (pixelFormatInfo->blueMask = mask; mask; ++pixelFormatInfo->blueShift)
+			mask >>= 1;
+	}
+
+	// FUNCTION: TOY2 0x004AFF80
+	void CopyTextureToSurface(BmpDataNode* bmpDataNode)
+	{
+		DDSURFACEDESC2 surfaceDesc;
+		memset(&surfaceDesc, 0, sizeof(surfaceDesc));
+		surfaceDesc.dwSize = sizeof(DDSURFACEDESC2);
+
+		HRESULT lockResult;
+		do
+		{
+			lockResult = bmpDataNode->surface->Lock(0, &surfaceDesc, DDLOCK_WAIT, 0);
+		} while (lockResult == DDERR_WASSTILLDRAWING);
+
+		if (lockResult < 0)
+		{
+			Logger::LogD3DError(lockResult);
+			return;
+		}
+
+		PixelFormatInfo pixelFormatInfo;
+		CalculatePixelFormatShifts(&pixelFormatInfo, &surfaceDesc);
+
+		int32_t texHeight = bmpDataNode->textureHeight;
+
+		for (int32_t row = 0; row < texHeight; ++row)
+		{
+			int32_t texWidth = bmpDataNode->textureWidth;
+
+			uint16_t* destPixel = (uint16_t*)((uint8_t*)surfaceDesc.lpSurface + row * surfaceDesc.lPitch);
+			int32_t* sourcePixel = (int32_t*)&bmpDataNode->texData[texWidth * (texHeight - row - 1)];
+
+			for (int32_t col = 0; col < bmpDataNode->textureWidth; ++col)
+			{
+				int32_t shiftedValue;
+
+				if (pixelFormatInfo.greenShift < 0)
+					shiftedValue = sourcePixel[1] >> -(int8_t)pixelFormatInfo.greenShift;
+				else
+					shiftedValue = sourcePixel[1] << (int8_t)pixelFormatInfo.greenShift;
+
+				uint16_t pixel = (uint16_t)pixelFormatInfo.greenMask & shiftedValue;
+
+				if (pixelFormatInfo.blueShift < 0)
+					shiftedValue = sourcePixel[0] >> -(int8_t)pixelFormatInfo.blueShift;
+				else
+					shiftedValue = sourcePixel[0] << (int8_t)pixelFormatInfo.blueShift;
+
+				pixel = ((uint16_t)pixelFormatInfo.blueMask & shiftedValue) | pixel;
+
+				if (pixelFormatInfo.redShift < 0)
+					shiftedValue = sourcePixel[2] >> -(int8_t)pixelFormatInfo.redShift;
+				else
+					shiftedValue = sourcePixel[2] << (int8_t)pixelFormatInfo.redShift;
+
+				pixel = ((uint16_t)pixelFormatInfo.redMask & shiftedValue) | pixel;
+
+				if ((bmpDataNode->flags & 0xF) != 0)
+				{
+					if (pixelFormatInfo.alphaShift < 0)
+						shiftedValue = sourcePixel[3] >> -(int8_t)pixelFormatInfo.alphaShift;
+					else
+						shiftedValue = sourcePixel[3] << (int8_t)pixelFormatInfo.alphaShift;
+
+					pixel |= (uint16_t)pixelFormatInfo.alphaMask & shiftedValue;
+				}
+
+				*destPixel++ = pixel;
+				++sourcePixel;
+			}
+		}
+
+		bmpDataNode->surface->Unlock(0);
+	}
 
 	// FUNCTION: TOY2 0x004B0400
 	int32_t CountAlphaBits(LPDDPIXELFORMAT pixelFormat)
@@ -520,5 +623,19 @@ namespace Nu3D
 				return 0;
 			}
 		}
+	}
+
+	// FUNCTION: TOY2 0x004AC1A0
+	HRESULT SetTexture(int32_t stageIndex, BmpDataNode* bmpDataNode)
+	{
+		g_currentBmpDataNode = bmpDataNode;
+
+		if (Renderer::g_isSoftwareRendering)
+			return 0;
+
+		if (bmpDataNode)
+			return DrawingDevice::g_drawingDevice->m_pd3dDevice->SetTexture(stageIndex, bmpDataNode->d3dTexture);
+
+		return DrawingDevice::g_drawingDevice->m_pd3dDevice->SetTexture(stageIndex, 0);
 	}
 }

@@ -144,6 +144,12 @@ namespace Renderer
 
 	// GLOBAL: TOY2 0x004F7418
 	float g_virtualScreenHeight = 256.0;
+
+	// GLOBAL: TOY2 0x00A4CC90
+	Nu3D::Material* g_boundMaterial;
+
+	// GLOBAL: TOY2 0x00AAD778
+	int32_t g_boundTextureIndices[8];
 }
 
 namespace DrawingAPI
@@ -802,7 +808,7 @@ namespace Renderer
 					uint8_t tileIndex;
 
 					if (currentChar == '\'')
-						tileIndex = '/';
+						tileIndex = 47;
 					else
 						tileIndex = currentChar - 97;
 
@@ -853,6 +859,71 @@ namespace Renderer
 		{
 			SoftwareRenderer::UnkFunc33();
 			SoftwareRenderer::UnkFunc32();
+		}
+	}
+
+	// FUNCTION: TOY2 0x004B8BF0
+	RGBA ModulateColorByAlpha(RGBA color, int32_t flags)
+	{
+		uint8_t blue;
+		uint8_t green;
+		uint8_t red;
+
+		if (((flags & 0x4000) != 0 || flags == 0x20000000) && g_srcBlendMode == 2)
+		{
+			blue = (color.a * color.b) >> 8;
+			green = (color.a * color.g) >> 8;
+			red = (color.a * color.r) >> 8;
+
+			color.b = blue;
+			color.g = green;
+			color.r = red;
+		}
+		else
+		{
+			blue = color.b;
+			green = color.g;
+			red = color.r;
+		}
+
+		if (g_alphaBlendDest != 6 || flags != 0x40000000)
+			return color;
+
+		color.a = green;
+
+		if (blue == green && blue == red)
+		{
+			color.r = 0;
+			color.g = 0;
+			color.b = 0;
+			return color;
+		}
+
+		color.b = ~blue;
+		color.g = ~green;
+		color.r = ~red;
+
+		return color;
+	}
+
+	// FUNCTION: TOY2 0x004C2870
+	void BindTexture(int32_t texIndex)
+	{
+		g_boundMaterial = 0;
+
+		if (g_boundTextureIndices[0] != texIndex)
+		{
+			g_boundTextureIndices[0] = texIndex;
+			DrawingDevice::BindTexWithStage(texIndex, 0);
+		}
+
+		for (int32_t idx = 1; idx < g_maxSimultaneousTextures; ++idx)
+		{
+			if (g_boundTextureIndices[0] != texIndex)
+			{
+				g_boundTextureIndices[0] = -1;
+				DrawingDevice::BindTexWithStage(-1, idx);
+			}
 		}
 	}
 }

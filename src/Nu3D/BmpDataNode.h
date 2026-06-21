@@ -32,6 +32,18 @@ namespace Nu3D
 		BmpDataNode* prev;
 	};
 
+	struct PixelFormatInfo
+	{
+		int32_t alphaShift;
+		int32_t redShift;
+		int32_t greenShift;
+		int32_t blueShift;
+		int32_t alphaMask;
+		int32_t redMask;
+		int32_t greenMask;
+		int32_t blueMask;
+	};
+
 	struct FindPixelFormat
 	{
 		uint32_t bpp;
@@ -46,6 +58,7 @@ namespace Nu3D
 	void SetMinTexSize(int32_t minTexSize);
 	BmpDataNode* LoadTextureByStream(FILE* handle, const char* rawTexStr, int32_t flags);
 	Nu3D::BmpDataNode* LoadLocalBmpTexture(const char* rawTexStr, int32_t flags);
+	HRESULT SetTexture(int32_t stageIndex, BmpDataNode* bmpDataNode);
 
 	STATIC_ASSERT(sizeof(BmpDataNode) == 0x110);
 }

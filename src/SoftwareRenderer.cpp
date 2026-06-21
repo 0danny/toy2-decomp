@@ -10,6 +10,12 @@ namespace SoftwareRenderer
 
 	// GLOBAL: TOY2 0x00830C60
 	int32_t g_unk830C60;
+	
+	// GLOBAL: TOY2 0x00E4D950
+	int32_t g_unkE4D950;
+
+	// GLOBAL: TOY2 0x009F6008
+	int32_t g_unk9F6008;
 
 	// GLOBAL: TOY2 0x00A4CC74
 	int32_t g_levelFileIndex;
@@ -19,6 +25,18 @@ namespace SoftwareRenderer
 
 	// GLOBAL: TOY2 0x00E4D960
 	int32_t g_softwareClearColor;
+
+	// GLOBAL: TOY2 0x005088D4
+	int32_t g_leftOffset = -1;
+
+	// GLOBAL: TOY2 0x005088D8
+	int32_t g_rightOffset = -1;
+
+	// GLOBAL: TOY2 0x005088DC
+	int32_t g_topOffset = -1;
+
+	// GLOBAL: TOY2 0x005088E0
+	int32_t g_bottomOffset = -1;
 
 	// STUB: TOY2 0x00452130
 	void SwapRenderBuffer() {}

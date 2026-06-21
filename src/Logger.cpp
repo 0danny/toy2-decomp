@@ -107,6 +107,9 @@ namespace Logger
 		Log(buffer);
 	}
 
+	// STUB: TOY2 0x004ADFD0
+	void LogD3DError(int32_t errorCode) {}
+
 	// FUNCTION: TOY2 0x00431900
 	void LogDDError(const char* message, HRESULT error)
 	{
@@ -117,6 +120,17 @@ namespace Logger
 		sprintf(buffer, "ERROR - %s\nERROR - %s\n", message, errorToMsg);
 
 		LogLn(buffer);
+	}
+
+	// FUNCTION: TOY2 0x004A8870
+	void DebugLog(char* format, ...)
+	{
+		char buffer[1024];
+		va_list vaList;
+
+		va_start(vaList, format);
+		vsprintf(buffer, format, vaList);
+		OutputDebugStringA(buffer);
 	}
 
 	// STUB: TOY2 0x0040D490;

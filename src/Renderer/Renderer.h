@@ -72,6 +72,7 @@ namespace Renderer
 	void SetIsSoftwareRendering(int32_t value);
 	void SetVirtualRatioTo54();
 	void DoFrameDelay(int32_t isGameplayFrame);
+	RGBA ApplyGammaCorrection(RGBA color);
 
 	// Draw Methods
 	void ClearScreen(RGBA clearColor, int32_t clearFlags);
@@ -82,9 +83,12 @@ namespace Renderer
 	void DrawMainMenuText(int16_t yPos, char* text, int32_t fadeAlpha);
 	void DrawTintOverlay();
 
+	void InitRenderState(int32_t newStage);
 	void ResetParallax();
 	void RenderParallaxBackground(int32_t forceRender);
 	void FlushRenderQueues();
+	RGBA ModulateColorByAlpha(RGBA color, int32_t flags);
+	void BindTexture(int32_t texIndex);
 
 	STATIC_ASSERT(sizeof(RenderEntry) == 0x18);
 }

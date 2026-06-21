@@ -11,8 +11,14 @@ namespace SoftwareRenderer
 	extern PointI g_unk4F7400;
 	extern int32_t g_unk500A1C;
 	extern int32_t g_unk830C60;
+	extern int32_t g_unkE4D950;
+	extern int32_t g_unk9F6008;
 	extern Nu3D::Viewport::ViewportRect* g_viewportRect;
 	extern int32_t g_softwareClearColor;
+	extern int32_t g_leftOffset;
+	extern int32_t g_rightOffset;
+	extern int32_t g_topOffset;
+	extern int32_t g_bottomOffset;
 
 	void SwapRenderBuffer();
 	void SetLevelFileIndex(int32_t index);

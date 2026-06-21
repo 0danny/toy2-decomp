@@ -1,5 +1,9 @@
 #include "DrawingDevice.h"
 #include "Nu3D/BmpDataNode.h"
+#include "NGNLoader/NGNLoader.h"
+#include "Common.h"
+
+#include <STDIO.H>
 
 namespace DrawingDevice
 {
@@ -23,6 +27,9 @@ namespace DrawingDevice
 
 	// GLOBAL: TOY2 0x00884040
 	int32_t g_viewportBottomOffset;
+
+	// GLOBAL: TOY2 0x00E4D8E4
+	int32_t g_setTexCalls;
 
 	/* ------ CD3DFramework ------- */
 
@@ -568,6 +575,12 @@ namespace DrawingDevice
 	// FUNCTION: TOY2 0x004ABBD0
 	int32_t GetHeight() { return g_drawingDevice->m_dwRenderHeight; }
 
+	// FUNCTION: TOY2 0x004ABD90
+	int32_t GetDestWidth() { return g_drawingDevice->m_rcViewportRect.right - g_drawingDevice->m_rcViewportRect.left; }
+
+	// FUNCTION: TOY2 0x004ABDA0
+	int32_t GetDestHeight() { return g_drawingDevice->m_rcViewportRect.bottom - g_drawingDevice->m_rcViewportRect.top; }
+
 	// FUNCTION: TOY2 0x004ABB30
 	int32_t SetViewport(LPD3DVIEWPORT2 viewport)
 	{
@@ -676,7 +689,7 @@ namespace DrawingDevice
 
 		if (viewport)
 		{
-			LPRECT destRect = DrawingDevice::GetDestRect();
+			LPRECT destRect = GetDestRect();
 
 			return viewport->Clear2(1, (LPD3DRECT)destRect, clearFlags, clearColor, 1.0, 0);
 		}
@@ -687,7 +700,7 @@ namespace DrawingDevice
 	// FUNCTION: TOY2 0x004ABA90
 	HRESULT BeginScene()
 	{
-		LPDIRECT3DDEVICE3 device = DrawingDevice::GetD3DDevice();
+		LPDIRECT3DDEVICE3 device = GetD3DDevice();
 
 		if (device)
 			return device->BeginScene();
@@ -717,10 +730,22 @@ namespace DrawingDevice
 	// FUNCTION: TOY2 0x004ABAD0
 	void EndScene()
 	{
-		LPDIRECT3DDEVICE3 device = DrawingDevice::GetD3DDevice();
+		LPDIRECT3DDEVICE3 device = GetD3DDevice();
 
 		if (device)
 			device->EndScene();
+	}
+
+	HRESULT BindTexWithStage(int32_t textureIndex, int32_t stageIndex)
+	{
+		Nu3D::BmpDataNode* bmpDataNode;
+
+		++g_setTexCalls;
+
+		if (textureIndex && (bmpDataNode = NGNLoader::g_textureDataFreeList[textureIndex].bmpDataNode) != 0)
+			return Nu3D::SetTexture(stageIndex, bmpDataNode);
+		else
+			return Nu3D::SetTexture(stageIndex, 0);
 	}
 }
 

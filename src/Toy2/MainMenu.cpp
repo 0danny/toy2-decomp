@@ -52,7 +52,7 @@ namespace Toy2
 			}
 		}
 
-		// STUB: TOY2 0x00437C40
+		// FUNCTION: TOY2 0x00437C40
 		int32_t Draw()
 		{
 			InputManager::g_curButtonsPressed = 0;

@@ -115,7 +115,7 @@ namespace NGNLoader
 	}
 
 	// FUNCTION: TOY2 0x004AC240
-	Nu3D::BmpDataNode* LoadLocalBmpTexture(const char* rawTexStr, int32_t flags) { return 0; }
+	Nu3D::BmpDataNode* LoadLocalBmpTexture(const char* rawTexStr, int32_t flags) { return Nu3D::LoadLocalBmpTexture(rawTexStr, flags); }
 
 	// FUNCTION: TOY2 0x004BB3C0
 	uint32_t GetOrAllocateTexture(NGNTextureParams* texParams)
@@ -691,26 +691,27 @@ namespace NGNLoader
 	{
 		FreeAllBmpDataNodes();
 
+		// $TODO: This method is really confusing because of some compiler optimizations
+		// It works as of right now but needs attention when we go instruction match
+
 		uint32_t textureDataCount = 1;
-		NGNTextureData* dataFreeListPtr = g_textureDataFreeList;
+		NGNTextureData* dataFreeListPtr = &g_textureDataFreeList[1];
 
 		do
 		{
 			++textureDataCount;
-
 			dataFreeListPtr->next = dataFreeListPtr + 1;
 			dataFreeListPtr[1].prev = dataFreeListPtr;
 			dataFreeListPtr[1].textureIndex = textureDataCount;
-
 			++dataFreeListPtr;
 
 		} while (dataFreeListPtr < &g_textureDataFreeList[1999]);
 
-		g_textureDataFreeList[0].textureIndex = 1;
-		g_textureDataFreeList[0].prev = 0;
+		g_textureDataFreeList[1].textureIndex = 1;
+		g_textureDataFreeList[1].prev = 0;
 		g_textureDataFreeList[textureDataCount].next = 0;
 
-		g_textureData.freeList = &g_textureDataFreeList[0];
+		g_textureData.freeList = &g_textureDataFreeList[1];
 		g_textureData.activeList = 0;
 
 		uint32_t textureCacheCount = 1;
@@ -721,7 +722,6 @@ namespace NGNLoader
 			cacheFreeListPtr->next = cacheFreeListPtr + 1;
 			cacheFreeListPtr[1].prev = cacheFreeListPtr;
 			cacheFreeListPtr[1].textureIndex = textureCacheCount;
-
 			++cacheFreeListPtr;
 			++textureCacheCount;
 
