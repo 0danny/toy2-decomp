@@ -53,7 +53,7 @@ namespace Nu3D
 			mask >>= 1;
 	}
 
-	// FUNCTION: TOY2 0x004AFF80
+	// FUNCTION: TOY2 0x004AFF80 [MATCHED]
 	void CopyTextureToSurface(BmpDataNode* bmpDataNode)
 	{
 		DDSURFACEDESC2 surfaceDesc;
@@ -63,7 +63,7 @@ namespace Nu3D
 		HRESULT lockResult;
 		do
 		{
-			lockResult = bmpDataNode->surface->Lock(0, &surfaceDesc, DDLOCK_WAIT, 0);
+			lockResult = bmpDataNode->surface->Lock(0, &surfaceDesc, DDLOCK_NOSYSLOCK, 0);
 		} while (lockResult == DDERR_WASSTILLDRAWING);
 
 		if (lockResult < 0)
@@ -75,58 +75,63 @@ namespace Nu3D
 		PixelFormatInfo pixelFormatInfo;
 		CalculatePixelFormatShifts(&pixelFormatInfo, &surfaceDesc);
 
-		int32_t texHeight = bmpDataNode->textureHeight;
-
-		for (int32_t row = 0; row < texHeight; ++row)
+		for (int32_t row = 0; row < bmpDataNode->textureHeight; ++row)
 		{
+			int32_t texHeight = bmpDataNode->textureHeight;
 			int32_t texWidth = bmpDataNode->textureWidth;
 
+			uint8_t* sourcePixel = (uint8_t*)&bmpDataNode->texData[texWidth * (texHeight - row - 1)];
 			uint16_t* destPixel = (uint16_t*)((uint8_t*)surfaceDesc.lpSurface + row * surfaceDesc.lPitch);
-			int32_t* sourcePixel = (int32_t*)&bmpDataNode->texData[texWidth * (texHeight - row - 1)];
 
-			for (int32_t col = 0; col < bmpDataNode->textureWidth; ++col)
+			int32_t col = 0;
+
+			if (texWidth > 0)
 			{
-				int32_t shiftedValue;
-
-				if (pixelFormatInfo.greenShift < 0)
-					shiftedValue = sourcePixel[1] >> -(int8_t)pixelFormatInfo.greenShift;
-				else
-					shiftedValue = sourcePixel[1] << (int8_t)pixelFormatInfo.greenShift;
-
-				uint16_t pixel = (uint16_t)pixelFormatInfo.greenMask & shiftedValue;
-
-				if (pixelFormatInfo.blueShift < 0)
-					shiftedValue = sourcePixel[0] >> -(int8_t)pixelFormatInfo.blueShift;
-				else
-					shiftedValue = sourcePixel[0] << (int8_t)pixelFormatInfo.blueShift;
-
-				pixel = ((uint16_t)pixelFormatInfo.blueMask & shiftedValue) | pixel;
-
-				if (pixelFormatInfo.redShift < 0)
-					shiftedValue = sourcePixel[2] >> -(int8_t)pixelFormatInfo.redShift;
-				else
-					shiftedValue = sourcePixel[2] << (int8_t)pixelFormatInfo.redShift;
-
-				pixel = ((uint16_t)pixelFormatInfo.redMask & shiftedValue) | pixel;
-
-				if ((bmpDataNode->flags & 0xF) != 0)
+				do
 				{
-					if (pixelFormatInfo.alphaShift < 0)
-						shiftedValue = sourcePixel[3] >> -(int8_t)pixelFormatInfo.alphaShift;
+					int32_t shiftedValue;
+
+					if (pixelFormatInfo.greenShift >= 0)
+						shiftedValue = sourcePixel[1] << (int8_t)pixelFormatInfo.greenShift;
 					else
-						shiftedValue = sourcePixel[3] << (int8_t)pixelFormatInfo.alphaShift;
+						shiftedValue = sourcePixel[1] >> -(int8_t)pixelFormatInfo.greenShift;
 
-					pixel |= (uint16_t)pixelFormatInfo.alphaMask & shiftedValue;
-				}
+					uint16_t pixel = (uint16_t)pixelFormatInfo.greenMask & shiftedValue;
 
-				*destPixel++ = pixel;
-				++sourcePixel;
+					if (pixelFormatInfo.blueShift >= 0)
+						shiftedValue = sourcePixel[0] << (int8_t)pixelFormatInfo.blueShift;
+					else
+						shiftedValue = sourcePixel[0] >> -(int8_t)pixelFormatInfo.blueShift;
+
+					pixel = ((uint16_t)pixelFormatInfo.blueMask & shiftedValue) | pixel;
+
+					if (pixelFormatInfo.redShift >= 0)
+						shiftedValue = sourcePixel[2] << (int8_t)pixelFormatInfo.redShift;
+					else
+						shiftedValue = sourcePixel[2] >> -(int8_t)pixelFormatInfo.redShift;
+
+					pixel = ((uint16_t)pixelFormatInfo.redMask & shiftedValue) | pixel;
+
+					if ((bmpDataNode->flags & 0xF) != 0)
+					{
+						if (pixelFormatInfo.alphaShift >= 0)
+							shiftedValue = sourcePixel[3] << (int8_t)pixelFormatInfo.alphaShift;
+						else
+							shiftedValue = sourcePixel[3] >> -(int8_t)pixelFormatInfo.alphaShift;
+
+						pixel |= (uint16_t)pixelFormatInfo.alphaMask & shiftedValue;
+					}
+
+					*destPixel++ = pixel;
+					sourcePixel += 4;
+					++col;
+
+				} while (col < bmpDataNode->textureWidth);
 			}
 		}
 
 		bmpDataNode->surface->Unlock(0);
 	}
-
 	// FUNCTION: TOY2 0x004B0400
 	int32_t CountAlphaBits(LPDDPIXELFORMAT pixelFormat)
 	{
@@ -347,7 +352,9 @@ namespace Nu3D
 
 			if ((flags & 8) != 0 && color.value == 0xFF00FF00)
 			{
-				RGBA empty = { 0, 0, 0, 0 };
+				RGBA empty;
+				empty.value = 0;
+
 				return empty;
 			}
 		}

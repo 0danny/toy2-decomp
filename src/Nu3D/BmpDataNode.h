@@ -15,8 +15,8 @@ namespace Nu3D
 		LPDIRECT3DTEXTURE2 d3dTexture;
 		DDSURFACEDESC2 surfaceDesc;
 		uint32_t* texData;
-		uint32_t textureWidth;
-		uint32_t textureHeight;
+		int32_t textureWidth;
+		int32_t textureHeight;
 		uint32_t bitmapWidth;
 		uint32_t bitmapHeight;
 		HBITMAP bitmapHandle;
