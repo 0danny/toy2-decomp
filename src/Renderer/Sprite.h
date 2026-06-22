@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Numerics.h"
 
 namespace Renderer
 {
@@ -18,6 +19,16 @@ namespace Renderer
 			int16_t flags,
 			int32_t scaleX,
 			int32_t scaleY);
+
+		void Queue2DSprite(float xPosition,
+			float yPosition,
+			float width,
+			float height,
+			Vector2F* uvTopLeft,
+			Vector2F* uvBottomRight,
+			int32_t textureIndex,
+			RGBA color,
+			int32_t flags);
 
 		void ResetQueue();
 		void DrawQueuedSprite();

@@ -15,4 +15,6 @@ namespace NGNLoader
 	int32_t GetTextureDataIndex(uint32_t textureIndex);
 	void RetrieveTextureData(
 		int32_t texDataIndex, uint32_t* bitmapWidthOut, uint32_t* bitmapHeightOut, uint32_t* textureWidth, uint32_t* textureHeight, uint32_t** textureData);
+	HBITMAP GetBmpHandle(int32_t index);
+	int32_t CopyToDDSurfaceByIndex(int32_t texIndex, LPDIRECTDRAWSURFACE4 ddSurface);
 }

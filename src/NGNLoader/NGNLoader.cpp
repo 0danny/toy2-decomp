@@ -775,4 +775,22 @@ namespace NGNLoader
 			}
 		}
 	}
+
+	// FUNCTION: TOY2 0x004BB6C0
+	HBITMAP GetBmpHandle(int32_t index)
+	{
+		if (index)
+			return g_textureDataFreeList[index].bmpDataNode->bitmapHandle;
+		else
+			return 0;
+	}
+
+	// FUNCTION: TOY2 0x004BB690
+	int32_t CopyToDDSurfaceByIndex(int32_t texIndex, LPDIRECTDRAWSURFACE4 ddSurface)
+	{
+		if (texIndex)
+			return Nu3D::CopyToDDSurface(g_textureDataFreeList[texIndex].bmpDataNode, ddSurface);
+		else
+			return 0;
+	}
 }

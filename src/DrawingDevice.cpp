@@ -581,6 +581,9 @@ namespace DrawingDevice
 	// FUNCTION: TOY2 0x004ABDA0
 	int32_t GetDestHeight() { return g_drawingDevice->m_rcViewportRect.bottom - g_drawingDevice->m_rcViewportRect.top; }
 
+	// FUNCTION: TOY2 0x004ABBF0
+	LPDIRECTDRAWSURFACE4 GetBackBuffer() { return g_drawingDevice->m_pddsBackBuffer; }
+
 	// FUNCTION: TOY2 0x004ABB30
 	int32_t SetViewport(LPD3DVIEWPORT2 viewport)
 	{

@@ -66,6 +66,7 @@ namespace Renderer
 	extern uint32_t g_frameDelta;
 	extern float g_virtualScreenWidth;
 	extern float g_virtualScreenHeight;
+	extern float g_parallaxCurHorizScroll;
 
 	void Cleanup();
 	void Init();
@@ -73,6 +74,7 @@ namespace Renderer
 	void SetVirtualRatioTo54();
 	void DoFrameDelay(int32_t isGameplayFrame);
 	RGBA ApplyGammaCorrection(RGBA color);
+	int32_t GetIsSoftwareRendering();
 
 	// Draw Methods
 	void ClearScreen(RGBA clearColor, int32_t clearFlags);

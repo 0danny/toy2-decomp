@@ -329,9 +329,9 @@ namespace Nu3D
 
 			int32_t paletteIndex = 4 * *((uint8_t*)mainBmp->bmBits + x * mainBmp->bmWidth / textureSize + mainBmp->bmWidthBytes * scaledY2);
 
-			color.r = g_lastBmpPalette[paletteIndex];
-			color.b = g_lastBmpPalette[paletteIndex + 2];
+			color.b = g_lastBmpPalette[paletteIndex];
 			color.g = g_lastBmpPalette[paletteIndex + 1];
+			color.r = g_lastBmpPalette[paletteIndex + 2];
 
 			if ((flags & 2) != 0)
 			{
@@ -347,7 +347,7 @@ namespace Nu3D
 
 			if ((flags & 8) != 0 && color.value == 0xFF00FF00)
 			{
-				RGBA empty = { 0 };
+				RGBA empty = { 0, 0, 0, 0 };
 				return empty;
 			}
 		}
@@ -359,9 +359,9 @@ namespace Nu3D
 
 			uint8_t* pixelOffset = (uint8_t*)mainBmp->bmBits + 3 * (x * mainBmp->bmWidth / textureSize) + mainBmp->bmWidthBytes * scaledY;
 
+			color.b = pixelOffset[0];
 			color.g = pixelOffset[1];
-			color.r = *pixelOffset;
-			color.b = pixelOffset[2];
+			color.r = pixelOffset[2];
 
 			if ((flags & 2) != 0)
 			{
@@ -637,5 +637,175 @@ namespace Nu3D
 			return DrawingDevice::g_drawingDevice->m_pd3dDevice->SetTexture(stageIndex, bmpDataNode->d3dTexture);
 
 		return DrawingDevice::g_drawingDevice->m_pd3dDevice->SetTexture(stageIndex, 0);
+	}
+
+	// FUNCTION: TOY2 0x004B0D90
+	void GetDIBPixelColor(BGRA* color, DIBSECTION* dibSection, RGBQUAD* colorTables, int32_t* rowBasePtr, int32_t xOffset)
+	{
+		color->a = 255;
+
+		WORD bitDepth = dibSection->dsBmih.biBitCount;
+
+		if (bitDepth == 8)
+		{
+			uint8_t index = ((uint8_t*)rowBasePtr)[xOffset];
+			color->b = colorTables[index].rgbBlue;
+			color->g = colorTables[index].rgbGreen;
+			color->r = colorTables[index].rgbRed;
+		}
+		else if (bitDepth == 24)
+		{
+			uint8_t* pixelPtr = (uint8_t*)rowBasePtr + 2 * xOffset + xOffset;
+
+			color->b = *pixelPtr++;
+			color->g = *pixelPtr;
+			color->r = pixelPtr[1];
+		}
+	}
+
+	// FUNCTION: TOY2 0x004B0E00
+	int32_t CopyToDDSurface(BmpDataNode* bmpDataNode, LPDIRECTDRAWSURFACE4 ddSurface)
+	{
+		int32_t result = 0;
+
+		if (! bmpDataNode)
+			return result;
+
+		HBITMAP bmpHandle = bmpDataNode->bitmapHandle;
+		if (! bmpHandle)
+			return result;
+
+		DIBSECTION dibSection;
+		if (! GetObjectA(bmpHandle, sizeof(DIBSECTION), &dibSection))
+			return result;
+
+		DDSURFACEDESC2 surfaceDesc;
+		memset(&surfaceDesc, 0, sizeof(surfaceDesc));
+		surfaceDesc.dwSize = sizeof(DDSURFACEDESC2);
+
+		HRESULT lockResult;
+		do
+		{
+			lockResult = ddSurface->Lock(0, &surfaceDesc, DDLOCK_WAIT, 0);
+		} while (lockResult == DDERR_WASSTILLDRAWING);
+
+		if (lockResult < 0)
+		{
+			Logger::LogD3DError(lockResult);
+			return 0;
+		}
+
+		HDC dc = CreateCompatibleDC(0);
+
+		if (dc)
+		{
+			RGBQUAD colorTables[256];
+			HGDIOBJ oldObject = SelectObject(dc, bmpDataNode->bitmapHandle);
+
+			if (dibSection.dsBmih.biBitCount == 8)
+				GetDIBColorTable(dc, 0, 256, colorTables);
+
+			PixelFormatInfo pixelFormat;
+			CalculatePixelFormatShifts(&pixelFormat, &surfaceDesc);
+
+			for (uint32_t currentRow = 0; currentRow < surfaceDesc.dwHeight; ++currentRow)
+			{
+				uint32_t width = surfaceDesc.dwWidth;
+				uint32_t bitCount = surfaceDesc.ddpfPixelFormat.dwRGBBitCount;
+
+				int32_t* srcRowPtr = (int32_t*)((uint8_t*)dibSection.dsBm.bmBits
+					+ dibSection.dsBm.bmWidthBytes * (dibSection.dsBm.bmHeight - currentRow * dibSection.dsBm.bmHeight / surfaceDesc.dwHeight - 1));
+
+				int32_t* destRowPtr = (int32_t*)((uint8_t*)surfaceDesc.lpSurface + currentRow * surfaceDesc.lPitch);
+
+				if (bitCount >= 15)
+				{
+					if (bitCount > 16)
+					{
+						if (bitCount == 32)
+						{
+							for (uint32_t xPixel = 0; xPixel < surfaceDesc.dwWidth; ++xPixel)
+							{
+								BGRA color;
+								GetDIBPixelColor(&color, &dibSection, colorTables, srcRowPtr, xPixel * dibSection.dsBm.bmWidth / width);
+
+								int32_t shiftedGreen;
+								if (pixelFormat.greenShift < 0)
+									shiftedGreen = color.g >> -(int8_t)pixelFormat.greenShift;
+								else
+									shiftedGreen = color.g << (int8_t)pixelFormat.greenShift;
+
+								int32_t maskedGreen = pixelFormat.greenMask & shiftedGreen;
+
+								int32_t shiftedBlue;
+								if (pixelFormat.blueShift < 0)
+									shiftedBlue = color.b >> -(int8_t)pixelFormat.blueShift;
+								else
+									shiftedBlue = color.b << (int8_t)pixelFormat.blueShift;
+
+								int32_t maskedBlue = (pixelFormat.blueMask & shiftedBlue) | maskedGreen;
+
+								int32_t shiftedRed;
+								if (pixelFormat.redShift < 0)
+									shiftedRed = color.r >> -(int8_t)pixelFormat.redShift;
+								else
+									shiftedRed = color.r << (int8_t)pixelFormat.redShift;
+
+								*destRowPtr++ = maskedBlue | (pixelFormat.redMask & shiftedRed);
+
+								width = surfaceDesc.dwWidth;
+							}
+						}
+					}
+					else
+					{
+						// 15 or 16 bit
+						for (uint32_t xPixel = 0; xPixel < surfaceDesc.dwWidth; ++xPixel)
+						{
+							BGRA color;
+							GetDIBPixelColor(&color, &dibSection, colorTables, srcRowPtr, xPixel * dibSection.dsBm.bmWidth / width);
+
+							int32_t shiftedGreen;
+							if (pixelFormat.greenShift < 0)
+								shiftedGreen = color.g >> -(int8_t)pixelFormat.greenShift;
+							else
+								shiftedGreen = color.g << (int8_t)pixelFormat.greenShift;
+
+							int16_t maskedGreen = (uint16_t)pixelFormat.greenMask & shiftedGreen;
+
+							int32_t shiftedBlue;
+							if (pixelFormat.blueShift < 0)
+								shiftedBlue = color.b >> -(int8_t)pixelFormat.blueShift;
+							else
+								shiftedBlue = color.b << (int8_t)pixelFormat.blueShift;
+
+							int16_t maskedBlue = ((uint16_t)pixelFormat.blueMask & shiftedBlue) | maskedGreen;
+
+							int32_t shiftedRed;
+							if (pixelFormat.redShift < 0)
+								shiftedRed = color.r >> -(int8_t)pixelFormat.redShift;
+							else
+								shiftedRed = color.r << (int8_t)pixelFormat.redShift;
+
+							*(uint16_t*)destRowPtr = maskedBlue | ((uint16_t)pixelFormat.redMask & shiftedRed);
+							destRowPtr = (int32_t*)((uint8_t*)destRowPtr + 2);
+
+							width = surfaceDesc.dwWidth;
+						}
+
+						bitCount = surfaceDesc.ddpfPixelFormat.dwRGBBitCount;
+					}
+				}
+
+				result = 1;
+			}
+
+			SelectObject(dc, oldObject);
+			DeleteDC(dc);
+		}
+
+		ddSurface->Unlock(0);
+
+		return result;
 	}
 }

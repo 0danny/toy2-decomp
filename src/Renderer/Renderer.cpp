@@ -9,6 +9,7 @@
 #include "Nu3D/Patch.h"
 #include "Renderer/Sprite.h"
 #include "Toy2/Toy2.h"
+#include "Renderer/Glue.h"
 
 namespace Renderer
 {
@@ -150,6 +151,27 @@ namespace Renderer
 
 	// GLOBAL: TOY2 0x00AAD778
 	int32_t g_boundTextureIndices[8];
+
+	// GLOBAL: TOY2 0x00500A54
+	int32_t g_drawParallaxTexture = 1;
+
+	// GLOBAL: TOY2 0x0072EF90
+	float g_parallaxHorizOffset;
+
+	// GLOBAL: TOY2 0x00830C50
+	float g_parallaxCurHorizScroll;
+
+	// GLOBAL: TOY2 0x00731CD0
+	float g_parallaxTexHeightRatio;
+
+	// GLOBAL: TOY2 0x00731CD4
+	float g_parallaxTexWidthRatio;
+
+	// GLOBAL: TOY2 0x00731D68
+	RGBA g_parallaxTexFirstPixel;
+
+	// GLOBAL: TOY2 0x00731CC8
+	RGBA g_parallaxTexLastPixel;
 }
 
 namespace DrawingAPI
@@ -831,8 +853,84 @@ namespace Renderer
 	// STUB: TOY2 0x0048F3E0
 	void ResetParallax() {}
 
-	// STUB: TOY2 0x0048F410
-	void RenderParallaxBackground(int32_t forceRender) {}
+	// FUNCTION: TOY2 0x004B3870
+	int32_t GetIsSoftwareRendering() { return g_isSoftwareRendering; }
+
+	// FUNCTION: TOY2 0x0048F410
+	void RenderParallaxBackground(int32_t forceRender)
+	{
+		if (g_drawParallaxTexture)
+		{
+			if (Toy2::g_hasStaticBackdrop)
+			{
+				g_parallaxHorizOffset = 0.0;
+				g_parallaxCurHorizScroll = 0.0;
+				g_parallaxTexHeightRatio = 1.0;
+				g_parallaxTexWidthRatio = 1.0;
+			}
+			else if (! Toy2::g_hasBackdrop)
+			{
+				return;
+			}
+
+			if (forceRender || GetIsSoftwareRendering() || (Glue::SetBackdrop(Toy2::g_nextBackdropId), ! Glue::BackdropBltFast()))
+			{
+				int32_t texIndex = NGNLoader::GetTextureDataIndex(Toy2::g_nextBackdropId);
+
+				if (texIndex)
+				{
+					Vector2F uvMax;
+					Vector2F uvMin;
+
+					uvMin.y = 0.0;
+					uvMin.x = 0.0;
+
+					uvMax.y = 1.0;
+					uvMax.x = 1.0;
+
+					if (g_parallaxHorizOffset > 0.0)
+					{
+						float topFillHeight = 1.0 / g_virtualScreenHeight + g_parallaxHorizOffset;
+						Sprite::Queue2DSprite(0.0, 0.0, 1.0, topFillHeight, &uvMin, &uvMax, 0, g_parallaxTexLastPixel, RENDER_PARALLAX_BG);
+					}
+
+					double verticalExtent = g_parallaxTexHeightRatio + g_parallaxHorizOffset;
+
+					if (verticalExtent < 1.0)
+					{
+						float bottomFillHeight = 1.0 - g_parallaxHorizOffset - g_parallaxTexHeightRatio + 1.0 / g_virtualScreenHeight;
+						float verticalEnd = verticalExtent;
+
+						Sprite::Queue2DSprite(
+							0.0, verticalEnd, 1.0, bottomFillHeight, &uvMin, &uvMax, 0, g_parallaxTexFirstPixel, RENDER_PARALLAX_BG);
+					}
+
+					double nextHorizontalPos;
+
+					do
+					{
+						RGBA color;
+						color.value = -1;
+
+						Sprite::Queue2DSprite(g_parallaxCurHorizScroll,
+							g_parallaxHorizOffset,
+							g_parallaxTexWidthRatio,
+							g_parallaxTexHeightRatio,
+							&uvMin,
+							&uvMax,
+							texIndex,
+							color,
+							RENDER_PARALLAX_BG);
+
+						nextHorizontalPos = g_parallaxTexWidthRatio + g_parallaxCurHorizScroll;
+
+						g_parallaxCurHorizScroll = nextHorizontalPos;
+
+					} while (nextHorizontalPos < 1.0);
+				}
+			}
+		}
+	}
 
 	// FUNCTION: TOY2 0x004B8400
 	void FlushMaterialBuckets() {}
@@ -872,12 +970,12 @@ namespace Renderer
 		if (((flags & 0x4000) != 0 || flags == 0x20000000) && g_srcBlendMode == 2)
 		{
 			blue = (color.a * color.b) >> 8;
-			green = (color.a * color.g) >> 8;
 			red = (color.a * color.r) >> 8;
+			green = (color.a * color.g) >> 8;
 
 			color.b = blue;
-			color.g = green;
 			color.r = red;
+			color.g = green;
 		}
 		else
 		{
@@ -893,15 +991,15 @@ namespace Renderer
 
 		if (blue == green && blue == red)
 		{
-			color.r = 0;
-			color.g = 0;
 			color.b = 0;
+			color.g = 0;
+			color.r = 0;
 			return color;
 		}
 
-		color.b = ~blue;
-		color.g = ~green;
-		color.r = ~red;
+		color.b = 255 - blue;
+		color.g = 255 - green;
+		color.r = 255 - red;
 
 		return color;
 	}

@@ -31,20 +31,19 @@ namespace Renderer
 		// FUNCTION: TOY2 0x004B68B0
 		HRESULT Render2DSprite(Nu3D::Sprite* sprite)
 		{
-			int32_t xPos = DrawingDevice::GetDestWidth() * sprite->position.x;
-			int32_t xOffset = DrawingDevice::GetDestWidth() * (sprite->width + sprite->position.x);
-			int32_t yPos = DrawingDevice::GetDestHeight() * sprite->position.y;
-			int32_t destHeight = DrawingDevice::GetDestHeight();
+			float xPos = DrawingDevice::GetDestWidth() * sprite->position.x;
+			float xOffset = DrawingDevice::GetDestWidth() * (sprite->width + sprite->position.x);
+			float yPos = DrawingDevice::GetDestHeight() * sprite->position.y;
+			float yOffset = DrawingDevice::GetDestHeight() * (sprite->height + sprite->position.y);
 
 			int32_t renderFlags = sprite->renderFlags;
-			int32_t yOffset = destHeight * (sprite->height + sprite->position.y);
 
 			int32_t flags;
-			double zPos;
+			float zPos;
 
 			if (renderFlags == RENDER_PARALLAX_BG)
 			{
-				zPos = Sprite::g_parallaxDepthZPos;
+				zPos = g_parallaxDepthZPos;
 				flags = RENDER_TEXTURE_WRAP_UV | RENDER_Z | RENDER_ZWRITE | RENDER_BILINEAR_FILTER | RENDER_CULL_NONE;
 			}
 			else
@@ -54,32 +53,27 @@ namespace Renderer
 			}
 
 			Nu3D::VertexTL vertexData[4];
-			vertexData[1].position.y = yPos;
-			vertexData[1].uv.y = sprite->uvTopLeft.y;
+			
 			vertexData[3].position.x = xOffset;
 			vertexData[3].position.y = yPos;
 			vertexData[1].position.z = zPos;
 			vertexData[3].position.z = zPos;
-			vertexData[3].uv.x = sprite->uvTopRight.x;
 			vertexData[3].uv.y = sprite->uvTopRight.y;
+			vertexData[3].uv.x = sprite->uvTopRight.x;
 			vertexData[0].position.x = xPos;
 			vertexData[0].uv.x = sprite->uvBottomLeft.x;
-			vertexData[0].position.y = yOffset;
 			vertexData[0].uv.y = sprite->uvBottomLeft.y;
+			vertexData[0].position.y = yOffset;
 			vertexData[0].position.z = zPos;
 			vertexData[1].position.x = xPos;
-			vertexData[2].position.x = xOffset;
+			vertexData[1].position.y = yPos;
 			vertexData[2].position.y = yOffset;
+			vertexData[2].position.x = xOffset;
+			vertexData[2].position.z = zPos;
 			vertexData[1].uv.x = sprite->uvTopLeft.x;
+			vertexData[1].uv.y = sprite->uvTopLeft.y;
 
 			RGBA color = sprite->color;
-
-			color.a = 255;
-			color.b = 255;
-			color.r = 255;
-			color.g = 255;
-
-			vertexData[2].position.z = zPos;
 			vertexData[2].uv.x = sprite->uvBottomRight.x;
 			vertexData[1].diffuse = color;
 			vertexData[1].rhw = 1.0;
@@ -95,8 +89,6 @@ namespace Renderer
 			SoftwareRenderer::g_unkE4D950 = 5;
 
 			Renderer::BindTexture(sprite->textureIndex);
-
-			Nu3D::BmpDataNode* dbgNode = sprite->textureIndex ? NGNLoader::g_textureDataFreeList[sprite->textureIndex].bmpDataNode : 0;
 
 			SoftwareRenderer::g_viewportRect = &sprite->viewportRect;
 			SoftwareRenderer::g_unk9F6008 = 1;
@@ -281,7 +273,7 @@ namespace Renderer
 			}
 			else
 			{
-				*alphaPtr = 128;
+				*alphaPtr = 255 - ((flags >> 8) & 0xFF);
 				renderFlags = RENDER_ZWRITE | RENDER_CULL_NONE | RENDER_ALPHA_DEFAULT;
 			}
 

@@ -19,6 +19,7 @@
 #include "Nu3D/Camera.h"
 #include "Renderer/Renderer.h"
 #include "AudioManager/AudioManager.h"
+#include "NGNLoader/NGNLoader.h"
 
 #include <WINDOWS.H>
 #include <STDIO.H>
@@ -83,6 +84,12 @@ namespace Toy2
 	// GLOBAL: TOY2 0x0052AD94
 	int32_t g_demoMode;
 
+	// GLOBAL: TOY2 0x0055A0E0
+	int32_t g_hasStaticBackdrop;
+
+	// GLOBAL: TOY2 0x00500A50
+	int32_t g_nextBackdropId = 36;
+
 	// GLOBAL: TOY2 0x00830C88
 	int32_t g_mainMenuState;
 
@@ -130,6 +137,12 @@ namespace Toy2
 
 	// GLOBAL: TOY2 0x00830C1C
 	int32_t g_inputSuppressFrames;
+
+	// GLOBAL: TOY2 0x00500A58
+	SectorBackdropTexIdTable g_sectorBackdropTexTable = {
+		{ 36, 40, 41, 42, 43, 44, 45, 46, 47, 32 },
+		{ 88, 89, 90, 91, 92, 93, 94, 95 },
+	};
 }
 
 namespace Toy2
@@ -210,8 +223,31 @@ namespace Toy2
 	// STUB: TOY2 0x0049AB90
 	int32_t PlayMovieWithTransition(int32_t movieId, int32_t backgroundId) { return 1; }
 
-	// STUB: TOY2 0x0048F1B0
-	void SetBackdropByIndex(int32_t index) {}
+	// FUNCTION: TOY2 0x0048F1B0
+	void SetBackdropByIndex(int32_t index)
+	{
+		int32_t sectorIdx = index + 1;
+		Renderer::g_parallaxCurHorizScroll = 0.0;
+
+		if (index + 1 >= 0 && sectorIdx < 9)
+		{
+			if (NGNLoader::GetTextureDataIndex(g_sectorBackdropTexTable.primary[sectorIdx]))
+			{
+				g_nextBackdropId = g_sectorBackdropTexTable.primary[sectorIdx];
+				g_hasBackdrop = 1;
+			}
+			else
+			{
+				uint32_t l_textureId = g_sectorBackdropTexTable.secondary[sectorIdx - 1];
+				int32_t* l_id = &g_sectorBackdropTexTable.secondary[sectorIdx - 1];
+
+				if (NGNLoader::GetTextureDataIndex(l_textureId))
+					g_nextBackdropId = *l_id;
+
+				g_hasBackdrop = 1;
+			}
+		}
+	}
 
 	// STUB: TOY2 0x00438520
 	int32_t ShowStaticScreen(int32_t backdropIndex) { return 0; }
@@ -953,7 +989,7 @@ namespace Toy2
 	int32_t CleanupManagers() { return 0; }
 
 	// STUB: TOY2 0x0047D7C0
-	void UpdateAudioChannels() {  }
+	void UpdateAudioChannels() {}
 
 	// STUB: TOY2 0x00490BF0
 	int16_t UpdateD3DState() { return 0; }

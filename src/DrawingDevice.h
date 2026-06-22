@@ -113,6 +113,7 @@ namespace DrawingDevice
 	int32_t GetHeight();
 	int32_t GetDestWidth();
 	int32_t GetDestHeight();
+	LPDIRECTDRAWSURFACE4 GetBackBuffer();
 	int32_t SetViewport(LPD3DVIEWPORT2 viewport);
 	int32_t BuildFreshViewport(LPD3DVIEWPORT2 viewport);
 	RECT* GetDestRect();

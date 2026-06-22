@@ -59,6 +59,7 @@ namespace Nu3D
 	BmpDataNode* LoadTextureByStream(FILE* handle, const char* rawTexStr, int32_t flags);
 	Nu3D::BmpDataNode* LoadLocalBmpTexture(const char* rawTexStr, int32_t flags);
 	HRESULT SetTexture(int32_t stageIndex, BmpDataNode* bmpDataNode);
+	int32_t CopyToDDSurface(BmpDataNode* bmpDataNode, LPDIRECTDRAWSURFACE4 ddSurface);
 
 	STATIC_ASSERT(sizeof(BmpDataNode) == 0x110);
 }
