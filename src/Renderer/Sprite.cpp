@@ -53,7 +53,7 @@ namespace Renderer
 			}
 
 			Nu3D::VertexTL vertexData[4];
-			
+
 			vertexData[3].position.x = xOffset;
 			vertexData[3].position.y = yPos;
 			vertexData[1].position.z = zPos;
@@ -203,7 +203,7 @@ namespace Renderer
 			uint32_t red,
 			uint32_t green,
 			uint32_t blue,
-			int16_t flags,
+			uint32_t flags,
 			int32_t scaleX,
 			int32_t scaleY)
 		{
@@ -230,8 +230,8 @@ namespace Renderer
 
 				int16_t ti = (int16_t)tileIndex;
 
-				double dW = (double)(uint32_t)bitmapWidth;
-				double dH = (double)(uint32_t)bitmapHeight;
+				double dW = (double)bitmapWidth;
+				double dH = (double)bitmapHeight;
 
 				uvMin.x = sheet->tiles[ti].x / dW;
 				uvMin.y = sheet->tiles[ti].y / dH;
@@ -267,13 +267,13 @@ namespace Renderer
 				}
 				else
 				{
-					*alphaPtr = 255 - (uint8_t)(flags >> 8);
+					*alphaPtr = 255 - (uint8_t)((flags >> 8) & 0xFF);
 					renderFlags = RENDER_ZWRITE | RENDER_CULL_NONE | RENDER_ALPHA_DEFAULT;
 				}
 			}
 			else
 			{
-				*alphaPtr = 255 - ((flags >> 8) & 0xFF);
+				*alphaPtr = 128;
 				renderFlags = RENDER_ZWRITE | RENDER_CULL_NONE | RENDER_ALPHA_DEFAULT;
 			}
 

@@ -23,6 +23,7 @@ namespace SoftwareRenderer
 	void SwapRenderBuffer();
 	void SetLevelFileIndex(int32_t index);
 	void InitialisePrimarySurface();
+	void InitialisePrimarySurface_T();
 	void Destroy();
 	void ZoomOut();
 	void ZoomIn();

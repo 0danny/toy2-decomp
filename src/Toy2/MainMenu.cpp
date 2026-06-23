@@ -181,7 +181,7 @@ namespace Toy2
 
 				uint32_t bounce = idleTimer & 63;
 
-				if (bounce)
+				if (bounce > 31)
 					bounce = 63 - bounce;
 
 				uint32_t spriteScale = 4 * bounce;

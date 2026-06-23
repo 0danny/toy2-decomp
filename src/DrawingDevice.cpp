@@ -665,10 +665,10 @@ namespace DrawingDevice
 	// FUNCTION: TOY2 0x004ABCA0
 	LPD3DDEVICEDESC CopySurfaceDesc(LPD3DDEVICEDESC outSurfaceDesc)
 	{
-		D3DDEVICEDESC l_surfaceDesc;
+		D3DDEVICEDESC tempDesc;
 
-		memcpy(&l_surfaceDesc, &g_drawingDevice->m_ddDeviceDesc, sizeof(outSurfaceDesc));
-		memcpy(outSurfaceDesc, &l_surfaceDesc, sizeof(D3DDEVICEDESC));
+		memcpy(&tempDesc, &g_drawingDevice->m_ddDeviceDesc, sizeof(D3DDEVICEDESC));
+		memcpy(outSurfaceDesc, &tempDesc, sizeof(D3DDEVICEDESC));
 
 		return outSurfaceDesc;
 	}

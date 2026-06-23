@@ -10,7 +10,7 @@ namespace SoftwareRenderer
 
 	// GLOBAL: TOY2 0x00830C60
 	int32_t g_unk830C60;
-	
+
 	// GLOBAL: TOY2 0x00E4D950
 	int32_t g_unkE4D950;
 
@@ -46,6 +46,9 @@ namespace SoftwareRenderer
 
 	// STUB: TOY2 0x004BCE00
 	void InitialisePrimarySurface() {}
+
+	// STUB: TOY2 0x004C1E60
+	void InitialisePrimarySurface_T() {}
 
 	// STUB: TOY2 0x0047D0F0
 	void Destroy() {}

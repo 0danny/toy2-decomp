@@ -67,6 +67,7 @@ namespace Renderer
 	extern float g_virtualScreenWidth;
 	extern float g_virtualScreenHeight;
 	extern float g_parallaxCurHorizScroll;
+	extern int32_t g_deviceBlendShadeCapsCpy;
 
 	void Cleanup();
 	void Init();
@@ -75,6 +76,8 @@ namespace Renderer
 	void DoFrameDelay(int32_t isGameplayFrame);
 	RGBA ApplyGammaCorrection(RGBA color);
 	int32_t GetIsSoftwareRendering();
+	float BuildGammaCorrectionLUT(float gammaCorrection);
+	void GetBlendShadeCaps(int32_t* capsOut);
 
 	// Draw Methods
 	void ClearScreen(RGBA clearColor, int32_t clearFlags);

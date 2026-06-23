@@ -12,6 +12,7 @@
 #include "Toy2/Toy2.h"
 #include "Toy2/Collectables.h"
 #include "Toy2/Actor.h"
+#include "Toy2/Animation.h"
 #include "AudioManager/AudioManager.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Shadows.h"
@@ -19,6 +20,8 @@
 #include "Renderer/SpriteSheets.h"
 #include "Nu3D/Particles.h"
 #include "Nu3D/Camera.h"
+#include "Nu3D/Light.h"
+#include "SaveManager.h"
 
 namespace Toy2
 {
@@ -51,8 +54,36 @@ namespace Toy2
 		// STUB: TOY2 0x004CEA20
 		void FlushRenderer() {}
 
-		// STUB: TOY2 0x004CE8B0
-		int32_t InitLevelDefaults() { return 0; }
+		// FUNCTION: TOY2 0x004CE8B0
+		int32_t InitLevelDefaults()
+		{
+			Renderer::Init();
+			Renderer::BuildGammaCorrectionLUT(g_toyCfgData.gammaCorrection);
+
+			Nu3D::SetUseAsDiffuseModulation(0);
+			Nu3D::SetDefaultPrimFlags(32);
+
+			Nu3D::Light::BuildGlobalLights();
+			Nu3D::Camera::ApplyTransformToCamera(0);
+
+			Toy2::Animation::ResetNodeAngles();
+
+			SoftwareRenderer::InitialisePrimarySurface_T();
+
+			Renderer::GetBlendShadeCaps(&Renderer::g_deviceBlendShadeCapsCpy);
+
+			SaveManager::SaveToFile(0, "default.cfg");
+
+			FILE* fd = fopen("toy2.cfg", "wb");
+
+			if (! fd)
+				return 0;
+
+			fwrite(&g_toyCfgData, 1, sizeof(g_toyCfgData), fd);
+			fclose(fd);
+
+			return 1;
+		}
 
 		// STUB: TOY2 0x0043E6E0
 		int32_t LoadDAT(int32_t levelId, int32_t fileSize) { return 0; }

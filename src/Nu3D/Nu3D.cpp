@@ -14,6 +14,12 @@ namespace Nu3D
 	// GLOBAL: TOY2 0x00883FE0
 	int64_t g_cpuTicksPerSecond;
 
+	// GLOBAL: TOY2 0x00508A68
+	int32_t g_useAsDiffuseModulation = 1;
+
+	// GLOBAL: TOY2 0x00B1C3B8
+	int32_t g_defaultPrimitiveFlags;
+
 	// FUNCTION: TOY2 0x004B1880
 	void SetIsSoftwareRendering(int32_t value) { g_isSoftwareRendering = value; }
 
@@ -164,4 +170,10 @@ namespace Nu3D
 			Sleep(delayMs);
 		}
 	}
+
+	// FUNCTION: TOY2 0x004CB2C0
+	void SetUseAsDiffuseModulation(int32_t option) { g_useAsDiffuseModulation = option; }
+
+	// FUNCTION: TOY2 0x004CB2A0
+	void SetDefaultPrimFlags(int32_t option) { g_defaultPrimitiveFlags = option; }
 }

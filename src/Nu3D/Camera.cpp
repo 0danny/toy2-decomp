@@ -20,6 +20,9 @@ namespace Nu3D
 		void InitViewMatrixGlobals() {}
 
 		// STUB: TOY2 0x004A1BE0
-        void FadeToTargetTint() {}
+		void FadeToTargetTint() {}
+
+		// STUB: TOY2 0x004CE050
+		void ApplyTransformToCamera(ActiveCameraTransform* camera) {}
 	}
 }

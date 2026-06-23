@@ -7,5 +7,6 @@ namespace Nu3D
     struct Light
     {
         static int32_t InitPool(int32_t poolSize);
+        static void BuildGlobalLights();
     };
 }

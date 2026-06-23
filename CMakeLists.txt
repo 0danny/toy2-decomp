@@ -100,6 +100,8 @@ set(TOY2_SOURCES
     src/Toy2/Collectables.h
     src/Toy2/MainMenu.cpp
     src/Toy2/MainMenu.h
+    src/Toy2/Animation.h
+    src/Toy2/Animation.cpp
 
     # Nu3D
     src/Nu3D/Creature.h

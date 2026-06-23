@@ -16,7 +16,7 @@ namespace Renderer
 			uint32_t red,
 			uint32_t green,
 			uint32_t blue,
-			int16_t flags,
+			uint32_t flags,
 			int32_t scaleX,
 			int32_t scaleY);
 

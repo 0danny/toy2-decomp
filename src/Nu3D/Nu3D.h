@@ -22,10 +22,14 @@ namespace Nu3D
 		Vector2F uv;
 	};
 
+	extern int32_t g_useAsDiffuseModulation;
+
 	void SetIsSoftwareRendering(int32_t value);
-	
 	uint32_t GetHighResolutionTime();
 	void PrecisionSleep(int32_t delayMs);
+
+	void SetUseAsDiffuseModulation(int32_t option);
+	void SetDefaultPrimFlags(int32_t option);
 
 	STATIC_ASSERT(sizeof(VertexTL) == 32);
 	STATIC_ASSERT(sizeof(Vertex) == 36);

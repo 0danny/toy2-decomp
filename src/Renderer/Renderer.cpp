@@ -115,24 +115,30 @@ namespace Renderer
 	// GLOBAL: TOY2 0x0050851C
 	uint8_t g_gammaLUT[256] = {
 		// clang-format off
-		0u,   1u,   2u,   3u,   4u,   5u,   6u,   7u,   8u,   9u,  10u,  11u,  12u,  13u,  14u,  15u,
-		16u,  17u,  18u,  19u,  20u,  21u,  22u,  23u,  24u,  25u,  26u,  27u,  28u,  29u,  30u,  31u,
-		32u,  33u,  34u,  35u,  36u,  37u,  38u,  39u,  40u,  41u,  42u,  43u,  44u,  45u,  46u,  47u,
-		48u,  49u,  50u,  51u,  52u,  53u,  54u,  55u,  56u,  57u,  58u,  59u,  60u,  61u,  62u,  63u,
-		64u,  65u,  66u,  67u,  68u,  69u,  70u,  71u,  72u,  73u,  74u,  75u,  76u,  77u,  78u,  79u,
-		80u,  81u,  82u,  83u,  84u,  85u,  86u,  87u,  88u,  89u,  90u,  91u,  92u,  93u,  94u,  95u,
-		96u,  97u,  98u,  99u, 100u, 101u, 102u, 103u, 104u, 105u, 106u, 107u, 108u, 109u, 110u, 111u,
-		112u, 113u, 114u, 115u, 116u, 117u, 118u, 119u, 120u, 121u, 122u, 123u, 124u, 125u, 126u, 127u,
-		128u, 129u, 130u, 131u, 132u, 133u, 134u, 135u, 136u, 137u, 138u, 139u, 140u, 141u, 142u, 143u,
-		144u, 145u, 146u, 147u, 148u, 149u, 150u, 151u, 152u, 153u, 154u, 155u, 156u, 157u, 158u, 159u,
-		160u, 161u, 162u, 163u, 164u, 165u, 166u, 167u, 168u, 169u, 170u, 171u, 172u, 173u, 174u, 175u,
-		176u, 177u, 178u, 179u, 180u, 181u, 182u, 183u, 184u, 185u, 186u, 187u, 188u, 189u, 190u, 191u,
-		192u, 193u, 194u, 195u, 196u, 197u, 198u, 199u, 200u, 201u, 202u, 203u, 204u, 205u, 206u, 207u,
-		208u, 209u, 210u, 211u, 212u, 213u, 214u, 215u, 216u, 217u, 218u, 219u, 220u, 221u, 222u, 223u,
-		224u, 225u, 226u, 227u, 228u, 229u, 230u, 231u, 232u, 233u, 234u, 235u, 236u, 237u, 238u, 239u,
-		240u, 241u, 242u, 243u, 244u, 245u, 246u, 247u, 248u, 249u, 250u, 251u, 252u, 253u, 254u, 255u,
+		0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+		16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+		32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+		48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+		64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+		80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+		96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+		112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+		128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+		144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+		160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+		176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+		192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+		208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+		224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+		240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
 		// clang-format on
 	};
+
+	// GLOBAL: TOY2 0x005084F4
+	float g_gammaCorrection = 1.0;
+
+	// GLOBAL: TOY2 0x005084F8
+	int32_t g_gammaFixedPoint = 0x10000;
 
 	// GLOBAL: TOY2 0x005087F4
 	int32_t g_drawMaterialBuckets = 1;
@@ -172,6 +178,9 @@ namespace Renderer
 
 	// GLOBAL: TOY2 0x00731CC8
 	RGBA g_parallaxTexLastPixel;
+
+	// GLOBAL: TOY2 0x00E4D96C
+	int32_t g_deviceBlendShadeCapsCpy;
 }
 
 namespace DrawingAPI
@@ -835,9 +844,9 @@ namespace Renderer
 						tileIndex = currentChar - 97;
 
 					if (fadeAlpha == 128)
-						Sprite::DrawScaled(xPos, yPos, 50, tileIndex, 128u, 128u, 128u, 255, 2048, 2048);
+						Sprite::DrawScaled(xPos, yPos, 50, tileIndex, 128, 128, 128, 255, 2048, 2048);
 					else
-						Sprite::DrawScaled(xPos, yPos, 50, tileIndex, 255u, 255u, 255u, (fadeAlpha << 9) + 96, 2048, 2048);
+						Sprite::DrawScaled(xPos, yPos, 50, tileIndex, 255, 255, 255, (fadeAlpha << 9) + 96, 2048, 2048);
 				}
 
 				xPos += 12;
@@ -850,11 +859,53 @@ namespace Renderer
 	// STUB: TOY2 0x0044DD80
 	void DrawTintOverlay() {}
 
-	// STUB: TOY2 0x0048F3E0
-	void ResetParallax() {}
+	// FUNCTION: TOY2 0x0048F3E0
+	void ResetParallax()
+	{
+		g_parallaxCurHorizScroll = 0.0;
+		g_parallaxHorizOffset = 0.0;
+		g_parallaxTexHeightRatio = 1.0;
+		g_parallaxTexWidthRatio = 1.0;
+	}
 
 	// FUNCTION: TOY2 0x004B3870
 	int32_t GetIsSoftwareRendering() { return g_isSoftwareRendering; }
+
+	// FUNCTION: TOY2 0x004B3740 [MATCHED]
+	float BuildGammaCorrectionLUT(float gammaCorrection)
+	{
+		float result = g_gammaCorrection;
+
+		g_gammaCorrection = gammaCorrection;
+		g_gammaFixedPoint = (gammaCorrection * 65536.0f);
+
+		int32_t curGammaIdx = 0;
+		int32_t count = 0;
+		int32_t step = g_gammaFixedPoint;
+
+		do
+		{
+			int32_t outputValue;
+
+			if ((int32_t)(count & 0xFFFF0000) > 0xFF0000)
+				outputValue = 0xFF;
+			else
+				outputValue = count >> 16;
+
+			g_gammaLUT[curGammaIdx++] = outputValue;
+			count += step;
+
+		} while (curGammaIdx < 256);
+
+		return result;
+	}
+
+	// FUNCTION: TOY2 0x004B2CC0
+	void GetBlendShadeCaps(int32_t* capsOut)
+	{
+		if (capsOut)
+			*capsOut = Renderer::g_deviceBlendShadeCaps;
+	}
 
 	// FUNCTION: TOY2 0x0048F410
 	void RenderParallaxBackground(int32_t forceRender)
@@ -901,8 +952,7 @@ namespace Renderer
 						float bottomFillHeight = 1.0 - g_parallaxHorizOffset - g_parallaxTexHeightRatio + 1.0 / g_virtualScreenHeight;
 						float verticalEnd = verticalExtent;
 
-						Sprite::Queue2DSprite(
-							0.0, verticalEnd, 1.0, bottomFillHeight, &uvMin, &uvMax, 0, g_parallaxTexFirstPixel, RENDER_PARALLAX_BG);
+						Sprite::Queue2DSprite(0.0, verticalEnd, 1.0, bottomFillHeight, &uvMin, &uvMax, 0, g_parallaxTexFirstPixel, RENDER_PARALLAX_BG);
 					}
 
 					double nextHorizontalPos;
@@ -969,6 +1019,8 @@ namespace Renderer
 
 		if (((flags & 0x4000) != 0 || flags == 0x20000000) && g_srcBlendMode == 2)
 		{
+			printf("Here!\n");
+
 			blue = (color.a * color.b) >> 8;
 			red = (color.a * color.r) >> 8;
 			green = (color.a * color.g) >> 8;
