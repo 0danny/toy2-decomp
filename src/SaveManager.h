@@ -50,6 +50,7 @@ namespace SaveManager
 	};
 #pragma pack(pop)
 
+	void Init();
 	void InitProgressData(Save0Data* save);
 	void LoadProgressData(Save0Data* save);
 	void SaveToFile(int32_t saveNum, const char *saveName);

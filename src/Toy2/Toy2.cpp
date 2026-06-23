@@ -449,7 +449,11 @@ namespace Toy2
 	}
 
 	// STUB: TOY2 0x0048E730
-	void OneInit() { g_randDatBufferPtr = g_randDatBuffer; }
+	void OneInit()
+	{
+		g_randDatBufferPtr = g_randDatBuffer;
+		SaveManager::Init();
+	}
 
 	// STUB: TOY2 0x00490730
 	void CheckForQuit() {}
