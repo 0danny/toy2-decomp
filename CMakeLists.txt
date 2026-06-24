@@ -71,6 +71,7 @@ set(TOY2_SOURCES
     src/SaveManager.cpp
     src/SaveManager.h
 
+    src/InputTypes.h
     src/InputManager.h
     src/InputManager.cpp
 
