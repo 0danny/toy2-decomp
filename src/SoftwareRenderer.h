@@ -19,7 +19,8 @@ namespace SoftwareRenderer
 	extern int32_t g_rightOffset;
 	extern int32_t g_topOffset;
 	extern int32_t g_bottomOffset;
-
+	extern int32_t g_bitsPerPixel;
+	
 	void SwapRenderBuffer();
 	void SetLevelFileIndex(int32_t index);
 	void InitialisePrimarySurface();
@@ -35,6 +36,7 @@ namespace SoftwareRenderer
 	void UnkFunc31();
 	void UnkFunc32();
 	void UnkFunc33();
+	void UnkFunc7();
 }
 
 namespace SoftwareDevice

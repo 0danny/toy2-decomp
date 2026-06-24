@@ -38,6 +38,9 @@ namespace SoftwareRenderer
 	// GLOBAL: TOY2 0x005088E0
 	int32_t g_bottomOffset = -1;
 
+	// GLOBAL: TOY2 0x00882910
+	int32_t g_bitsPerPixel;
+
 	// STUB: TOY2 0x00452130
 	void SwapRenderBuffer() {}
 
@@ -79,6 +82,9 @@ namespace SoftwareRenderer
 
 	// STUB: TOY2 0x004BCB60
 	void UnkFunc33() {}
+
+	// STUB: TOY2 0x00470C70
+	void UnkFunc7() {}
 }
 
 namespace SoftwareDevice

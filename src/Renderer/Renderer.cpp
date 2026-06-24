@@ -3,6 +3,7 @@
 #include "DrawingDevice.h"
 #include "Nu3D/Light.h"
 #include "Nu3D/Font.h"
+#include "Nu3D/Camera.h"
 #include "Nu3D/BmpDataNode.h"
 #include "Nu3D/Material.h"
 #include "NGNLoader/NGNLoader.h"
@@ -10,6 +11,7 @@
 #include "Renderer/Sprite.h"
 #include "Toy2/Toy2.h"
 #include "Renderer/Glue.h"
+#include "Toy2/D3DApp.h"
 
 namespace Renderer
 {
@@ -856,8 +858,167 @@ namespace Renderer
 		}
 	}
 
-	// STUB: TOY2 0x0044DD80
-	void DrawTintOverlay() {}
+	// FUNCTION: TOY2 0x0044DD80
+	void DrawTintOverlay()
+	{
+		Vector2F uvTopLeft;
+		Vector2F uvBottomRight;
+		bool greenAtOrBelowMid;
+
+		if (Nu3D::Camera::g_cameraTintBlue != 128)
+		{
+			if (Nu3D::Camera::g_cameraTintBlue > 128)
+				goto LBL_BRIGHTEN;
+
+			greenAtOrBelowMid = Nu3D::Camera::g_cameraTintGreen <= 128;
+
+			if (greenAtOrBelowMid)
+				goto LBL_DARKEN;
+
+		LBL_BRIGHTEN:
+
+			int32_t brightenGreen = 2 * Nu3D::Camera::g_cameraTintGreen - 256;
+			int32_t brightenBlue = 2 * Nu3D::Camera::g_cameraTintBlue - 256;
+			int32_t brightenRed = 2 * Nu3D::Camera::g_cameraTintRed - 256;
+
+			if (brightenBlue <= 255)
+			{
+				if (brightenBlue < 0)
+					brightenBlue = 0;
+			}
+			else
+			{
+				brightenBlue = -1;
+			}
+
+			if (brightenGreen <= 255)
+			{
+				if (brightenGreen < 0)
+					brightenGreen = 0;
+			}
+			else
+			{
+				brightenGreen = -1;
+			}
+
+			if (brightenRed <= 255)
+			{
+				if (brightenRed < 0)
+					brightenRed = 0;
+			}
+			else
+			{
+				brightenRed = -1;
+			}
+
+			RGBA brightenColor;
+			brightenColor.b = brightenBlue;
+			brightenColor.g = brightenGreen;
+			brightenColor.a = -1 - brightenGreen;
+			brightenColor.r = brightenRed;
+
+			uvTopLeft.x = 0.0;
+			uvTopLeft.y = 0.0;
+
+			uvBottomRight.x = 1.0;
+			uvBottomRight.y = 1.0;
+
+			Sprite::Queue2DSprite(0.0, 0.0, 1.0, 1.0, &uvTopLeft, &uvBottomRight, 0, brightenColor, RENDER_PRESET_COLOR_OVERLAY);
+
+			if (D3DApp::g_renderMode == RENDERMODE_SOFTWARE && SoftwareRenderer::g_bitsPerPixel == 8)
+				SoftwareRenderer::UnkFunc7();
+
+			return;
+		}
+
+		greenAtOrBelowMid = Nu3D::Camera::g_cameraTintGreen <= 128;
+
+		if (Nu3D::Camera::g_cameraTintGreen != 128)
+		{
+			if (greenAtOrBelowMid)
+				goto LBL_DARKEN;
+
+			goto LBL_BRIGHTEN;
+		}
+
+		if (Nu3D::Camera::g_cameraTintRed == 128)
+			return;
+
+	LBL_DARKEN:
+
+		if (Nu3D::Camera::g_cameraTintRed > 128)
+			goto LBL_BRIGHTEN;
+
+		int32_t darkenBlue = 2 * (128 - Nu3D::Camera::g_cameraTintBlue);
+		int32_t darkenGreen = 2 * (128 - Nu3D::Camera::g_cameraTintGreen);
+		int32_t darkenRed = 2 * (128 - Nu3D::Camera::g_cameraTintRed);
+
+		if (darkenBlue <= 255)
+		{
+			if (((128 - Nu3D::Camera::g_cameraTintBlue) & 0x40000000) != 0)
+				darkenBlue = 0;
+		}
+		else
+		{
+			darkenBlue = -1;
+		}
+
+		if (darkenGreen <= 255)
+		{
+			if (((128 - Nu3D::Camera::g_cameraTintGreen) & 0x40000000) != 0)
+				darkenGreen = 0;
+		}
+		else
+		{
+			darkenGreen = -1;
+		}
+
+		if (darkenRed <= 255)
+		{
+			if (((128 - Nu3D::Camera::g_cameraTintRed) & 0x40000000) != 0)
+				darkenRed = 0;
+		}
+		else
+		{
+			darkenRed = -1;
+		}
+
+		uvTopLeft.x = 0.0;
+		uvTopLeft.y = 0.0;
+
+		uvBottomRight.x = 1.0;
+		uvBottomRight.y = 1.0;
+
+		RGBA darkenColor;
+		darkenColor.a = -1 - darkenGreen;
+		darkenColor.b = darkenBlue;
+		darkenColor.g = darkenGreen;
+		darkenColor.r = darkenRed;
+
+		int32_t texDataIndex;
+
+		if (darkenBlue == darkenGreen && darkenBlue == darkenRed)
+		{
+			texDataIndex = NGNLoader::GetTextureDataIndex(14);
+
+			if (! texDataIndex)
+			{
+				texDataIndex = NGNLoader::GetTextureDataIndex(36);
+
+				if (! texDataIndex)
+					texDataIndex = NGNLoader::GetTextureDataIndex(37);
+			}
+		}
+		else
+		{
+			texDataIndex = 0;
+		}
+
+		Sprite::Queue2DSprite(0.0, 0.0, 1.0, 1.0, &uvTopLeft, &uvBottomRight, texDataIndex, darkenColor, RENDER_PRESET_FADE_OVERLAY);
+
+		if (D3DApp::g_renderMode == RENDERMODE_SOFTWARE && SoftwareRenderer::g_bitsPerPixel == 8)
+			SoftwareRenderer::UnkFunc7();
+	}
 
 	// FUNCTION: TOY2 0x0048F3E0
 	void ResetParallax()
