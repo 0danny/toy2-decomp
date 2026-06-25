@@ -26,7 +26,7 @@ namespace D3DApp
 	WindowData g_windowData;
 
 	// GLOBAL: TOY2 0x00534554
-	RenderMode g_renderMode;
+	int16_t g_renderMode;
 
 	// GLOBAL: TOY2 0x0050A770
 	int32_t g_readyForRender = 0;

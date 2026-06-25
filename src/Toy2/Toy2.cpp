@@ -143,6 +143,9 @@ namespace Toy2
 		{ 36, 40, 41, 42, 43, 44, 45, 46, 47, 32 },
 		{ 88, 89, 90, 91, 92, 93, 94, 95 },
 	};
+
+	// GLOBAL: TOY2 0x00534550
+	int32_t g_unused0;
 }
 
 namespace Toy2
@@ -208,8 +211,36 @@ namespace Toy2
 	// STUB: TOY2 0x004A3770
 	void LoadPathBin() {}
 
-	// STUB: TOY2 0x00453CF0
-	int32_t ShowLevelSelect() { return 0; }
+	// FUNCTION: TOY2 0x00453CF0
+	int32_t ShowLevelSelect()
+	{
+		int32_t prevLevelFileIdx = Toy2::g_levelFileIndex;
+
+		g_levelFileIndex = 16;
+		Levels::g_levelLoadConfig = 56;
+
+		g_hasStaticBackdrop = 0;
+		Renderer::g_virtualScreenWidth = 512.0;
+		Renderer::g_virtualScreenHeight = 256.0;
+		g_nextBackdropId = 36;
+		Levels::InitLevelPlay(16);
+
+		Renderer::g_frameDelta = 2;
+		g_hasBackdrop = 0;
+		MainMenu::g_menuClearColor.b = 140;
+		MainMenu::g_menuClearColor.g = 140;
+		MainMenu::g_menuClearColor.r = 140;
+
+		int32_t newState = LevelSelect::Tick();
+
+		g_levelFileIndex = prevLevelFileIdx;
+
+		MainMenu::g_menuClearColor.b = 32;
+		MainMenu::g_menuClearColor.g = 32;
+		MainMenu::g_menuClearColor.r = 32;
+
+		return newState;
+	}
 
 	// STUB: TOY2 0x00453FA0
 	void ShowMovieViewer() {}
@@ -1133,20 +1164,18 @@ void AllocateConsole()
 // FUNCTION: TOY2 0x004316C0
 int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int32_t cmdShow)
 {
-	// GLOBAL: TOY2 0x00534550
-	static int32_t g_unused0;
-
+#ifdef APPLY_FIXES
 	AllocateConsole();
+#endif
 
-	g_unused0 = 0;
+	Toy2::g_unused0 = 0;
 
 	memset(&D3DApp::g_d3dAppI, 0, sizeof(D3DApp::g_d3dAppI));
 
-#ifndef APPLY_FIXES
 	D3DApp::g_no32bitColors = 1;
-#endif
 
 	FileUtils::ValidateInstall();
+
 	Toy2::g_levelFileIndex = 1;
 
 	memset(&D3DApp::g_windowData, 0, sizeof(D3DApp::g_windowData));
@@ -1160,7 +1189,6 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 	D3DApp::g_windowData.unkInt3 = 1;
 	D3DApp::g_windowData.unkInt4 = 1;
 	D3DApp::g_windowData.unkInt5 = 1;
-
 	D3DApp::g_windowData.wndIsExiting = 0;
 
 	Toy2::OneInit();
@@ -1176,18 +1204,21 @@ int32_t WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, char* cmdLine, int3
 	D3DApp::BuildWindow();
 	Toy2::ShowModeSelect();
 
-	if (D3DApp::g_renderMode == RENDERMODE_SOFTWARE)
+	switch (D3DApp::g_renderMode)
 	{
-		Toy2::InitSoftwareRenderer();
-	}
-	else if (D3DApp::g_renderMode == RENDERMODE_D3D)
-	{
-		Toy2::InitDirect3DRenderer();
+		case RENDERMODE_SOFTWARE:
+			Toy2::InitSoftwareRenderer();
+			break;
+		case RENDERMODE_D3D:
+			Toy2::InitDirect3DRenderer();
+			break;
 	}
 
 	int32_t tokenCount = 0;
+	char* currentToken;
 	char* tokenEntries[8];
-	char* currentToken = strtok(cmdLine, " ");
+
+	currentToken = strtok(cmdLine, " ");
 
 	if (currentToken)
 	{

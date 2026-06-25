@@ -549,7 +549,7 @@ namespace Renderer
 
 		SoftwareRenderer::InitialisePrimarySurface();
 
-		DECOMP_PRINT(("Finished Renderer::InitResources"));
+		DECOMP_PRINT(("Finished Renderer::InitResources\n"));
 	}
 
 	// STUB: TOY2 0x004B37F0

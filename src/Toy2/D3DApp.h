@@ -18,7 +18,7 @@ namespace D3DApp
 	extern D3DAppInfo g_d3dAppI;
 	extern PC g_pcStruct;
 	extern WindowData g_windowData;
-	extern RenderMode g_renderMode;
+	extern int16_t g_renderMode;
 
 	int32_t BuildProfileMachine();
 	int32_t BuildWindow();
