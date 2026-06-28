@@ -1,31 +1,37 @@
 #include "RawLoader.h"
-
-#define LOBYTE_RD(x) (*((uint8_t*)&(x)))
-#define HIBYTE_RD(x) (*((uint8_t*)&(x) + 1))
-
-#define LOWORD_RD(x) (*((uint16_t*)&(x)))
-#define HIWORD_RD(x) (*((uint16_t*)&(x) + 1))
+#include <WINDOWS.H>
 
 namespace RawLoader
 {
-
 	// FUNCTION: TOY2 0x0047B170
-	void DecompressBuffer(uint8_t* p_inBuffer, uint8_t* p_outBuffer)
+	void DecompressBuffer(uint8_t* inBuffer, uint8_t* outBuffer)
 	{
 		// Decompression is based on RNC ProPack Method 2. Normally these files
 		// have a standard 18 byte header, which looks like it has been replaced
 		// in Toy 2 with a custom 15 byte header.
 
+		// this method is incredibly hard to instruction match, this current version
+		// is no where near what the original looks like, but it works. Its a future
+		// me problem to match it for now.
+
+		typedef union
+		{
+			uint32_t dword;
+			uint16_t word[2];
+			uint8_t byte[4];
+		} RawReg;
+
 		uint32_t copyLength;
 		uint32_t exitFlag;
-		uint32_t lengthCode;
-		uint32_t distanceHighOrLiteralCount;
+		RawReg lengthCode;
+		RawReg distanceHighOrLiteralCount;
 		uint32_t extendedLengthBit;
 		uint32_t lengthFollowupBit;
 		uint32_t hasDistanceHighBits;
 
-		uint8_t* afterHeader = p_inBuffer + 15;
-		uint32_t bitAccum = 4 * p_inBuffer[14] + 2;
+		uint8_t* afterHeader = inBuffer + 15;
+		RawReg bitAccum;
+		bitAccum.dword = 4 * inBuffer[14] + 2;
 
 		do
 		{
@@ -35,85 +41,87 @@ namespace RawLoader
 				{
 					while (true)
 					{
-						bitAccum *= 2;
-						uint32_t bitTest = (bitAccum >> 8) & 1;
+						bitAccum.dword *= 2;
+						uint32_t bitTest = (bitAccum.dword >> 8) & 1;
 
 						if (! bitTest)
 						{
-							bitAccum *= 2;
+							bitAccum.dword *= 2;
 
-							*p_outBuffer++ = *afterHeader++;
+							*outBuffer++ = *afterHeader++;
 
-							bitTest = (bitAccum >> 8) & 1;
+							bitTest = (bitAccum.dword >> 8) & 1;
 						}
 
 						if (bitTest)
 						{
-							bitAccum &= 0xFF;
+							bitAccum.dword &= 0xFF;
 
-							if (bitAccum)
+							if (bitAccum.dword)
 								break;
 
-							bitAccum = bitTest + 2 * (*afterHeader++);
+							bitAccum.dword = bitTest + 2 * (*afterHeader++);
 
-							if ((bitAccum & 0x100) != 0)
+							if ((bitAccum.dword & 0x100) != 0)
 								break;
 						}
 
-						*p_outBuffer++ = *afterHeader++;
+						*outBuffer++ = *afterHeader++;
 					}
 
-					LOBYTE_RD(lengthCode) = 2 * bitAccum;
-					distanceHighOrLiteralCount = 0;
+					lengthCode.byte[0] = 2 * bitAccum.dword;
+					distanceHighOrLiteralCount.dword = 0;
 					copyLength = 2;
 
-					uint32_t lengthCodeBit = ((2 * bitAccum) >> 8) & 1;
-					lengthCode &= 0xFF;
+					uint32_t lengthCodeBit = ((2 * bitAccum.dword) >> 8) & 1;
+					lengthCode.dword &= 0xFF;
 
-					if (! lengthCode)
+					if (! lengthCode.dword)
 					{
-						lengthCode = lengthCodeBit + 2 * (*afterHeader++);
-						lengthCodeBit = (lengthCode >> 8) & 1;
+						lengthCode.dword = lengthCodeBit + 2 * (*afterHeader++);
+						lengthCodeBit = (lengthCode.dword >> 8) & 1;
 					}
 
 					if (lengthCodeBit)
 						break;
 
-					uint32_t shiftedLengthCode = 2 * lengthCode;
+					uint32_t shiftedLengthCode = 2 * lengthCode.dword;
 					uint32_t shiftedLengthBit = (shiftedLengthCode >> 8) & 1;
 					shiftedLengthCode &= 0xFF;
 
 					if (! shiftedLengthCode)
 					{
-						LOBYTE_RD(lengthCodeBit) = (*afterHeader++);
+						RawReg lengthCodeBitReg;
+						lengthCodeBitReg.byte[0] = (*afterHeader++);
+						lengthCodeBit = lengthCodeBitReg.dword; // only low byte was written
 						shiftedLengthCode = shiftedLengthBit + 2 * lengthCodeBit;
 						shiftedLengthBit = (shiftedLengthCode >> 8) & 1;
 					}
 
-					LOBYTE_RD(bitAccum) = 2 * shiftedLengthCode;
+					bitAccum.byte[0] = 2 * shiftedLengthCode;
 					copyLength = shiftedLengthBit + 4;
 
 					uint32_t extraLengthBit = ((2 * shiftedLengthCode) >> 8) & 1;
 
-					bitAccum &= 0xFF;
+					bitAccum.dword &= 0xFF;
 
-					if (! bitAccum)
+					if (! bitAccum.dword)
 					{
-						bitAccum = extraLengthBit + 2 * (*afterHeader++);
-						extraLengthBit = (bitAccum >> 8) & 1;
+						bitAccum.dword = extraLengthBit + 2 * (*afterHeader++);
+						extraLengthBit = (bitAccum.dword >> 8) & 1;
 					}
 
 					if (! extraLengthBit)
 						goto LBL_DECODE_DISTANCE;
 
-					bitAccum *= 2;
-					uint32_t finalLengthBit = (bitAccum >> 8) & 1;
-					bitAccum &= 0xFF;
+					bitAccum.dword *= 2;
+					uint32_t finalLengthBit = (bitAccum.dword >> 8) & 1;
+					bitAccum.dword &= 0xFF;
 
-					if (! bitAccum)
+					if (! bitAccum.dword)
 					{
-						bitAccum = finalLengthBit + 2 * (*afterHeader++);
-						finalLengthBit = (bitAccum >> 8) & 1;
+						bitAccum.dword = finalLengthBit + 2 * (*afterHeader++);
+						finalLengthBit = (bitAccum.dword >> 8) & 1;
 					}
 
 					copyLength = finalLengthBit + 2 * (copyLength - 1);
@@ -123,72 +131,66 @@ namespace RawLoader
 
 					for (int32_t bitIndex = 3; bitIndex >= 0; --bitIndex)
 					{
-						bitAccum *= 2;
-						uint32_t literalCountBit = (bitAccum >> 8) & 1;
-						bitAccum &= 0xFF;
+						bitAccum.dword *= 2;
+						uint32_t literalCountBit = (bitAccum.dword >> 8) & 1;
+						bitAccum.dword &= 0xFF;
 
-						if (! bitAccum)
+						if (! bitAccum.dword)
 						{
-							bitAccum = literalCountBit + 2 * (*afterHeader++);
-							literalCountBit = (bitAccum >> 8) & 1;
+							bitAccum.dword = literalCountBit + 2 * (*afterHeader++);
+							literalCountBit = (bitAccum.dword >> 8) & 1;
 						}
 
-						distanceHighOrLiteralCount = literalCountBit + 2 * distanceHighOrLiteralCount;
+						distanceHighOrLiteralCount.dword = literalCountBit + 2 * distanceHighOrLiteralCount.dword;
 					}
 
-					*p_outBuffer = *afterHeader;
-					p_outBuffer[1] = afterHeader[1];
+					outBuffer[0] = afterHeader[0];
+					outBuffer[1] = afterHeader[1];
+					outBuffer[2] = afterHeader[2];
+					outBuffer[3] = afterHeader[3];
 
-					p_outBuffer += 4;
+					outBuffer += 4;
 					afterHeader += 4;
 
-					*(p_outBuffer - 2) = afterHeader[2];
-					*(p_outBuffer - 1) = afterHeader[3];
+					uint32_t literalBlockCount = distanceHighOrLiteralCount.dword + 1;
+					uint32_t literalBlocksRemaining = literalBlockCount + 1;
 
-					uint32_t literalBlockCount = distanceHighOrLiteralCount + 1;
-
-					if (literalBlockCount >= 0)
+					do
 					{
-						uint32_t literalBlocksRemaining = literalBlockCount + 1;
+						outBuffer[0] = afterHeader[0];
+						outBuffer[1] = afterHeader[1];
+						outBuffer[2] = afterHeader[2];
+						outBuffer[3] = afterHeader[3];
 
-						do
-						{
-							*p_outBuffer = *afterHeader;
-							p_outBuffer[1] = afterHeader[1];
-							p_outBuffer += 4;
-
-							*(p_outBuffer - 2) = afterHeader[2];
-							*(p_outBuffer - 1) = afterHeader[3];
-
-							afterHeader += 4;
-							--literalBlocksRemaining;
-						} while (literalBlocksRemaining);
-					}
+						outBuffer += 4;
+						afterHeader += 4;
+						--literalBlocksRemaining;
+					} while (literalBlocksRemaining);
 				}
 
-				LOBYTE_RD(bitAccum) = 2 * lengthCode;
-				lengthFollowupBit = ((2 * lengthCode) >> 8) & 1;
-				bitAccum &= 0xFF;
+				bitAccum.byte[0] = 2 * lengthCode.dword;
+				lengthFollowupBit = ((2 * lengthCode.dword) >> 8) & 1;
+				bitAccum.dword &= 0xFF;
 
-				if (! bitAccum)
+				if (! bitAccum.dword)
 				{
-					bitAccum = lengthFollowupBit + 2 * (*afterHeader++);
-					lengthFollowupBit = (bitAccum >> 8) & 1;
+					bitAccum.dword = lengthFollowupBit + 2 * (*afterHeader++);
+					lengthFollowupBit = (bitAccum.dword >> 8) & 1;
 				}
 
 				if (! lengthFollowupBit)
 					goto LBL_COPY_MATCH;
 
-				bitAccum *= 2;
+				bitAccum.dword *= 2;
 				copyLength = 3;
 
-				extendedLengthBit = (bitAccum >> 8) & 1;
-				bitAccum &= 0xFF;
+				extendedLengthBit = (bitAccum.dword >> 8) & 1;
+				bitAccum.dword &= 0xFF;
 
-				if (! bitAccum)
+				if (! bitAccum.dword)
 				{
-					bitAccum = extendedLengthBit + 2 * (*afterHeader++);
-					extendedLengthBit = (bitAccum >> 8) & 1;
+					bitAccum.dword = extendedLengthBit + 2 * (*afterHeader++);
+					extendedLengthBit = (bitAccum.dword >> 8) & 1;
 				}
 
 				if (extendedLengthBit)
@@ -196,19 +198,19 @@ namespace RawLoader
 
 			LBL_DECODE_DISTANCE:
 
-				bitAccum *= 2;
-				hasDistanceHighBits = (bitAccum >> 8) & 1;
-				bitAccum &= 0xFF;
+				bitAccum.dword *= 2;
+				hasDistanceHighBits = (bitAccum.dword >> 8) & 1;
+				bitAccum.dword &= 0xFF;
 
-				if (! bitAccum)
+				if (! bitAccum.dword)
 				{
-					bitAccum = hasDistanceHighBits + 2 * (*afterHeader++);
-					hasDistanceHighBits = (bitAccum >> 8) & 1;
+					bitAccum.dword = hasDistanceHighBits + 2 * (*afterHeader++);
+					hasDistanceHighBits = (bitAccum.dword >> 8) & 1;
 				}
 
 				if (hasDistanceHighBits)
 				{
-					uint32_t distancePrefixAccum = 2 * bitAccum;
+					uint32_t distancePrefixAccum = 2 * bitAccum.dword;
 					uint32_t distancePrefixBit = (distancePrefixAccum >> 8) & 1;
 
 					distancePrefixAccum &= 0xFF;
@@ -219,21 +221,21 @@ namespace RawLoader
 						distancePrefixBit = (distancePrefixAccum >> 8) & 1;
 					}
 
-					bitAccum = 2 * distancePrefixAccum;
+					bitAccum.dword = 2 * distancePrefixAccum;
 					uint32_t distanceHighBits = distancePrefixBit;
 
-					uint32_t hasMoreDistanceBits = (bitAccum >> 8) & 1;
-					bitAccum &= 0xFF;
+					uint32_t hasMoreDistanceBits = (bitAccum.dword >> 8) & 1;
+					bitAccum.dword &= 0xFF;
 
-					if (! bitAccum)
+					if (! bitAccum.dword)
 					{
-						bitAccum = hasMoreDistanceBits + 2 * (*afterHeader++);
-						hasMoreDistanceBits = (bitAccum >> 8) & 1;
+						bitAccum.dword = hasMoreDistanceBits + 2 * (*afterHeader++);
+						hasMoreDistanceBits = (bitAccum.dword >> 8) & 1;
 					}
 
 					if (hasMoreDistanceBits)
 					{
-						uint32_t shifted = 2 * bitAccum;
+						uint32_t shifted = 2 * bitAccum.dword;
 						uint32_t distanceExtraBit = (shifted >> 8) & 1;
 						uint32_t distanceExtraAccum = shifted & 0xFF;
 
@@ -247,12 +249,12 @@ namespace RawLoader
 
 						shifted = 2 * distanceExtraAccum;
 						uint32_t distanceTerminatorBit = (shifted >> 8) & 1;
-						bitAccum = shifted & 0xFF;
+						bitAccum.dword = shifted & 0xFF;
 
-						if (! bitAccum)
+						if (! bitAccum.dword)
 						{
-							bitAccum = distanceTerminatorBit + 2 * (*afterHeader++);
-							distanceTerminatorBit = (bitAccum >> 8) & 1;
+							bitAccum.dword = distanceTerminatorBit + 2 * (*afterHeader++);
+							distanceTerminatorBit = (bitAccum.dword >> 8) & 1;
 						}
 
 						if (distanceTerminatorBit)
@@ -264,9 +266,10 @@ namespace RawLoader
 						{
 						LBL_COMMIT_DISTANCE:
 
-							int16_t distanceHighWord = 0;
-							HIBYTE_RD(distanceHighWord) = distanceHighBits;
-							LOWORD_RD(distanceHighOrLiteralCount) = distanceHighWord | (distanceHighBits >> 8);
+							RawReg distanceHighWord;
+							distanceHighWord.dword = 0;
+							distanceHighWord.byte[1] = distanceHighBits;
+							distanceHighOrLiteralCount.word[0] = distanceHighWord.word[0] | (distanceHighBits >> 8);
 
 							goto LBL_COPY_MATCH;
 						}
@@ -274,14 +277,14 @@ namespace RawLoader
 						distanceHighBits = 1;
 					}
 
-					bitAccum *= 2;
-					uint32_t distanceTailBit = (bitAccum >> 8) & 1;
-					bitAccum &= 0xFF;
+					bitAccum.dword *= 2;
+					uint32_t distanceTailBit = (bitAccum.dword >> 8) & 1;
+					bitAccum.dword &= 0xFF;
 
-					if (! bitAccum)
+					if (! bitAccum.dword)
 					{
-						bitAccum = distanceTailBit + 2 * (*afterHeader++);
-						distanceTailBit = (bitAccum >> 8) & 1;
+						bitAccum.dword = distanceTailBit + 2 * (*afterHeader++);
+						distanceTailBit = (bitAccum.dword >> 8) & 1;
 					}
 
 					distanceHighBits = distanceTailBit + 2 * distanceHighBits;
@@ -290,24 +293,23 @@ namespace RawLoader
 
 			LBL_COPY_MATCH:
 
-				int32_t matchDistance = distanceHighOrLiteralCount & 0xFF00 | (*afterHeader++);
-				uint8_t* matchSource = &p_outBuffer[-matchDistance - 1];
+				int32_t matchDistance = (distanceHighOrLiteralCount.dword & 0xFF00) | (*afterHeader++);
+				uint8_t* matchSource = &outBuffer[-matchDistance - 1];
 
 				if (copyLength & 1)
 				{
-					matchSource = &p_outBuffer[-matchDistance];
-					*p_outBuffer++ = *matchSource;
+					*outBuffer++ = *matchSource++;
 				}
 
 				int32_t pairCopyCount = (copyLength >> 1) - 1;
 
 				if (matchDistance)
 				{
-					p_outBuffer += 2;
+					outBuffer += 2;
 					uint16_t* matchSourceWords = (uint16_t*)(matchSource + 2);
 
-					*(p_outBuffer - 1) = *((uint8_t*)matchSourceWords - 1);
-					*(p_outBuffer - 2) = *matchSource;
+					*(outBuffer - 1) = *((uint8_t*)matchSourceWords - 1);
+					*(outBuffer - 2) = *matchSource;
 
 					int32_t wordCopyLoopCount = pairCopyCount - 1;
 
@@ -317,20 +319,20 @@ namespace RawLoader
 
 						do
 						{
-							*(uint16_t*)p_outBuffer = *matchSourceWords++;
-							p_outBuffer += 2;
+							*(uint16_t*)outBuffer = *matchSourceWords++;
+							outBuffer += 2;
 							--wordCopiesRemaining;
 						} while (wordCopiesRemaining);
 					}
 				}
 				else
 				{
-					p_outBuffer += 2;
+					outBuffer += 2;
 					uint8_t repeatedByte = *matchSource;
 					int32_t repeatPairLoopCount = pairCopyCount - 1;
 
-					*(p_outBuffer - 2) = repeatedByte;
-					*(p_outBuffer - 1) = repeatedByte;
+					*(outBuffer - 2) = repeatedByte;
+					*(outBuffer - 1) = repeatedByte;
 
 					if (repeatPairLoopCount >= 0)
 					{
@@ -338,9 +340,9 @@ namespace RawLoader
 
 						do
 						{
-							*p_outBuffer = repeatedByte;
-							p_outBuffer[1] = repeatedByte;
-							p_outBuffer += 2;
+							*outBuffer = repeatedByte;
+							outBuffer[1] = repeatedByte;
+							outBuffer += 2;
 							--repeatPairsRemaining;
 						} while (repeatPairsRemaining);
 					}
@@ -355,19 +357,18 @@ namespace RawLoader
 				goto LBL_DECODE_DISTANCE;
 			}
 
-			bitAccum *= 2;
-			exitFlag = (bitAccum >> 8) & 1;
-			bitAccum &= 0xFF;
+			bitAccum.dword *= 2;
+			exitFlag = (bitAccum.dword >> 8) & 1;
+			bitAccum.dword &= 0xFF;
 
-			if (! bitAccum)
+			if (! bitAccum.dword)
 			{
-				bitAccum = exitFlag + 2 * (*afterHeader++);
-				exitFlag = (bitAccum >> 8) & 1;
+				bitAccum.dword = exitFlag + 2 * (*afterHeader++);
+				exitFlag = (bitAccum.dword >> 8) & 1;
 			}
 		} while (exitFlag);
 	}
 
 	// STUB: TOY2 0x00452310
 	void LoadPacketData(char* fileName) {}
-
 }
