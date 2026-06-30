@@ -1,8 +1,20 @@
 #include "RawLoader.h"
+#include "Toy2/Levels.h"
+#include "Toy2/Toy2.h"
+#include "FileUtils.h"
+#include "Logger.h"
+#include "Toy2/Actor.h"
+
 #include <WINDOWS.H>
 
 namespace RawLoader
 {
+	// GLOBAL: TOY2 0x005D2BE0
+	uint8_t* g_resumePacketPtr;
+
+	// GLOBAL: TOY2 0x0052AFD8
+	CreatureListRam g_creatureListRam[64];
+
 	// FUNCTION: TOY2 0x0047B170
 	void DecompressBuffer(uint8_t* inBuffer, uint8_t* outBuffer)
 	{
@@ -369,6 +381,120 @@ namespace RawLoader
 		} while (exitFlag);
 	}
 
-	// STUB: TOY2 0x00452310
-	void LoadPacketData(char* fileName) {}
+	// GLOBAL: TOY2 0x0055A0F4
+	int32_t g_unusedBuffer1[8];
+
+	// GLOBAL: TOY2 0x005D2AB8
+	uint8_t g_unusedBuffer2[32];
+
+	// GLOBAL: TOY2 0x00703C04
+	int32_t g_unusedBuffer3[129];
+
+	// GLOBAL: TOY2 0x00559EDC
+	uint8_t g_unusedBuffer4[516];
+
+	// GLOBAL: TOY2 0x0055A11C
+	int32_t g_unused1;
+
+	// GLOBAL: TOY2 0x00703E08
+	int16_t g_unused2;
+
+	// GLOBAL: TOY2 0x0055A13C
+	int16_t g_unused3;
+
+	// GLOBAL: TOY2 0x00557700
+	uint8_t* g_unused5;
+
+	// GLOBAL: TOY2 0x005D2BE4
+	uint16_t* g_unused4;
+
+	// GLOBAL: TOY2 0x00703BE8
+	uint16_t g_type36Data1[4];
+
+	// GLOBAL: TOY2 0x004F7408
+	uint8_t g_unusedBuffer5[12] = { 32, 0, 255, 32, 0, 0, 0, 0, 0, 164, 0, 201 };
+
+	// FUNCTION: TOY2 0x00452310
+	void LoadPacketData(char* fileName)
+	{
+		uint8_t* buffer;
+		uint8_t* resumePtr;
+		uint8_t* decompBuffer;
+		uint8_t* packetCursor;
+
+		Logger::Log("ROUTINE : Loading packet data %s, level %d.\n", fileName, Toy2::g_levelFileIndex);
+
+		if ((Toy2::Levels::g_levelLoadConfig & 0x800) != 0 && (resumePtr = g_resumePacketPtr) != 0)
+		{
+			buffer = reinterpret_cast<uint8_t*>(fileName);
+		}
+		else
+		{
+			buffer = Toy2::Levels::g_levelDataHeapBase + sizeof(Toy2::Levels::g_levelDataHeapBase) - FileUtils::GetFileSize(fileName);
+
+			FileUtils::LoadFile(fileName, buffer);
+
+			memset(g_unusedBuffer1, 0, sizeof(g_unusedBuffer1));
+			memset(g_unusedBuffer2, 0, sizeof(g_unusedBuffer2));
+
+			resumePtr = reinterpret_cast<uint8_t*>(g_resumePacketPtr);
+			packetCursor = buffer;
+
+			memset(g_unusedBuffer3, 0, sizeof(g_unusedBuffer3));
+
+			g_unused1 = 0x80000000;
+			g_unused2 = 0;
+			g_unused3 = 0;
+
+			Toy2::g_hasBackdrop = 0;
+
+			memset(g_unusedBuffer4, 0, sizeof(g_unusedBuffer4));
+		}
+
+		Toy2::Actor::g_activeActors[0] = 0;
+
+		memset(g_creatureListRam, 0, sizeof(g_creatureListRam));
+
+		if ((Toy2::Levels::g_levelLoadConfig & 0x800) != 0 && resumePtr)
+		{
+			buffer = resumePtr;
+			packetCursor = resumePtr;
+		}
+
+		decompBuffer = Toy2::Levels::g_levelLoadArena;
+		int32_t resumeCounter = 0;
+
+		while ((*buffer != 0xFF || buffer[1] != 0xFF || buffer[2] != 0xFF || buffer[3] != 0xFF) && resumeCounter != 2)
+		{
+			DecompressBuffer(buffer, decompBuffer);
+
+			if (*reinterpret_cast<uint32_t*>(decompBuffer) == 35)
+			{
+				memcpy(g_creatureListRam, decompBuffer + 4, sizeof(g_creatureListRam));
+				Logger::Log("LOAD: Type 35, CreatListRam.\n");
+			}
+			else if (*reinterpret_cast<uint32_t*>(decompBuffer) == 36)
+			{
+				// omitted
+				// $TODO: implement this portion, don't know if it actually does anything
+			}
+
+			int32_t packetPayloadSize = (buffer[6] + ((buffer[5] + (buffer[4] << 8)) << 8)) << 8;
+			uint8_t* packetBodyBase = &buffer[buffer[7]];
+
+			buffer = &packetBodyBase[packetPayloadSize + 14];
+			packetCursor = buffer;
+
+			if ((Toy2::Levels::g_levelLoadConfig & 0x800) != 0)
+			{
+				g_resumePacketPtr = &packetBodyBase[packetPayloadSize + 14];
+				++resumeCounter;
+			}
+		}
+
+		Toy2::Levels::g_levelLoadArena = decompBuffer;
+
+		g_unused4 = g_type36Data1;
+		g_unused5 = g_unusedBuffer5;
+	}
 }

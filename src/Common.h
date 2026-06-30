@@ -47,6 +47,13 @@ struct RGBColor
 	float b;
 };
 
+struct RGB16
+{
+  int16_t r;
+  int16_t g;
+  int16_t b;
+};
+
 union RGBA
 {
 	struct

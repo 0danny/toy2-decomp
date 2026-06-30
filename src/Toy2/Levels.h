@@ -15,7 +15,10 @@ namespace Toy2
 		};
 
 		extern RecordData* g_recordData[96];
+		extern uint8_t g_levelDataHeapBase[1249280];
+		extern uint8_t* g_levelDataHeapBasePtr;
 		extern int32_t g_levelLoadConfig;
+		extern uint8_t* g_levelLoadArena;
 
 		void InitLevelPlay(int32_t levelId);
 
