@@ -815,4 +815,59 @@ namespace Nu3D
 
 		return result;
 	}
+
+	// FUNCTION: TOY2 0x004AFBE0
+	void FreeTexData(BmpDataNode* bmpDataNode)
+	{
+		if (bmpDataNode->texData)
+			free(bmpDataNode->texData);
+
+		bmpDataNode->texData = 0;
+	}
+
+	// FUNCTION: TOY2 0x004AFB20
+	void ReleaseBmpDataNode(BmpDataNode* bmpDataNode)
+	{
+		int32_t refCount = bmpDataNode->refCount;
+
+		if (refCount)
+		{
+			bmpDataNode->refCount = refCount - 1;
+		}
+		else
+		{
+			BmpDataNode* next = bmpDataNode->next;
+
+			if (next)
+				next->prev = bmpDataNode->prev;
+
+			BmpDataNode* prev = bmpDataNode->prev;
+
+			if (prev)
+				prev->next = bmpDataNode->next;
+			else
+				g_bmpDataHead = bmpDataNode->next;
+
+			DestroyBmpDataNode(bmpDataNode);
+			FreeTexData(bmpDataNode);
+
+			if (bmpDataNode->bitmapHandle)
+				DeleteObject(bmpDataNode->bitmapHandle);
+
+			free(bmpDataNode);
+		}
+	}
+
+	// FUNCTION: TOY2 0x004B1150
+	void FreeAllBmpDataNodes()
+	{
+		for (BmpDataNode* curNode = g_bmpDataHead; g_bmpDataHead; curNode = g_bmpDataHead)
+		{
+			curNode->refCount = 0;
+			ReleaseBmpDataNode(g_bmpDataHead);
+		}
+	}
+
+	// FUNCTION: TOY2 0x004B1180
+	void FreeAllBmpDataNodes_T() { FreeAllBmpDataNodes(); }
 }

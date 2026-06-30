@@ -3,6 +3,7 @@
 #include "Toy2/Toy2.h"
 #include "Nu3D/BmpDataNode.h"
 #include "Logger.h"
+#include "Renderer/Glue.h"
 
 #include <windows.h>
 
@@ -32,8 +33,8 @@ namespace NGNLoader
 	// GLOBAL: TOY2 0x00508A58
 	Vector3F g_vertexScaleVector = { 1.0, 1.0, 1.0 };
 
-	// STUB: TOY2 0x004B1190
-	void FreeAllBmpDataNodes() {}
+	// FUNCTION: TOY2 0x004B1190
+	void FreeAllBmpDataNodes() { Nu3D::FreeAllBmpDataNodes_T(); }
 
 	// FUNCTION: TOY2 0x004CB300
 	void GetScaleVector(Vector3F* output) { *output = g_vertexScaleVector; }
@@ -553,7 +554,7 @@ namespace NGNLoader
 
 				portal->portalId = portalId;
 
-				fread(ngnImage->areaPortals[portalId++]->vertices, 12u, vertexCount, stream);
+				fread(ngnImage->areaPortals[portalId++]->vertices, sizeof(Vector3F), vertexCount, stream);
 
 				if (portalId >= portalCount)
 					return;
@@ -736,8 +737,52 @@ namespace NGNLoader
 		g_textureDataFreeList[1999].next = 0;
 	}
 
-	// STUB: TOY2 0x0044FF50
-	void DetectBackdropTextures() {}
+	// FUNCTION: TOY2 0x0044FF50 [MATCHED]
+	void DetectBackdropTextures()
+	{
+		if (GetTextureDataIndex(36))
+		{
+			Toy2::g_hasBackdrop = 2;
+			Toy2::g_nextBackdropId = 36;
+		}
+
+		if (GetTextureDataIndex(37))
+		{
+			Toy2::g_hasStaticBackdrop = 1;
+			Toy2::g_nextBackdropId = 37;
+		}
+
+		if (! Toy2::g_hasBackdrop)
+		{
+			int32_t idx;
+
+			for (idx = 40; idx < 48; ++idx)
+			{
+				if (GetTextureDataIndex(idx))
+				{
+					Toy2::g_hasBackdrop = 1;
+					Toy2::g_nextBackdropId = idx;
+					break;
+				}
+			}
+
+			if (! Toy2::g_hasBackdrop)
+			{
+				for (idx = 88; idx < 96; ++idx)
+				{
+					if (GetTextureDataIndex(idx))
+					{
+						Toy2::g_hasBackdrop = 2;
+						Toy2::g_nextBackdropId = idx;
+						break;
+					}
+				}
+			}
+		}
+
+		if (Toy2::g_hasStaticBackdrop)
+			Renderer::Glue::SetBackdrop(Toy2::g_nextBackdropId);
+	}
 
 	// FUNCTION: TOY2 0x004CE2C0
 	int32_t GetTextureDataIndex(uint32_t textureIndex)

@@ -156,7 +156,7 @@ namespace Toy2
 
 			if (levelId > 10)
 			{
-				g_levelLoadConfig |= 1;
+				g_levelLoadConfig |= 256;
 
 				if ((g_levelLoadConfig & 192) == 0)
 					g_levelLoadConfig |= 64;
@@ -451,6 +451,8 @@ namespace Toy2
 			int32_t variantStep;
 			const char* ngnBaseName;
 			int32_t loadConfigCpy2 = g_levelLoadConfig;
+
+			Logger::Log("Level load config -> %d\n", g_levelLoadConfig);
 
 			if ((g_levelLoadConfig & 4) == 0 || (g_levelLoadConfig & 1) == 0)
 			{
