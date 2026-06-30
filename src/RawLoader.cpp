@@ -15,6 +15,39 @@ namespace RawLoader
 	// GLOBAL: TOY2 0x0052AFD8
 	CreatureListRam g_creatureListRam[64];
 
+	// GLOBAL: TOY2 0x0055A0F4
+	int32_t g_unusedBuffer1[8];
+
+	// GLOBAL: TOY2 0x005D2AB8
+	uint8_t g_unusedBuffer2[32];
+
+	// GLOBAL: TOY2 0x00703C04
+	int32_t g_unusedBuffer3[129];
+
+	// GLOBAL: TOY2 0x00559EDC
+	uint8_t g_unusedBuffer4[516];
+
+	// GLOBAL: TOY2 0x0055A11C
+	int32_t g_unused1;
+
+	// GLOBAL: TOY2 0x00703E08
+	int16_t g_unused2;
+
+	// GLOBAL: TOY2 0x0055A13C
+	int16_t g_unused3;
+
+	// GLOBAL: TOY2 0x00557700
+	uint8_t* g_unused5;
+
+	// GLOBAL: TOY2 0x005D2BE4
+	uint16_t* g_unused4;
+
+	// GLOBAL: TOY2 0x00703BE8
+	uint16_t g_type36Data1[4];
+
+	// GLOBAL: TOY2 0x004F7408
+	uint8_t g_unusedBuffer5[12] = { 32, 0, 255, 32, 0, 0, 0, 0, 0, 164, 0, 201 };
+
 	// FUNCTION: TOY2 0x0047B170
 	void DecompressBuffer(uint8_t* inBuffer, uint8_t* outBuffer)
 	{
@@ -381,39 +414,6 @@ namespace RawLoader
 		} while (exitFlag);
 	}
 
-	// GLOBAL: TOY2 0x0055A0F4
-	int32_t g_unusedBuffer1[8];
-
-	// GLOBAL: TOY2 0x005D2AB8
-	uint8_t g_unusedBuffer2[32];
-
-	// GLOBAL: TOY2 0x00703C04
-	int32_t g_unusedBuffer3[129];
-
-	// GLOBAL: TOY2 0x00559EDC
-	uint8_t g_unusedBuffer4[516];
-
-	// GLOBAL: TOY2 0x0055A11C
-	int32_t g_unused1;
-
-	// GLOBAL: TOY2 0x00703E08
-	int16_t g_unused2;
-
-	// GLOBAL: TOY2 0x0055A13C
-	int16_t g_unused3;
-
-	// GLOBAL: TOY2 0x00557700
-	uint8_t* g_unused5;
-
-	// GLOBAL: TOY2 0x005D2BE4
-	uint16_t* g_unused4;
-
-	// GLOBAL: TOY2 0x00703BE8
-	uint16_t g_type36Data1[4];
-
-	// GLOBAL: TOY2 0x004F7408
-	uint8_t g_unusedBuffer5[12] = { 32, 0, 255, 32, 0, 0, 0, 0, 0, 164, 0, 201 };
-
 	// FUNCTION: TOY2 0x00452310
 	void LoadPacketData(char* fileName)
 	{
@@ -426,7 +426,7 @@ namespace RawLoader
 
 		if ((Toy2::Levels::g_levelLoadConfig & 0x800) != 0 && (resumePtr = g_resumePacketPtr) != 0)
 		{
-			buffer = reinterpret_cast<uint8_t*>(fileName);
+			buffer = reinterpret_cast<uint8_t*>(fileName); // ?
 		}
 		else
 		{
@@ -437,7 +437,7 @@ namespace RawLoader
 			memset(g_unusedBuffer1, 0, sizeof(g_unusedBuffer1));
 			memset(g_unusedBuffer2, 0, sizeof(g_unusedBuffer2));
 
-			resumePtr = reinterpret_cast<uint8_t*>(g_resumePacketPtr);
+			resumePtr = g_resumePacketPtr;
 			packetCursor = buffer;
 
 			memset(g_unusedBuffer3, 0, sizeof(g_unusedBuffer3));
