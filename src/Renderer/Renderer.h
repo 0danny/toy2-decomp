@@ -62,12 +62,15 @@ namespace Renderer
 		Nu3D::Material* material;
 	};
 
+	extern float g_gammaCorrection;
 	extern int32_t g_isSoftwareRendering;
 	extern uint32_t g_frameDelta;
 	extern float g_virtualScreenWidth;
 	extern float g_virtualScreenHeight;
 	extern float g_parallaxCurHorizScroll;
 	extern int32_t g_deviceBlendShadeCapsCpy;
+	extern int32_t g_boundTextureIndices[8];
+	extern Nu3D::Material* g_boundMaterial;
 
 	void Cleanup();
 	void Init();

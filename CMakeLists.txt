@@ -131,6 +131,8 @@ set(TOY2_SOURCES
     src/Nu3D/Camera.h
     src/Nu3D/Particles.h
     src/Nu3D/Particles.cpp
+    src/Nu3D/Math.cpp
+    src/Nu3D/Math.h
 
     # Renderer
     src/Renderer/Renderer.h
@@ -149,6 +151,8 @@ set(TOY2_SOURCES
     src/NGNLoader/NGNLoader.cpp
     src/NGNLoader/NGNLoader.h
     src/NGNLoader/NGNTypes.h
+    src/NGNLoader/ObjectLoad.cpp
+    src/NGNLoader/ObjectLoad.h
 
     # AudioManager
     src/AudioManager/AudioManager.cpp

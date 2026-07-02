@@ -49,9 +49,25 @@ struct RGBColor
 
 struct RGB16
 {
-  int16_t r;
-  int16_t g;
-  int16_t b;
+	int16_t r;
+	int16_t g;
+	int16_t b;
+};
+
+struct ARGB
+{
+	uint8_t a;
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+};
+
+struct RGBColor3B
+{
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
 };
 
 union RGBA

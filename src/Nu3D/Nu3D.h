@@ -22,6 +22,16 @@ namespace Nu3D
 		Vector2F uv;
 	};
 
+	struct ShapeVertex
+	{
+		Vector3F position;
+		Vector3F normals;
+		RGBA diffuse;
+		Vector2F coords;
+		int16_t primIndex;
+		int16_t primVerticesSize;
+	};
+
 	extern int32_t g_useAsDiffuseModulation;
 
 	void SetIsSoftwareRendering(int32_t value);
@@ -33,4 +43,5 @@ namespace Nu3D
 
 	STATIC_ASSERT(sizeof(VertexTL) == 32);
 	STATIC_ASSERT(sizeof(Vertex) == 36);
+	STATIC_ASSERT(sizeof(ShapeVertex) == 40);
 }

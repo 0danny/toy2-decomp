@@ -18,10 +18,10 @@ namespace Nu3D
 			Vector3F scale;
 			D3DMATRIX transformMatrix;
 			int32_t shapeId;
-			Vector3F unkVector4;
-			int32_t unkVar33;
-			int32_t unkVar34;
-			int32_t unkVar35;
+			Vector3F boundsCenterWorld;
+			int32_t packedAreaData;
+			int32_t areaIndex;
+			int32_t packedFlags;
 			int32_t flags;
 			int32_t gscaleType;
 		};
@@ -41,7 +41,5 @@ namespace Nu3D
 	}
 
 	namespace Spatial
-	{
-		
-	}
+	{}
 }

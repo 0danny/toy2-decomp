@@ -4,6 +4,9 @@
 #include "Nu3D/BmpDataNode.h"
 #include "Logger.h"
 #include "Renderer/Glue.h"
+#include "Renderer/Renderer.h"
+#include "Nu3D/Math.h"
+#include "NGNLoader/ObjectLoad.h"
 
 #include <windows.h>
 
@@ -564,11 +567,239 @@ namespace NGNLoader
 		}
 	}
 
-	// STUB: TOY2 0x004C3740
-	void ParseGscale(FILE* stream, NGNImage* ngnImage) {}
+	// FUNCTION: TOY2 0x004C3740
+	int32_t ParseGscale(FILE* stream, NGNImage* ngnImage)
+	{
+		Vector3F scaleVector;
+		int32_t shapeDataLength;
+		int32_t shapeCount;
+		int32_t flipY;
 
-	// STUB: TOY2 0x004C35C0
-	void ParseGeometry(FILE* stream, NGNImage* ngnImage) {}
+		GetScaleVector(&scaleVector);
+
+		int32_t flipX = scaleVector.x < 0.0f;
+		int32_t curShape = 0;
+		flipY = scaleVector.y < 0.0f;
+		int32_t flipZ = scaleVector.z < 0.0f;
+
+		fread(&shapeCount, sizeof(int32_t), 1, stream);
+		fread(&shapeDataLength, sizeof(int32_t), 1, stream);
+
+		shapeDataLength -= 40;
+		int32_t hasExtraData = 0;
+
+		if (shapeDataLength != 0)
+		{
+			hasExtraData = 1;
+			shapeDataLength -= 4;
+		}
+
+		if (shapeCount)
+		{
+			ngnImage->dynamicScalers[ngnImage->gscaleType] = (Nu3D::Link::DynamicScaler*)malloc(sizeof(Nu3D::Link::DynamicScaler) * shapeCount);
+
+			if (ngnImage->dynamicScalers[ngnImage->gscaleType] != 0)
+			{
+				ngnImage->shapeCounts[ngnImage->gscaleType] = shapeCount;
+
+				if (shapeCount > curShape)
+				{
+					int32_t flipXOrig = flipX;
+					int32_t flipYZ = flipZ ^ flipY;
+
+					flipX = flipZ ^ flipX;
+					flipY = flipY ^ flipXOrig;
+
+					do
+					{
+						// yes, the original ASM does every single dynamicScalers load individually, which is odd because you would think
+						// the compiler would just optimize it down to one load and then pointer re-use, but I guess not
+
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].flags = 0;
+
+						fread(&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation, sizeof(Vector3F), 1, stream);
+						fread(&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation, sizeof(Vector3F), 1, stream);
+						fread(&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].scale, sizeof(Vector3F), 1, stream);
+						fread(&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].shapeId, sizeof(int32_t), 1, stream);
+
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].shapeId += g_curPrimCount;
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].gscaleType = ngnImage->gscaleType;
+
+						if (hasExtraData)
+						{
+							fread(&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].packedAreaData, sizeof(int32_t), 1, stream);
+
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].packedFlags =
+								(ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].packedAreaData >> 16) & 0xF;
+
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].areaIndex =
+								ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].packedAreaData & 0xFF;
+						}
+						else
+						{
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].packedAreaData = 0;
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].areaIndex = 0;
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].packedFlags = 0;
+						}
+
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.x =
+							scaleVector.x * ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.x;
+
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.y =
+							scaleVector.y * ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.y;
+
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.z =
+							scaleVector.z * ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.z;
+
+						if (flipYZ)
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.x =
+								-ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.x;
+
+						if (flipX)
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.y =
+								-ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.y;
+
+						if (flipY)
+							ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.z =
+								-ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.z;
+
+						Nu3D::Math::BuildIdentityMatrix(&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].transformMatrix);
+
+						// clang-format off
+					Nu3D::Math::ScaleMatrixByVector(
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].transformMatrix, 
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].scale
+					);
+
+					Nu3D::Math::RotateZFromLut(
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].transformMatrix,
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.z
+					);
+
+					Nu3D::Math::RotateYFromLut(
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].transformMatrix,
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.y
+					);
+
+					Nu3D::Math::PostRotateXFromLut(
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].transformMatrix,
+						ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].rotation.x
+					);
+
+					Nu3D::Math::AddWorldSpaceTransform(
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].transformMatrix,
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation
+					);
+
+					ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].next = 0;
+
+					Nu3D::Math::TransformVectorByMatrix(
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].boundsCenterWorld,
+						&ngnImage->primitives[ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].shapeId]->boundsCenter,
+						&ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].transformMatrix
+					);
+						// clang-format on
+
+						if (curShape || ngnImage->gscaleType)
+						{
+							ngnImage->worldMinX = ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.x > ngnImage->worldMinX
+								? ngnImage->worldMinX
+								: ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.x;
+
+							ngnImage->worldMaxX = ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.x < ngnImage->worldMaxX
+								? ngnImage->worldMaxX
+								: ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.x;
+
+							ngnImage->worldMinZ = ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.z > ngnImage->worldMinZ
+								? ngnImage->worldMinZ
+								: ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.z;
+
+							ngnImage->worldMaxZ = ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.z < ngnImage->worldMaxZ
+								? ngnImage->worldMaxZ
+								: ngnImage->dynamicScalers[ngnImage->gscaleType][curShape].translation.z;
+						}
+						else
+						{
+							ngnImage->worldMaxX = ngnImage->dynamicScalers[0]->translation.x;
+							ngnImage->worldMinX = ngnImage->dynamicScalers[0]->translation.x;
+							ngnImage->worldMaxZ = ngnImage->dynamicScalers[0]->translation.z;
+							ngnImage->worldMinZ = ngnImage->dynamicScalers[0]->translation.z;
+						}
+
+						if (shapeDataLength)
+							fseek(stream, shapeDataLength, 1);
+
+						++curShape;
+
+					} while (curShape < shapeCount);
+				}
+
+				ngnImage->worldMaxX = ngnImage->worldMaxX + 10.0f;
+				ngnImage->worldMaxZ = ngnImage->worldMaxZ + 10.0f;
+				ngnImage->worldMinX = ngnImage->worldMinX - 10.0f;
+				ngnImage->worldMinZ = ngnImage->worldMinZ - 10.0f;
+
+				return shapeCount;
+			}
+		}
+
+		return 0;
+	}
+
+	// FUNCTION: TOY2 0x004C35C0
+	int32_t ParseGeometry(FILE* stream, NGNImage* ngnImage)
+	{
+		int32_t shapeCount;
+		fread(&shapeCount, sizeof(int32_t), 1, stream);
+
+		if (! shapeCount)
+			return 0;
+
+		g_curPrimCount = ngnImage->primCount;
+
+		if (ngnImage->primCount)
+		{
+			shapeCount += ngnImage->primCount;
+
+			Nu3D::Primitive** primList = (Nu3D::Primitive**)malloc(sizeof(Nu3D::Primitive*) * shapeCount);
+
+			if (primList)
+			{
+				memcpy(primList, ngnImage->primitives, sizeof(Nu3D::Primitive*) * ngnImage->primCount);
+				free(ngnImage->primitives);
+
+				ngnImage->primitives = primList;
+			}
+		}
+		else
+		{
+			ngnImage->primitives = (Nu3D::Primitive**)malloc(sizeof(Nu3D::Primitive*) * shapeCount);
+		}
+
+		if (! ngnImage->primitives)
+			return 0;
+
+		int32_t result = shapeCount;
+
+		ngnImage->primCount = shapeCount;
+
+		int32_t index = g_curPrimCount;
+
+		if (g_curPrimCount < result)
+		{
+			do
+			{
+				ngnImage->primitives[index] = ObjectLoad::ExtractShapeData(stream);
+				Nu3D::Primitive::CreateAllVertexBuffers(ngnImage->primitives[index], 3);
+
+				result = shapeCount;
+				++index;
+
+			} while (index < shapeCount);
+		}
+
+		return result;
+	}
 
 	// STUB: TOY2 0x004B9630
 	void BuildTex14(int32_t unused) {}
@@ -792,6 +1023,9 @@ namespace NGNLoader
 		else
 			return 0;
 	}
+
+	// FUNCTION: TOY2 0x004BB0E0
+	NGNTextureData* GetTextureDataByIndex(uint32_t texDataIndex) { return &g_textureDataFreeList[texDataIndex]; }
 
 	// FUNCTION: TOY2 0x004BB5E0
 	void RetrieveTextureData(

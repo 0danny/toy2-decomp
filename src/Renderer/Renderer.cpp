@@ -1180,8 +1180,6 @@ namespace Renderer
 
 		if (((flags & 0x4000) != 0 || flags == 0x20000000) && g_srcBlendMode == 2)
 		{
-			printf("Here!\n");
-
 			blue = (color.a * color.b) >> 8;
 			red = (color.a * color.r) >> 8;
 			green = (color.a * color.g) >> 8;

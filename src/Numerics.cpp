@@ -25,23 +25,20 @@ namespace Numerics
 		return result;
 	}
 
-	// FUNCTION: TOY2 0x004A88B0
+	// FUNCTION: TOY2 0x004A88B0 [MATCHED]
 	void InitTrigLut()
 	{
 		if (! g_trigLUT)
 		{
 			g_trigLUT = (float*)malloc(sizeof(float) * 0x10000);
 
-			int32_t index = 0;
-			int32_t nextIndex = 0;
+			int32_t i = 0;
 
 			do
 			{
-				int32_t currentIndex = nextIndex;
-				nextIndex = ++index;
-
-				g_trigLUT[index - 1] = sin(currentIndex * 0.000095873802);
-			} while (index < 0x10000);
+				g_trigLUT[i] = sin(i * 9.58738019107841e-05f);
+				++i;
+			} while (i < 0x10000);
 		}
 	}
 }

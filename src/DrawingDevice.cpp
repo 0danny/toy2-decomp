@@ -604,6 +604,9 @@ namespace DrawingDevice
 		return 0;
 	}
 
+	// FUNCTION: TOY2 0x004AC100
+	HRESULT CreateMaterial(LPDIRECT3DMATERIAL3* outMaterial) { return g_drawingDevice->m_pD3D->CreateMaterial(outMaterial, 0); }
+
 	// FUNCTION: TOY2 0x004ABD80
 	RECT* GetDestRect() { return &g_drawingDevice->m_rcViewportRect; }
 
@@ -739,6 +742,7 @@ namespace DrawingDevice
 			device->EndScene();
 	}
 
+	// FUNCTION: TOY2 0x004BB590
 	HRESULT BindTexWithStage(int32_t textureIndex, int32_t stageIndex)
 	{
 		Nu3D::BmpDataNode* bmpDataNode;
@@ -749,6 +753,19 @@ namespace DrawingDevice
 			return Nu3D::SetTexture(stageIndex, bmpDataNode);
 		else
 			return Nu3D::SetTexture(stageIndex, 0);
+	}
+
+	// FUNCTION: TOY2 0x004BB540
+	HRESULT BindTexToStage0(int32_t textureIndex)
+	{
+		Nu3D::BmpDataNode* bmpDataNode;
+
+		++g_setTexCalls;
+
+		if (textureIndex && (bmpDataNode = NGNLoader::g_textureDataFreeList[textureIndex].bmpDataNode) != 0)
+			return Nu3D::SetTexture(0, bmpDataNode);
+		else
+			return Nu3D::SetTexture(0, 0);
 	}
 }
 
