@@ -38,6 +38,7 @@ namespace Nu3D
 	void SetIsSoftwareRendering(int32_t value);
 	uint32_t GetHighResolutionTime();
 	void PrecisionSleep(int32_t delayMs);
+	void MemSet32Util(void* buffer, int32_t count, uint32_t value);
 
 	void SetUseAsDiffuseModulation(int32_t option);
 	void SetDefaultPrimFlags(int32_t option);

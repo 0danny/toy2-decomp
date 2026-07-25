@@ -1,6 +1,7 @@
 #include "InputManager.h"
 #include "Toy2/D3DApp.h"
 #include "SaveManager.h"
+#include "Nu3D/Nu3D.h"
 
 #include <DINPUT.H>
 
@@ -251,18 +252,6 @@ namespace InputManager
 		return result;
 	}
 
-	// FUNCTION: TOY2 0x0047D520
-	void MemSetUtil(void* buffer, uint32_t value, int32_t count)
-	{
-		__asm
-		{
-			mov     edi, buffer
-			mov     ecx, value
-			mov     eax, count
-			rep     stosd
-		}
-	}
-
 	// FUNCTION: TOY2 0x00414AF0
 	void UpdateInputState()
 	{
@@ -279,7 +268,7 @@ namespace InputManager
 
 		if (g_directInputSuccess)
 		{
-			MemSetUtil(g_inputStates, 64, 0);
+			Nu3D::MemSet32Util(g_inputStates, 64, 0);
 
 			g_directInputDevice->Acquire();
 			g_directInputDevice->GetDeviceState(256, g_inputStates);

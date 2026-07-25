@@ -93,7 +93,7 @@ namespace Renderer
 			SoftwareRenderer::g_viewportRect = &sprite->viewportRect;
 			SoftwareRenderer::g_unk9F6008 = 1;
 
-			return DrawingAPI::DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0x1C4, vertexData, 4, g_2DSpriteIndices, 4, 24);
+			return DrawingAPI::DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, D3DFVF_0x1C4, vertexData, 4, g_2DSpriteIndices, 4, 24);
 		}
 
 		// FUNCTION: TOY2 0x004B8DD0

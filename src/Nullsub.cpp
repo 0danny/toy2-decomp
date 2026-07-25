@@ -5,3 +5,6 @@ void Nullsub5() {}
 
 // FUNCTION: TOY2 0x00449090
 void Nullsub3() {}
+
+// FUNCTION: TOY2 0x0049D790
+void Nullsub6() {}

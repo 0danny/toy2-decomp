@@ -3,6 +3,7 @@
 #include "Nu3D/Portal.h"
 #include "Nu3D/Math.h"
 #include "Numerics.h"
+#include "NGNLoader/NGNLoader.h"
 #include <cmath>
 
 namespace Nu3D
@@ -11,7 +12,7 @@ namespace Nu3D
 	uint8_t Portal::g_visibleAreaFlags[64];
 
 	// FUNCTION: TOY2 0x004B33B0
-	void Portal::AreaPortal::CalculateBoundingSphere(Nu3D::Portal::AreaPortal* portal)
+	void Portal::AreaPortal::CalculateBoundingSphere(Portal::AreaPortal* portal)
 	{
 		float z = 3.4028235e38;
 		float y = 3.4028235e38;
@@ -66,6 +67,42 @@ namespace Nu3D
 		// TODO: naming is wrong here
 		portal->radius = radSqrt;
 		portal->radiusSquared = sqrt(radSqrt);
+	}
+
+	// FUNCTION: TOY2 0x004BC3A0
+	Portal::ScalerEntry* Portal::AreaPortal::AllocScalerEntry(NGNLoader::NGNImage* image)
+	{
+		if (image->scalerEntryCount < image->maxScalerEntries)
+		{
+			ScalerEntry* pool = image->scalerEntryPool;
+
+			if (! pool)
+				return 0;
+
+			ScalerEntry* newAlloc = &pool[image->scalerEntryCount];
+			
+			image->scalerEntryCount = image->scalerEntryCount + 1;
+
+			return newAlloc;
+		}
+
+		return 0;
+	}
+
+	// FUNCTION: TOY2 0x004BC360
+	int32_t Portal::AreaPortal::BuildScalerEntry(NGNLoader::NGNImage* image, int32_t index, Link::DynamicScaler* scaler)
+	{
+		Portal::ScalerEntry* head = Portal::AreaPortal::AllocScalerEntry(image);
+
+		if (! head)
+			return 0;
+
+		head->scaler = scaler;
+		head->next = image->portalHashTable->buckets[index].scalerHead;
+
+		image->portalHashTable->buckets[index].scalerHead = head;
+
+		return 1;
 	}
 
 	// FUNCTION: TOY2 0x004BC120

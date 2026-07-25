@@ -4,3 +4,4 @@
 
 void Nullsub5();
 void Nullsub3();
+void Nullsub6();

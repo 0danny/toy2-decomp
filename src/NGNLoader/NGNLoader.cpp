@@ -804,11 +804,68 @@ namespace NGNLoader
 	// STUB: TOY2 0x004B9630
 	void BuildTex14(int32_t unused) {}
 
-	// STUB: TOY2 0x004C36A0
-	void BuildGrid(int32_t gridWidth, int32_t gridHeight, int32_t type, NGNImage* ngnImage) {}
+	// FUNCTION: TOY2 0x004C36A0 [MATCHED]
+	void BuildGrid(int32_t gridWidth, int32_t gridHeight, int32_t type, NGNImage* ngnImage)
+	{
+		Nu3D::Link::DynamicScaler** alloc = (Nu3D::Link::DynamicScaler**)malloc(sizeof(int32_t*) * gridHeight * gridWidth);
 
-	// STUB: TOY2 0x004C3240
-	void BuildScalerEntries(NGNImage* ngnImage) {}
+		ngnImage->spacialGrid[type] = alloc;
+
+		if (&ngnImage->spacialGrid[0])
+		{
+			memset(alloc, 0, sizeof(int32_t*) * gridHeight * gridWidth);
+
+			float cellWidth = (ngnImage->worldMaxX - ngnImage->worldMinX) / gridWidth;
+
+			ngnImage->gridWidth = gridWidth;
+			ngnImage->gridHeight = gridHeight;
+
+			int32_t shape = 0;
+
+			ngnImage->cellWidthInWorldUnits = cellWidth;
+			ngnImage->cellHeightInWorldUnits = (ngnImage->worldMaxZ - ngnImage->worldMinZ) / gridHeight;
+
+			if (ngnImage->shapeCounts[type] > 0)
+			{
+				do
+				{
+					Nu3D::Link::InsertScalerAtComputedCell(&ngnImage->dynamicScalers[type][shape], type, ngnImage);
+
+					++shape;
+				} while (shape < ngnImage->shapeCounts[type]);
+			}
+		}
+	}
+
+	// FUNCTION: TOY2 0x004C3240
+	void BuildScalerEntries(NGNImage* ngnImage)
+	{
+		int32_t count = 0;
+
+		Nu3D::Link::DynamicScaler** scalers = ngnImage->dynamicScalers;
+
+		while (*scalers)
+		{
+			if (count >= 2)
+				break;
+
+			int32_t shapeCount = ngnImage->shapeCounts[count];
+
+			if (shapeCount > 0)
+			{
+				int32_t i = 0;
+
+				do
+				{
+					Nu3D::Portal::AreaPortal::BuildScalerEntry(ngnImage, (*scalers)[i].areaIndex, &(*scalers)[i]);
+					++i;
+				} while (i < shapeCount);
+			}
+
+			++scalers;
+			++count;
+		}
+	}
 
 	// FUNCTION: TOY2 0x004C33F0
 	NGNImage* BuildImage(char* fileName)

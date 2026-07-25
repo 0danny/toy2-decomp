@@ -103,6 +103,8 @@ set(TOY2_SOURCES
     src/Toy2/MainMenu.h
     src/Toy2/Animation.h
     src/Toy2/Animation.cpp
+    src/Toy2/Weather.cpp
+    src/Toy2/Weather.h
 
     # Nu3D
     src/Nu3D/Creature.h

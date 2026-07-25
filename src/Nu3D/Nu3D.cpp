@@ -171,6 +171,18 @@ namespace Nu3D
 		}
 	}
 
+	// FUNCTION: TOY2 0x0047D520
+	void MemSet32Util(void* buffer, int32_t count, uint32_t value)
+	{
+		__asm
+		{
+			mov     edi, buffer
+			mov     ecx, count
+			mov     eax, value
+			rep     stosd
+		}
+	}
+
 	// FUNCTION: TOY2 0x004CB2C0
 	void SetUseAsDiffuseModulation(int32_t option) { g_useAsDiffuseModulation = option; }
 

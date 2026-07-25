@@ -3,10 +3,21 @@
 #include "Nu3D/Nu3D.h"
 #include "Nu3D/Link.h"
 
+namespace NGNLoader
+{
+	struct NGNImage;
+}
+
 namespace Nu3D
 {
 	namespace Portal
 	{
+		struct ScalerEntry
+		{
+			ScalerEntry* next;
+			Nu3D::Link::DynamicScaler* scaler;
+		};
+
 		struct AreaPortal
 		{
 			int32_t portalId;
@@ -16,7 +27,9 @@ namespace Nu3D
 			float radius;
 			Vector3F* vertices;
 
-			static void CalculateBoundingSphere(Nu3D::Portal::AreaPortal *portal);
+			static void CalculateBoundingSphere(AreaPortal* portal);
+			static ScalerEntry* AllocScalerEntry(NGNLoader::NGNImage* image);
+			static int32_t BuildScalerEntry(NGNLoader::NGNImage* image, int32_t index, Link::DynamicScaler* scaler);
 		};
 
 		struct PortalState
@@ -26,12 +39,6 @@ namespace Nu3D
 			int32_t sourceAreaIdx;
 			int32_t targetAreaIdx;
 			int32_t visited;
-		};
-
-		struct ScalerEntry
-		{
-			ScalerEntry* next;
-			Nu3D::Link::DynamicScaler* scaler;
 		};
 
 		struct PortalBucket

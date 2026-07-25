@@ -4,6 +4,11 @@
 #include <directx6/ddraw.h>
 #include <directx6/d3d.h>
 
+namespace NGNLoader
+{
+	struct NGNImage;
+}
+
 namespace Nu3D
 {
 	namespace Link
@@ -12,7 +17,7 @@ namespace Nu3D
 		{
 			DynamicScaler* next;
 			DynamicScaler* prev;
-			DynamicScaler* cellHead;
+			DynamicScaler** cellHead;
 			Vector3F translation;
 			Vector3I rotation;
 			Vector3F scale;
@@ -36,10 +41,12 @@ namespace Nu3D
 			D3DMATRIX transformMatrix;
 		};
 
+		DynamicScaler** GetCellByPos(Vector3I* pos, NGNLoader::NGNImage* ngnImage);
+		int32_t ComputeCellFromXZ(Vector3I* pos, float x, float z, int32_t layer, NGNLoader::NGNImage* ngnImage);
+		void InsertScalerAtComputedCell(DynamicScaler* scaler, int32_t type, NGNLoader::NGNImage* ngnImage);
+		void SetScaleFromFixedOffsets(int32_t linkId, int32_t x, int32_t y, int32_t z);
+
 		STATIC_ASSERT(sizeof(DynamicScaler) == 0x94);
 		STATIC_ASSERT(sizeof(Linker) == 0x74);
 	}
-
-	namespace Spatial
-	{}
 }

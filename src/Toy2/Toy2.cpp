@@ -196,6 +196,9 @@ namespace Toy2
 		void Tick() {}
 	}
 
+	// STUB: TOY2 0x00440F70
+	void RenderGame(int32_t fullRender) {}
+
 	// STUB: TOY2 0x00454020
 	void ShowPostGameSaveMenu() {}
 

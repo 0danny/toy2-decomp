@@ -133,6 +133,14 @@ namespace Nu3D
 			result->z = tempZ;
 		}
 
+		// FUNCTION: TOY2 0x004A91B0 [MATCHED]
+		void VertexAdd(Vector3F* result, Vector3F* v1, Vector3F* v2)
+		{
+			result->x = v1->x + v2->x;
+			result->y = v1->y + v2->y;
+			result->z = v1->z + v2->z;
+		}
+
 		// FUNCTION: TOY2 0x004A91E0 [MATCHED]
 		void VertexSubtract(Vector3F* result, Vector3F* v1, Vector3F* v2)
 		{
@@ -152,7 +160,7 @@ namespace Nu3D
 			result->z = z;
 		}
 
-		// FUNCTION: TOY2 0x004A9340
+		// FUNCTION: TOY2 0x004A9340 [MATCHED]
 		float VectorNormalize(Vector3F* output, Vector3F* vector)
 		{
 			float lengthSquared = vector->x * vector->x + vector->y * vector->y + vector->z * vector->z;
