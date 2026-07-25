@@ -55,8 +55,8 @@ struct PointI
 
 struct Plane
 {
-  Vector3F normal;
-  float distance;
+	Vector3F normal;
+	float distance;
 };
 
 struct Matrix3x3I16
@@ -75,6 +75,7 @@ struct Matrix3x3I16
 namespace Numerics
 {
 	extern float* g_trigLUT;
+	extern int16_t g_sinCosLUT[4096];
 
 	int32_t RoundUpToPowerOf2(int32_t number);
 	void InitTrigLut();

@@ -190,5 +190,21 @@ namespace Nu3D
 
 			plane->distance = -(point1->z * plane->normal.z + point1->y * plane->normal.y + point1->x * plane->normal.x);
 		}
+
+		// FUNCTION: TOY2 0x00451FD0
+		int32_t NormalizeToFixedPoint(Vector3I* v1, Vector3I* v2)
+		{
+			float z = v1->z;
+			float y = v1->y;
+			float x = v1->x;
+
+			float sqrtVal = sqrt(x * x + y * y + z * z);
+
+			v2->x = (v1->x * 4096.0 / sqrtVal);
+			v2->y = (v1->y * 4096.0 / sqrtVal);
+			v2->z = (v1->z * 4096.0 / sqrtVal);
+
+			return 0;
+		}
 	}
 }

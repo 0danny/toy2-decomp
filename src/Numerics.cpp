@@ -7,6 +7,14 @@ namespace Numerics
 	// GLOBAL: TOY2 0x0088334C
 	float* g_trigLUT;
 
+	// GLOBAL: TOY2 0x004FE788
+	
+	// clang-format off
+	int16_t g_sinCosLUT[4096] = {
+		#include "SinCosLUT.inc"
+	};
+	// clang-format on
+
 	// FUNCTION: TOY2 0x004B0740
 	int32_t RoundUpToPowerOf2(int32_t number)
 	{

@@ -28,4 +28,10 @@ namespace AudioManager
 
 	// STUB: TOY2 0x0047D7F0
 	void PlayMusicOneShot(int32_t trackIndex) {}
+
+	// STUB: TOY2 0x0047D880
+	void PlayMusicLooping(int16_t trackIndex) {}
+
+	// STUB: TOY2 0x004A3B90
+	int32_t PlayLoopingSound3DPositional(void* owner, int32_t soundIndex, int32_t volume, int32_t leftVolume, void* unused, int16_t rightVolume) { return 0; }
 }

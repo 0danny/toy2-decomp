@@ -45,6 +45,7 @@ namespace Nu3D
 		int32_t ComputeCellFromXZ(Vector3I* pos, float x, float z, int32_t layer, NGNLoader::NGNImage* ngnImage);
 		void InsertScalerAtComputedCell(DynamicScaler* scaler, int32_t type, NGNLoader::NGNImage* ngnImage);
 		void SetScaleFromFixedOffsets(int32_t linkId, int32_t x, int32_t y, int32_t z);
+		void FollowWaypointPath(int32_t linkId, int32_t pathTableIdx, int32_t* progress);
 
 		STATIC_ASSERT(sizeof(DynamicScaler) == 0x94);
 		STATIC_ASSERT(sizeof(Linker) == 0x74);

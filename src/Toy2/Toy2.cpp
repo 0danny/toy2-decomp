@@ -206,7 +206,7 @@ namespace Toy2
 	void ShowActClearScreen() {}
 
 	// STUB: TOY2 0x0049EB50
-	int32_t ComputeTokenProgress() { return 1; }
+	uint32_t ComputeTokenProgress() { return 1; }
 
 	// STUB: TOY2 0x00414720
 	int32_t EnterLevel(int32_t levelIndex) { return 0; }

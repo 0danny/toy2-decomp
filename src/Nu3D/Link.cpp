@@ -156,5 +156,8 @@ namespace Nu3D
 				}
 			}
 		}
+
+		// FUNCTION: TOY2 0x00438910
+		void FollowWaypointPath(int32_t linkId, int32_t pathTableIdx, int32_t* progress) {}
 	}
 }

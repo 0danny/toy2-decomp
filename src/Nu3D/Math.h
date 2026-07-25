@@ -21,5 +21,6 @@ namespace Nu3D
 		void VertexCrossProduct(Vector3F* result, Vector3F* v1, Vector3F* v2);
 		float VectorNormalize(Vector3F* output, Vector3F* vector);
 		void CalculatePlaneFromTriangle(Vector3F* point1, Vector3F* point2, Vector3F* point3, Plane* plane);
+		int32_t NormalizeToFixedPoint(Vector3I *v1, Vector3I *v2);
 	}
 }

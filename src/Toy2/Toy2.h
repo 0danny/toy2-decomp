@@ -23,6 +23,7 @@ namespace Toy2
 	void SetBackdropByIndex(int32_t index);
 	void ProcessMiscEventsEx();
 	void RenderGame(int32_t fullRender);
+	uint32_t ComputeTokenProgress();
 
 	extern ToyCfg g_toyCfgData;
 	extern int32_t g_levelFileIndex;
@@ -37,6 +38,7 @@ namespace Toy2
 	extern int32_t g_hasStaticBackdrop;
 	extern int32_t g_nextBackdropId;
 	extern int16_t g_levelIndex;
+	extern int32_t g_levelFileConversion[15];
 
 	STATIC_ASSERT(sizeof(ToyCfg) == 0x18);
 }
